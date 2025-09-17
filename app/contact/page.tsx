@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { ContactForm } from '@/components/contact-form';
+import LightRays from '@/components/light-rays';
 
 export default function ContactPage() {
   return (

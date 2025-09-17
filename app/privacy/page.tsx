@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import LightRays from '@/components/light-rays';
 
 export default function PrivacyPage() {
   return (
