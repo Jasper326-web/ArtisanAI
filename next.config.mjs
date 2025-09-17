@@ -13,17 +13,13 @@ const nextConfig = {
     if (!isServer) {
       config.optimization.splitChunks = {
         chunks: 'all',
+        maxSize: 244000, // 244KB limit
         cacheGroups: {
-          default: {
-            minChunks: 2,
-            priority: -20,
-            reuseExistingChunk: true,
-          },
           vendor: {
             test: /[\\/]node_modules[\\/]/,
             name: 'vendors',
-            priority: -10,
             chunks: 'all',
+            maxSize: 244000,
           },
         },
       }
