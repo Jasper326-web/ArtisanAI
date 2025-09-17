@@ -232,8 +232,8 @@ export default function AIImageGenerator() {
 
   return (
     <div className="min-h-screen relative">
-      {/* Prism Background */}
-      <div className="fixed inset-0 z-0">
+      {/* Light Rays Background */}
+      <div className="fixed inset-0 z-[1]">
         <LightRays
           raysOrigin="top-center"
           raysColor="#00ffff"
