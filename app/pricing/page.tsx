@@ -7,7 +7,6 @@ import { Badge } from '@/components/ui/badge';
 import { Check, Star, Zap, Crown, Building2 } from 'lucide-react';
 import { useLanguage } from '@/contexts/language-context';
 import { useToast } from '@/hooks/use-toast';
-import LightRays from '@/components/light-rays';
 
 interface PricingPlan {
   id: string;
