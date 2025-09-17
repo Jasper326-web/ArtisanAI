@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
+import { Renderer, Program, Triangle, Mesh } from 'ogl';
 
 export type RaysOrigin =
   | 'top-center'
@@ -262,12 +263,12 @@ void main() {
       uniformsRef.current = uniforms;
 
       const geometry = new Triangle(gl);
-      const program = new Program(gl as any, {
+      const program = new Program(gl, {
         vertex: vert,
         fragment: frag,
         uniforms
-      } as any);
-      const mesh = new Mesh(gl as any, { geometry, program } as any);
+      });
+      const mesh = new Mesh(gl, { geometry, program });
       meshRef.current = mesh;
 
       const updatePlacement = () => {
