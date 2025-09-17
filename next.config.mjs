@@ -9,25 +9,35 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  experimental: {
+    optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
+      // Exclude large dependencies from client bundle
+      config.externals = config.externals || [];
+      config.externals.push({
+        '@google-cloud/aiplatform': 'commonjs @google-cloud/aiplatform',
+        '@google-cloud/vertexai': 'commonjs @google-cloud/vertexai',
+      });
+
       config.optimization.splitChunks = {
         chunks: 'all',
-        maxSize: 200000, // 200KB limit
-        minSize: 10000,  // 10KB minimum
+        maxSize: 150000, // 150KB limit - more aggressive
+        minSize: 5000,   // 5KB minimum
         cacheGroups: {
           default: {
             minChunks: 2,
             priority: -20,
             reuseExistingChunk: true,
-            maxSize: 200000,
+            maxSize: 150000,
           },
           vendor: {
             test: /[\\/]node_modules[\\/]/,
             name: 'vendors',
             chunks: 'all',
             priority: -10,
-            maxSize: 200000,
+            maxSize: 150000,
             enforce: true,
           },
           // Split large libraries separately
@@ -36,7 +46,7 @@ const nextConfig = {
             name: 'react',
             chunks: 'all',
             priority: 20,
-            maxSize: 200000,
+            maxSize: 150000,
             enforce: true,
           },
           ui: {
@@ -44,7 +54,7 @@ const nextConfig = {
             name: 'ui',
             chunks: 'all',
             priority: 15,
-            maxSize: 200000,
+            maxSize: 150000,
             enforce: true,
           },
           google: {
@@ -52,7 +62,7 @@ const nextConfig = {
             name: 'google',
             chunks: 'all',
             priority: 10,
-            maxSize: 200000,
+            maxSize: 150000,
             enforce: true,
           },
         },
