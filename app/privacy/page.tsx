@@ -78,7 +78,33 @@ export default function PrivacyPage() {
                   <h2 className="text-xl font-semibold text-foreground mb-3">6. Cookies and Tracking</h2>
                   <p>
                     We use cookies and similar tracking technologies to enhance your experience on our website. 
-                    You can control cookie settings through your browser preferences.
+                    You can control cookie settings through your browser preferences or our cookie consent banner.
+                  </p>
+                </section>
+
+                <section>
+                  <h2 className="text-xl font-semibold text-foreground mb-3">7. Your Rights (GDPR/CCPA)</h2>
+                  <p>You have the following rights regarding your personal data:</p>
+                  <ul className="list-disc list-inside ml-4 space-y-1">
+                    <li><strong>Access:</strong> Request a copy of your personal data</li>
+                    <li><strong>Rectification:</strong> Correct inaccurate or incomplete data</li>
+                    <li><strong>Erasure:</strong> Request deletion of your personal data</li>
+                    <li><strong>Portability:</strong> Export your data in a machine-readable format</li>
+                    <li><strong>Restriction:</strong> Limit how we process your data</li>
+                    <li><strong>Objection:</strong> Object to certain types of data processing</li>
+                  </ul>
+                  <p className="mt-2">
+                    To exercise these rights, contact us at privacy@artisans-ai.com. 
+                    We will respond within 30 days.
+                  </p>
+                </section>
+
+                <section>
+                  <h2 className="text-xl font-semibold text-foreground mb-3">8. Data Retention</h2>
+                  <p>
+                    We retain your personal data only as long as necessary to provide our services 
+                    and comply with legal obligations. Account data is retained until you delete 
+                    your account, and transaction data is retained for 7 years for tax purposes.
                   </p>
                 </section>
 

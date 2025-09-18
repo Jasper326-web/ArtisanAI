@@ -26,7 +26,21 @@ export default function TermsPage() {
                   <h2 className="text-xl font-semibold text-foreground mb-3">1. Acceptance of Terms</h2>
                   <p>
                     By accessing and using ArtisanAI, you accept and agree to be bound by the terms and provision of this agreement.
+                    You must be at least 13 years old to use this service. If you are under 18, you must have parental consent.
                   </p>
+                </section>
+
+                <section>
+                  <h2 className="text-xl font-semibold text-foreground mb-3">2. Age Requirements</h2>
+                  <p>
+                    ArtisanAI is intended for users who are at least 13 years of age. By using our service, you represent and warrant that:
+                  </p>
+                  <ul className="list-disc list-inside ml-4 space-y-1">
+                    <li>You are at least 13 years old</li>
+                    <li>If you are under 18, you have obtained parental or guardian consent</li>
+                    <li>You have the legal capacity to enter into this agreement</li>
+                    <li>Your use of the service does not violate any applicable law</li>
+                  </ul>
                 </section>
 
                 <section>

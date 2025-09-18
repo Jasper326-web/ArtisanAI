@@ -34,7 +34,7 @@ import { ImageUpload } from "@/components/image-upload"
 import type { UploadedImage } from "@/lib/upload"
 import { createClient } from "@/lib/supabase-client"
 import { useToast } from "@/hooks/use-toast"
-import { ImagePreviewModal } from '@/components/image-preview-modal'
+import { CookieConsent } from '@/components/cookie-consent'
 
 export default function AIImageGenerator() {
   const [feedback, setFeedback] = useState("")
@@ -1515,6 +1515,14 @@ export default function AIImageGenerator() {
                     {t.footer.cookiePolicy}
                   </a>
                 </li>
+                <li>
+                  <a
+                    href="/refund"
+                    className="hover:text-primary transition-colors duration-300 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]"
+                  >
+                    Refund Policy
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
@@ -1567,6 +1575,9 @@ export default function AIImageGenerator() {
           />
         </div>
       )}
+      
+      {/* Cookie Consent Banner */}
+      <CookieConsent />
     </div>
   )
 }
