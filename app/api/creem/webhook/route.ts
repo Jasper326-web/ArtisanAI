@@ -9,13 +9,15 @@ export async function POST(req: NextRequest) {
     
     console.log('Creem webhook received:', { signature, bodyLength: body.length });
 
-    // 验证 webhook 签名
+    // 验证 webhook 签名（临时禁用用于测试）
     const webhookSecret = process.env.CREEM_WEBHOOK_SECRET;
     if (webhookSecret && signature) {
       if (!verifyWebhookSignature(body, signature, webhookSecret)) {
         console.error('Invalid webhook signature');
         return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
       }
+    } else {
+      console.log('Webhook signature verification skipped (testing mode)');
     }
 
     const data = JSON.parse(body);
