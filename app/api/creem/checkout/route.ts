@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const CREEM_API_KEY = process.env.CREEM_API_KEY || 'creem_test_7Pio5ccVdDKTaSz6ijf5Te';
-const CREEM_API_URL = 'https://test-api.creem.io/v1/checkouts';
+const CREEM_API_URL = process.env.CREEM_API_KEY?.startsWith('creem_live_') 
+  ? 'https://api.creem.io/v1/checkouts' 
+  : 'https://test-api.creem.io/v1/checkouts';
 
 interface CheckoutRequest {
   plan_id: string;
@@ -23,6 +25,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // 产品ID映射
+    const productIdMap: Record<string, string> = {
+      small: process.env.CREEM_PRODUCT_SMALL || 'prod_j8RS5IyEKO0MiYG2Bdusi',
+      medium: process.env.CREEM_PRODUCT_MEDIUM || 'prod_j8RS5IyEKO0MiYG2Bdusi',
+      large: process.env.CREEM_PRODUCT_LARGE || 'prod_j8RS5IyEKO0MiYG2Bdusi',
+      xlarge: process.env.CREEM_PRODUCT_XLARGE || 'prod_j8RS5IyEKO0MiYG2Bdusi',
+      mega: process.env.CREEM_PRODUCT_MEGA || 'prod_j8RS5IyEKO0MiYG2Bdusi',
+    };
+
     // 创建 Creem 结账会话
     const response = await fetch(CREEM_API_URL, {
       method: 'POST',
@@ -31,14 +42,14 @@ export async function POST(req: NextRequest) {
         'x-api-key': CREEM_API_KEY,
       },
       body: JSON.stringify({
-        product_id: 'prod_j8RS5IyEKO0MiYG2Bdusi', // 你的 Creem 产品 ID
+        product_id: productIdMap[plan_id],
         metadata: {
           plan_id,
           credits,
           user_agent: req.headers.get('user-agent') || '',
           ip: req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || '',
         },
-        success_url: `http://localhost:3000/pricing?success=true&plan=${plan_id}`,
+        success_url: process.env.CREEM_SUCCESS_URL || `https://artisans-ai.com/pricing?success=true&plan=${plan_id}`,
       }),
     });
 

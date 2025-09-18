@@ -1,34 +1,51 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import * as crypto from 'crypto';
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { event, data } = body;
+    const body = await req.text();
+    const signature = req.headers.get('creem-signature');
+    
+    console.log('Creem webhook received:', { signature, bodyLength: body.length });
 
-    console.log('Creem webhook received:', { event, data });
+    // 验证 webhook 签名
+    const webhookSecret = process.env.CREEM_WEBHOOK_SECRET;
+    if (webhookSecret && signature) {
+      if (!verifyWebhookSignature(body, signature, webhookSecret)) {
+        console.error('Invalid webhook signature');
+        return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+      }
+    }
 
-    // 验证 webhook 签名（生产环境建议添加）
-    // const signature = req.headers.get('x-creem-signature');
-    // if (!verifyWebhookSignature(body, signature)) {
-    //   return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
-    // }
+    const data = JSON.parse(body);
+    const { eventType, object } = data;
 
-    switch (event) {
-      case 'checkout.session.completed':
-        await handleCheckoutCompleted(data);
+    console.log('Processing webhook event:', eventType);
+
+    switch (eventType) {
+      case 'checkout.completed':
+        await handleCheckoutCompleted(object);
         break;
       
-      case 'payment.succeeded':
-        await handlePaymentSucceeded(data);
+      case 'subscription.paid':
+        await handleSubscriptionPaid(object);
         break;
       
-      case 'payment.failed':
-        await handlePaymentFailed(data);
+      case 'subscription.canceled':
+        await handleSubscriptionCanceled(object);
+        break;
+      
+      case 'refund.created':
+        await handleRefundCreated(object);
+        break;
+      
+      case 'dispute.created':
+        await handleDisputeCreated(object);
         break;
       
       default:
-        console.log('Unhandled webhook event:', event);
+        console.log('Unhandled webhook event:', eventType);
     }
 
     return NextResponse.json({ received: true });
@@ -44,67 +61,227 @@ export async function POST(req: NextRequest) {
 
 async function handleCheckoutCompleted(data: any) {
   try {
-    const { metadata, amount, currency } = data;
-    const { plan_id, credits } = metadata;
+    const { order, customer, metadata } = data;
+    const { plan_id, credits } = metadata || {};
+    
+    console.log('Checkout completed:', { 
+      orderId: order?.id, 
+      customerEmail: customer?.email,
+      plan_id, 
+      credits,
+      amount: order?.amount,
+      currency: order?.currency
+    });
 
-    // 这里需要根据实际的用户识别方式来处理
-    // 由于 Creem 可能不直接提供用户ID，我们需要通过其他方式关联
-    console.log('Checkout completed:', { plan_id, credits, amount, currency });
-
-    // 示例：如果 Creem 提供了用户邮箱或其他标识
-    // const userEmail = data.customer_email;
-    // if (userEmail) {
-    //   const { data: user } = await supabase
-    //     .from('users')
-    //     .select('id')
-    //     .eq('email', userEmail)
-    //     .single();
-    //   
-    //   if (user) {
-    //     await supabase.rpc('recharge_credits', {
-    //       p_user_id: user.id,
-    //       p_amount: parseInt(credits)
-    //     });
-    //   }
-    // }
+    // 通过客户邮箱查找用户
+    if (customer?.email) {
+      const { data: user } = await supabase
+        .from('users')
+        .select('id')
+        .eq('email', customer.email)
+        .single();
+      
+      if (user && credits) {
+        // 充值积分
+        const { data: result } = await supabase.rpc('recharge_credits', {
+          p_user_id: user.id,
+          p_amount: parseInt(credits)
+        });
+        
+        // 记录订单
+        await supabase.from('orders').insert({
+          user_id: user.id,
+          amount: order?.amount || 0,
+          status: 'completed',
+          provider: 'creem',
+          external_id: order?.id,
+          metadata: {
+            plan_id,
+            credits,
+            customer_email: customer.email,
+            order_data: order
+          }
+        });
+        
+        console.log('Credits recharged successfully:', result);
+      }
+    }
 
   } catch (error) {
     console.error('Error handling checkout completed:', error);
   }
 }
 
-async function handlePaymentSucceeded(data: any) {
+async function handleSubscriptionPaid(data: any) {
   try {
-    console.log('Payment succeeded:', data);
+    const { customer, product, metadata } = data;
     
-    // 处理支付成功逻辑
-    // 1. 验证支付金额
-    // 2. 查找对应用户
-    // 3. 充值积分
-    // 4. 记录订单
+    console.log('Subscription paid:', { 
+      customerEmail: customer?.email,
+      productName: product?.name,
+      amount: product?.price
+    });
+
+    // 处理订阅支付成功
+    if (customer?.email) {
+      const { data: user } = await supabase
+        .from('users')
+        .select('id')
+        .eq('email', customer.email)
+        .single();
+      
+      if (user) {
+        // 记录订阅支付
+        await supabase.from('orders').insert({
+          user_id: user.id,
+          amount: product?.price || 0,
+          status: 'completed',
+          provider: 'creem',
+          external_id: data.id,
+          metadata: {
+            type: 'subscription',
+            subscription_id: data.id,
+            customer_email: customer.email,
+            subscription_data: data
+          }
+        });
+      }
+    }
     
   } catch (error) {
-    console.error('Error handling payment succeeded:', error);
+    console.error('Error handling subscription paid:', error);
   }
 }
 
-async function handlePaymentFailed(data: any) {
+async function handleSubscriptionCanceled(data: any) {
   try {
-    console.log('Payment failed:', data);
+    const { customer, product } = data;
     
-    // 处理支付失败逻辑
-    // 1. 记录失败原因
-    // 2. 通知用户
-    // 3. 清理临时数据
+    console.log('Subscription canceled:', { 
+      customerEmail: customer?.email,
+      productName: product?.name
+    });
+
+    // 处理订阅取消
+    if (customer?.email) {
+      const { data: user } = await supabase
+        .from('users')
+        .select('id')
+        .eq('email', customer.email)
+        .single();
+      
+      if (user) {
+        // 记录订阅取消
+        await supabase.from('orders').insert({
+          user_id: user.id,
+          amount: 0,
+          status: 'canceled',
+          provider: 'creem',
+          external_id: data.id,
+          metadata: {
+            type: 'subscription_canceled',
+            subscription_id: data.id,
+            customer_email: customer.email,
+            subscription_data: data
+          }
+        });
+      }
+    }
     
   } catch (error) {
-    console.error('Error handling payment failed:', error);
+    console.error('Error handling subscription canceled:', error);
   }
 }
 
-// 验证 webhook 签名的函数（生产环境使用）
-function verifyWebhookSignature(payload: any, signature: string | null): boolean {
-  // 实现 Creem webhook 签名验证
-  // 参考 Creem 文档中的签名验证方法
-  return true; // 测试环境暂时返回 true
+async function handleRefundCreated(data: any) {
+  try {
+    const { customer, refund_amount, order } = data;
+    
+    console.log('Refund created:', { 
+      customerEmail: customer?.email,
+      refundAmount: refund_amount,
+      orderId: order?.id
+    });
+
+    // 处理退款
+    if (customer?.email && order?.id) {
+      const { data: user } = await supabase
+        .from('users')
+        .select('id')
+        .eq('email', customer.email)
+        .single();
+      
+      if (user) {
+        // 更新订单状态为退款
+        await supabase
+          .from('orders')
+          .update({ 
+            status: 'refunded',
+            metadata: {
+              refund_amount,
+              refund_id: data.id,
+              refund_data: data
+            }
+          })
+          .eq('external_id', order.id);
+      }
+    }
+    
+  } catch (error) {
+    console.error('Error handling refund created:', error);
+  }
+}
+
+async function handleDisputeCreated(data: any) {
+  try {
+    const { customer, amount, order } = data;
+    
+    console.log('Dispute created:', { 
+      customerEmail: customer?.email,
+      disputeAmount: amount,
+      orderId: order?.id
+    });
+
+    // 处理争议
+    if (customer?.email && order?.id) {
+      const { data: user } = await supabase
+        .from('users')
+        .select('id')
+        .eq('email', customer.email)
+        .single();
+      
+      if (user) {
+        // 更新订单状态为争议
+        await supabase
+          .from('orders')
+          .update({ 
+            status: 'disputed',
+            metadata: {
+              dispute_amount: amount,
+              dispute_id: data.id,
+              dispute_data: data
+            }
+          })
+          .eq('external_id', order.id);
+      }
+    }
+    
+  } catch (error) {
+    console.error('Error handling dispute created:', error);
+  }
+}
+
+// 验证 webhook 签名的函数
+function verifyWebhookSignature(payload: string, signature: string, secret: string): boolean {
+  try {
+    const computedSignature = crypto
+      .createHmac('sha256', secret)
+      .update(payload)
+      .digest('hex');
+    
+    return computedSignature === signature;
+  } catch (error) {
+    console.error('Error verifying webhook signature:', error);
+    return false;
+  }
 }
