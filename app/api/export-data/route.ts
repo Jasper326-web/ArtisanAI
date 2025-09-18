@@ -62,23 +62,9 @@ export async function GET(req: NextRequest) {
       userData.feedback = feedback;
     }
 
-    // 获取生成的图像信息（如果有存储的话）
-    // 注意：这里假设你有一个存储生成图像的表格
-    // 如果没有，可以跳过这部分
-    try {
-      const { data: images } = await supabase
-        .from('generated_images')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-
-      if (images) {
-        userData.generated_images = images;
-      }
-    } catch (error) {
-      // 如果表格不存在，忽略错误
-      console.log('Generated images table not found, skipping...');
-    }
+    // 注意：我们不在服务器上存储用户生成的图像
+    // 所有生成的图像都是临时的，用户需要自行保存
+    userData.generated_images = [];
 
     // 生成导出文件名
     const timestamp = new Date().toISOString().split('T')[0];

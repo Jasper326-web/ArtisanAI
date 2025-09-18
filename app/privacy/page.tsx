@@ -50,7 +50,8 @@ export default function PrivacyPage() {
                   <h2 className="text-xl font-semibold text-foreground mb-3">3. AI Processing and Image Data</h2>
                   <p>
                     When you upload images to ArtisanAI, we process them using artificial intelligence to generate new content. 
-                    Your uploaded images are processed securely and are not stored permanently unless you choose to save generated results.
+                    Your uploaded images are processed securely and temporarily. We do not store your uploaded images or generated results on our servers.
+                    All generated images are provided to you for immediate download and are not retained by our system.
                   </p>
                 </section>
 
@@ -105,6 +106,7 @@ export default function PrivacyPage() {
                     We retain your personal data only as long as necessary to provide our services 
                     and comply with legal obligations. Account data is retained until you delete 
                     your account, and transaction data is retained for 7 years for tax purposes.
+                    Uploaded images and generated content are not stored and are processed only temporarily.
                   </p>
                 </section>
 

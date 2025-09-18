@@ -348,6 +348,11 @@ export default function AIImageGenerator() {
                         onClick={() => setIsPreviewOpen(true)}
                       />
                       
+                      {/* 图片不保存提示 */}
+                      <div className="absolute top-2 left-2 bg-yellow-500/90 text-white text-xs px-2 py-1 rounded-md">
+                        ⚠️ 图片不会保存，请及时下载
+                      </div>
+                      
                       {/* 操作按钮组 */}
                       <div className="absolute top-2 right-2 flex gap-2">
                         <Button
