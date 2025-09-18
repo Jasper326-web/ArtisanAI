@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const CREEM_API_KEY = process.env.CREEM_API_KEY || 'creem_test_7Pio5ccVdDKTaSz6ijf5Te';
 const CREEM_API_URL = process.env.CREEM_API_KEY?.startsWith('creem_live_') 
-  ? 'https://api.creem.io/v1/checkouts' 
-  : 'https://test-api.creem.io/v1/checkouts';
+  ? 'https://api.creem.io/v1/checkout' 
+  : 'https://test-api.creem.io/v1/checkout';
 
 interface CheckoutRequest {
   plan_id: string;
@@ -44,13 +44,7 @@ export async function POST(req: NextRequest) {
     // 创建 Creem 结账会话
     const requestBody = {
       product_id: productIdMap[plan_id],
-      metadata: {
-        plan_id,
-        credits,
-        user_agent: req.headers.get('user-agent') || '',
-        ip: req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || '',
-      },
-      success_url: process.env.CREEM_SUCCESS_URL || `https://artisans-ai.com/pricing`,
+      success_url: process.env.CREEM_SUCCESS_URL || `https://artisans-ai.com`,
     };
     
     console.log('Creem API request:', {
