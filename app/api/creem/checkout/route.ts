@@ -13,12 +13,19 @@ interface CheckoutRequest {
 
 export async function POST(req: NextRequest) {
   try {
+    console.log('Checkout request received');
+    console.log('API Key:', CREEM_API_KEY ? 'Set' : 'Not set');
+    console.log('API URL:', CREEM_API_URL);
+    
     const body: CheckoutRequest = await req.json();
     const { plan_id, price, credits } = body;
+    
+    console.log('Request body:', { plan_id, price, credits });
 
     // 支持所有积分包
     const validPlans = ['small', 'medium', 'large', 'xlarge', 'mega'];
     if (!validPlans.includes(plan_id)) {
+      console.error('Invalid plan ID:', plan_id);
       return NextResponse.json(
         { error: 'Invalid plan ID' },
         { status: 400 }
@@ -35,29 +42,43 @@ export async function POST(req: NextRequest) {
     };
 
     // 创建 Creem 结账会话
+    const requestBody = {
+      product_id: productIdMap[plan_id],
+      metadata: {
+        plan_id,
+        credits,
+        user_agent: req.headers.get('user-agent') || '',
+        ip: req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || '',
+      },
+      success_url: process.env.CREEM_SUCCESS_URL || `https://artisans-ai.com/pricing?success=true&plan=${plan_id}`,
+    };
+    
+    console.log('Creem API request:', {
+      url: CREEM_API_URL,
+      product_id: productIdMap[plan_id],
+      success_url: requestBody.success_url
+    });
+    
     const response = await fetch(CREEM_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': CREEM_API_KEY,
       },
-      body: JSON.stringify({
-        product_id: productIdMap[plan_id],
-        metadata: {
-          plan_id,
-          credits,
-          user_agent: req.headers.get('user-agent') || '',
-          ip: req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || '',
-        },
-        success_url: process.env.CREEM_SUCCESS_URL || `https://artisans-ai.com/pricing?success=true&plan=${plan_id}`,
-      }),
+      body: JSON.stringify(requestBody),
     });
+
+    console.log('Creem API response status:', response.status);
 
     if (!response.ok) {
       const errorData = await response.text();
-      console.error('Creem API error:', errorData);
+      console.error('Creem API error:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorData
+      });
       return NextResponse.json(
-        { error: 'Failed to create checkout session' },
+        { error: `Creem API error: ${response.status} - ${errorData}` },
         { status: 500 }
       );
     }
