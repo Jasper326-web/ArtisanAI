@@ -34,17 +34,24 @@ export async function POST(req: NextRequest) {
 
     // 产品ID映射
     const productIdMap: Record<string, string> = {
-      small: process.env.CREEM_PRODUCT_SMALL || 'prod_j8RS5IyEKO0MiYG2Bdusi',
-      medium: process.env.CREEM_PRODUCT_MEDIUM || 'prod_j8RS5IyEKO0MiYG2Bdusi',
-      large: process.env.CREEM_PRODUCT_LARGE || 'prod_j8RS5IyEKO0MiYG2Bdusi',
-      xlarge: process.env.CREEM_PRODUCT_XLARGE || 'prod_j8RS5IyEKO0MiYG2Bdusi',
-      mega: process.env.CREEM_PRODUCT_MEGA || 'prod_j8RS5IyEKO0MiYG2Bdusi',
+      small: process.env.CREEM_PRODUCT_SMALL || 'prod_3MFSvuWDwkK316p64whLf6',
+      medium: process.env.CREEM_PRODUCT_MEDIUM || 'prod_3MFSvuWDwkK316p64whLf6',
+      large: process.env.CREEM_PRODUCT_LARGE || 'prod_3MFSvuWDwkK316p64whLf6',
+      xlarge: process.env.CREEM_PRODUCT_XLARGE || 'prod_3MFSvuWDwkK316p64whLf6',
+      mega: process.env.CREEM_PRODUCT_MEGA || 'prod_3MFSvuWDwkK316p64whLf6',
     };
 
     // 创建 Creem 结账会话
     const requestBody = {
-      product: productIdMap[plan_id],
+      product_id: productIdMap[plan_id],
       success_url: process.env.CREEM_SUCCESS_URL || `https://artisans-ai.com/`,
+      request_id: `artisan-ai-${plan_id}-${Date.now()}`,
+      metadata: {
+        plan_id,
+        credits,
+        user_agent: req.headers.get('user-agent') || '',
+        ip: req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || '',
+      }
     };
     
     console.log('Creem API request:', {
