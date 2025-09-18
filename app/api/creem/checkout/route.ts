@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
         user_agent: req.headers.get('user-agent') || '',
         ip: req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || '',
       },
-      success_url: process.env.CREEM_SUCCESS_URL || `https://artisans-ai.com/pricing?success=true&plan=${plan_id}`,
+      success_url: process.env.CREEM_SUCCESS_URL || `https://artisans-ai.com/pricing`,
     };
     
     console.log('Creem API request:', {
