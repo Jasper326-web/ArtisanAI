@@ -9,6 +9,7 @@ interface CheckoutRequest {
   plan_id: string;
   price: string;
   credits: number;
+  user_id: string; // 添加用户ID
 }
 
 export async function POST(req: NextRequest) {
@@ -19,9 +20,9 @@ export async function POST(req: NextRequest) {
     console.log('Test Mode:', CREEM_API_URL.includes('test-api'));
     
     const body: CheckoutRequest = await req.json();
-    const { plan_id, price, credits } = body;
+    const { plan_id, price, credits, user_id } = body;
     
-    console.log('Request body:', { plan_id, price, credits });
+    console.log('Request body:', { plan_id, price, credits, user_id });
 
     // 支持所有积分包
     const validPlans = ['small', 'medium', 'large', 'xlarge', 'mega'];
@@ -50,6 +51,7 @@ export async function POST(req: NextRequest) {
       metadata: {
         plan_id,
         credits,
+        user_id, // 传递用户ID到Creem
         user_agent: req.headers.get('user-agent') || '',
         ip: req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || '',
       }

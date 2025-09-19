@@ -74,72 +74,66 @@ async function handleCheckoutCompleted(data: any) {
       metadata
     });
 
-    // 通过客户邮箱查找用户
-    if (customer?.email) {
-      const { data: user } = await supabase
-        .from('users')
-        .select('id')
-        .eq('email', customer.email)
-        .single();
+    // 从metadata中获取用户ID
+    const userId = metadata?.user_id;
+    
+    if (userId) {
+      console.log('Processing payment for user ID:', userId);
       
-      if (user) {
-        // 根据产品ID确定积分数量
-        const credits = getCreditsByProductId(product?.id);
-        
-        if (credits > 0) {
-          // 充值积分
-          const { data: result, error: rechargeError } = await supabase.rpc('recharge_credits', {
-            p_user_id: user.id,
-            p_amount: credits
-          });
-          
-          if (rechargeError) {
-            console.error('Recharge credits error:', rechargeError);
-          } else {
-            console.log('Credits recharged successfully:', result);
-          }
-        }
-        
-        // 检查订单是否已存在（防重复处理）
-        const { data: existingOrder } = await supabase
-          .from('orders')
-          .select('id')
-          .eq('external_id', order?.id)
-          .single();
-        
-        if (existingOrder) {
-          console.log('Order already exists, skipping:', order?.id);
-          return;
-        }
-        
-        // 记录订单
-        const { error: orderError } = await supabase.from('orders').insert({
-          user_id: user.id,
-          amount: order?.amount || 0,
-          bonus: credits,
-          status: 'completed',
-          provider: 'creem',
-          external_id: order?.id,
-          metadata: {
-            product_id: product?.id,
-            credits,
-            customer_email: customer.email,
-            order_data: order,
-            product_data: product,
-            customer_data: customer
-          }
+      // 根据产品ID确定积分数量
+      const credits = getCreditsByProductId(product?.id);
+      
+      if (credits > 0) {
+        // 充值积分
+        const { data: result, error: rechargeError } = await supabase.rpc('recharge_credits', {
+          p_user_id: userId,
+          p_amount: credits
         });
         
-        if (orderError) {
-          console.error('Insert order error:', orderError);
+        if (rechargeError) {
+          console.error('Recharge credits error:', rechargeError);
         } else {
-          console.log('Order recorded successfully');
+          console.log('Credits recharged successfully:', result);
         }
+      }
+      
+      // 检查订单是否已存在（防重复处理）
+      const { data: existingOrder } = await supabase
+        .from('orders')
+        .select('id')
+        .eq('external_id', order?.id)
+        .single();
+      
+      if (existingOrder) {
+        console.log('Order already exists, skipping:', order?.id);
+        return;
+      }
+      
+      // 记录订单
+      const { error: orderError } = await supabase.from('orders').insert({
+        user_id: userId,
+        amount: order?.amount || 0,
+        bonus: credits,
+        status: 'completed',
+        provider: 'creem',
+        external_id: order?.id,
+        metadata: {
+          product_id: product?.id,
+          credits,
+          customer_email: customer?.email,
+          order_data: order,
+          product_data: product,
+          customer_data: customer
+        }
+      });
+      
+      if (orderError) {
+        console.error('Insert order error:', orderError);
       } else {
-        console.log('User not found for email:', customer.email);
+        console.log('Order recorded successfully');
       }
     } else {
-      console.log('No customer email provided');
+      console.log('No user_id found in metadata');
     }
 
   } catch (error) {

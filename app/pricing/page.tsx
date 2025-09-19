@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -8,6 +8,7 @@ import { Check, Star, Zap, Crown, Building2 } from 'lucide-react';
 import { useLanguage } from '@/contexts/language-context';
 import { useToast } from '@/hooks/use-toast';
 import LightRays from '@/components/light-rays';
+import { createClient } from '@/lib/supabase-client';
 
 interface PricingPlan {
   id: string;
@@ -27,6 +28,38 @@ export default function PricingPage() {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [loading, setLoading] = useState<string | null>(null);
+  const [user, setUser] = useState<{ id: string; email?: string } | null>(null);
+  const supabase = createClient();
+
+  // 获取当前用户信息
+  useEffect(() => {
+    const getSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        setUser({
+          id: session.user.id,
+          email: session.user.email,
+        });
+      }
+    };
+
+    getSession();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (session?.user) {
+          setUser({
+            id: session.user.id,
+            email: session.user.email,
+          });
+        } else {
+          setUser(null);
+        }
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, [supabase]);
 
   const creditPacks: PricingPlan[] = [
     {
@@ -111,6 +144,16 @@ export default function PricingPage() {
       return;
     }
 
+    // 检查用户是否已登录
+    if (!user?.id) {
+      toast({
+        title: '请先登录',
+        description: '购买积分前请先登录您的账户。',
+        variant: 'destructive'
+      });
+      return;
+    }
+
     setLoading(plan.id);
     
     try {
@@ -123,7 +166,8 @@ export default function PricingPage() {
         body: JSON.stringify({
           plan_id: plan.id,
           price: plan.price,
-          credits: plan.credits + getBonusCredits(plan.credits)
+          credits: plan.credits + getBonusCredits(plan.credits),
+          user_id: user.id // 传递用户ID
         }),
       });
 
