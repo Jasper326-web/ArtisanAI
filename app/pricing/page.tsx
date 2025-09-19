@@ -33,6 +33,7 @@ export default function PricingPage() {
 
   // 获取当前用户信息
   useEffect(() => {
+    console.log('🚀 Pricing页面组件已挂载');
     const getSession = async () => {
       console.log('🔍 开始获取用户会话...');
       try {
@@ -149,8 +150,11 @@ export default function PricingPage() {
 
   const handlePurchase = async (plan: PricingPlan) => {
     console.log('🛒 开始购买流程:', { plan: plan.id, user: user?.id });
+    console.log('🔍 当前用户状态:', user);
+    console.log('🔍 计划信息:', plan);
     
     if (!plan.available) {
+      console.log('❌ 计划不可用');
       toast({
         title: t?.pricing?.coming_soon || 'Coming Soon',
         description: t?.pricing?.coming_soon_description || 'This plan will be available after testing is complete.',
@@ -162,6 +166,7 @@ export default function PricingPage() {
     // 检查用户是否已登录
     if (!user?.id) {
       console.log('❌ 用户未登录，无法购买');
+      console.log('🔍 用户对象:', user);
       toast({
         title: '请先登录',
         description: '购买积分前请先登录您的账户。',
@@ -241,7 +246,10 @@ export default function PricingPage() {
                     ? 'border-purple-500 shadow-2xl shadow-purple-500/25 bg-gradient-to-br from-purple-900/20 to-pink-900/20' 
                     : 'border-gray-700 hover:border-gray-600 bg-gray-800/50'
                 }`}
-                onClick={() => handlePurchase(pack)}
+                onClick={() => {
+                  console.log('🖱️ 按钮被点击:', pack.id);
+                  handlePurchase(pack);
+                }}
               >
                 {pack.popular && (
                   <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-center py-2 text-sm font-semibold">
