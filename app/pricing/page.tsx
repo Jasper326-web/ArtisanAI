@@ -34,12 +34,24 @@ export default function PricingPage() {
   // 获取当前用户信息
   useEffect(() => {
     const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        setUser({
-          id: session.user.id,
-          email: session.user.email,
-        });
+      console.log('🔍 开始获取用户会话...');
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        console.log('📋 会话获取结果:', { session, error });
+        
+        if (session?.user) {
+          console.log('✅ 用户已登录:', session.user.id, session.user.email);
+          setUser({
+            id: session.user.id,
+            email: session.user.email,
+          });
+        } else {
+          console.log('❌ 用户未登录');
+          setUser(null);
+        }
+      } catch (error) {
+        console.error('💥 获取会话时出错:', error);
+        setUser(null);
       }
     };
 
@@ -47,6 +59,7 @@ export default function PricingPage() {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('🔄 认证状态变化:', event, session?.user?.id);
         if (session?.user) {
           setUser({
             id: session.user.id,
@@ -135,6 +148,8 @@ export default function PricingPage() {
   };
 
   const handlePurchase = async (plan: PricingPlan) => {
+    console.log('🛒 开始购买流程:', { plan: plan.id, user: user?.id });
+    
     if (!plan.available) {
       toast({
         title: t?.pricing?.coming_soon || 'Coming Soon',
@@ -146,6 +161,7 @@ export default function PricingPage() {
 
     // 检查用户是否已登录
     if (!user?.id) {
+      console.log('❌ 用户未登录，无法购买');
       toast({
         title: '请先登录',
         description: '购买积分前请先登录您的账户。',
@@ -153,6 +169,8 @@ export default function PricingPage() {
       });
       return;
     }
+
+    console.log('✅ 用户已登录，继续购买流程');
 
     setLoading(plan.id);
     
