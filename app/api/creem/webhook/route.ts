@@ -150,12 +150,22 @@ async function handleCheckoutCompleted(data: any) {
 // 根据产品ID获取积分数量
 function getCreditsByProductId(productId: string): number {
   const productCreditsMap: { [key: string]: number } = {
-    'prod_hjE2miByilwiAMNFFfRm7': 100, // 你的测试产品ID
+    // 测试环境产品ID映射
+    'prod_hjE2miByilwiAMNFFfRm7': 300, // 小包 - 300积分
+    'prod_j8RS5IyEKO0MiYG2Bdusi': 300, // 小包 - 300积分 (文档中的ID)
+    
     // 生产环境产品ID映射
-    'prod_3MFSvuWDwkK316p64whLf6': 100, // 生产环境产品ID
-    // 添加更多产品ID映射
+    'prod_3MFSvuWDwkK316p64whLf6': 300, // 小包 - 300积分
+    
+    // 根据你的实际套餐配置
+    // 小包: $4.99 - 300积分
+    // 中包: $9.99 - 700积分  
+    // 大包: $19.99 - 1600积分
+    // 超大包: $49.99 - 4500积分
+    // 超级包: $99.99 - 10000积分
   };
   
+  console.log('Product ID mapping:', { productId, credits: productCreditsMap[productId] });
   return productCreditsMap[productId] || 0;
 }
 
