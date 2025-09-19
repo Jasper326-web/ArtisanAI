@@ -239,18 +239,14 @@ export default function PricingPage() {
             const totalCredits = pack.credits + bonusCredits;
             
             return (
-              <Card 
-                key={pack.id}
-                className={`relative overflow-hidden transition-all duration-300 hover:scale-105 cursor-pointer ${
-                  pack.popular 
-                    ? 'border-purple-500 shadow-2xl shadow-purple-500/25 bg-gradient-to-br from-purple-900/20 to-pink-900/20' 
-                    : 'border-gray-700 hover:border-gray-600 bg-gray-800/50'
-                }`}
-                onClick={() => {
-                  console.log('🖱️ 按钮被点击:', pack.id);
-                  handlePurchase(pack);
-                }}
-              >
+                <Card 
+                  key={pack.id}
+                  className={`relative overflow-hidden transition-all duration-300 hover:scale-105 ${
+                    pack.popular 
+                      ? 'border-purple-500 shadow-2xl shadow-purple-500/25 bg-gradient-to-br from-purple-900/20 to-pink-900/20' 
+                      : 'border-gray-700 hover:border-gray-600 bg-gray-800/50'
+                  }`}
+                >
                 {pack.popular && (
                   <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-center py-2 text-sm font-semibold">
                     {t?.pricing?.most_popular || '最受欢迎'}
@@ -300,6 +296,10 @@ export default function PricingPage() {
                   {/* Purchase Button */}
                   <Button
                     disabled={loading === pack.id}
+                    onClick={() => {
+                      console.log('🖱️ 按钮被点击:', pack.id);
+                      handlePurchase(pack);
+                    }}
                     className={`w-full ${
                       pack.popular
                         ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600'
