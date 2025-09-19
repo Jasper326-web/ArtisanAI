@@ -16,6 +16,7 @@ export async function POST(req: NextRequest) {
     console.log('Checkout request received');
     console.log('API Key:', CREEM_API_KEY ? 'Set' : 'Not set');
     console.log('API URL:', CREEM_API_URL);
+    console.log('Test Mode:', CREEM_API_URL.includes('test-api'));
     
     const body: CheckoutRequest = await req.json();
     const { plan_id, price, credits } = body;
@@ -32,13 +33,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 产品ID映射
+    // 产品ID映射 - 使用测试模式下的产品ID
     const productIdMap: Record<string, string> = {
-      small: process.env.CREEM_PRODUCT_SMALL || 'prod_3MFSvuWDwkK316p64whLf6',
-      medium: process.env.CREEM_PRODUCT_MEDIUM || 'prod_3MFSvuWDwkK316p64whLf6',
-      large: process.env.CREEM_PRODUCT_LARGE || 'prod_3MFSvuWDwkK316p64whLf6',
-      xlarge: process.env.CREEM_PRODUCT_XLARGE || 'prod_3MFSvuWDwkK316p64whLf6',
-      mega: process.env.CREEM_PRODUCT_MEGA || 'prod_3MFSvuWDwkK316p64whLf6',
+      small: process.env.CREEM_PRODUCT_SMALL || 'prod_hjE2miByilwiAMNFFfRm7',
+      medium: process.env.CREEM_PRODUCT_MEDIUM || 'prod_hjE2miByilwiAMNFFfRm7',
+      large: process.env.CREEM_PRODUCT_LARGE || 'prod_hjE2miByilwiAMNFFfRm7',
+      xlarge: process.env.CREEM_PRODUCT_XLARGE || 'prod_hjE2miByilwiAMNFFfRm7',
+      mega: process.env.CREEM_PRODUCT_MEGA || 'prod_hjE2miByilwiAMNFFfRm7',
     };
 
     // 创建 Creem 结账会话
@@ -57,7 +58,8 @@ export async function POST(req: NextRequest) {
     console.log('Creem API request:', {
       url: CREEM_API_URL,
       product_id: productIdMap[plan_id],
-      success_url: requestBody.success_url
+      success_url: requestBody.success_url,
+      api_key: CREEM_API_KEY.substring(0, 20) + '...' // 只显示前20个字符
     });
     
     const response = await fetch(CREEM_API_URL, {

@@ -63,16 +63,15 @@ export async function POST(req: NextRequest) {
 
 async function handleCheckoutCompleted(data: any) {
   try {
-    const { order, customer, metadata } = data;
-    const { plan_id, credits } = metadata || {};
+    const { order, customer, product, metadata } = data;
     
     console.log('Checkout completed:', { 
       orderId: order?.id, 
       customerEmail: customer?.email,
-      plan_id, 
-      credits,
+      productId: product?.id,
       amount: order?.amount,
-      currency: order?.currency
+      currency: order?.currency,
+      metadata
     });
 
     // 通过客户邮箱查找用户
@@ -83,35 +82,81 @@ async function handleCheckoutCompleted(data: any) {
         .eq('email', customer.email)
         .single();
       
-      if (user && credits) {
-        // 充值积分
-        const { data: result } = await supabase.rpc('recharge_credits', {
-          p_user_id: user.id,
-          p_amount: parseInt(credits)
-        });
+      if (user) {
+        // 根据产品ID确定积分数量
+        const credits = getCreditsByProductId(product?.id);
+        
+        if (credits > 0) {
+          // 充值积分
+          const { data: result, error: rechargeError } = await supabase.rpc('recharge_credits', {
+            p_user_id: user.id,
+            p_amount: credits
+          });
+          
+          if (rechargeError) {
+            console.error('Recharge credits error:', rechargeError);
+          } else {
+            console.log('Credits recharged successfully:', result);
+          }
+        }
+        
+        // 检查订单是否已存在（防重复处理）
+        const { data: existingOrder } = await supabase
+          .from('orders')
+          .select('id')
+          .eq('external_id', order?.id)
+          .single();
+        
+        if (existingOrder) {
+          console.log('Order already exists, skipping:', order?.id);
+          return;
+        }
         
         // 记录订单
-        await supabase.from('orders').insert({
+        const { error: orderError } = await supabase.from('orders').insert({
           user_id: user.id,
           amount: order?.amount || 0,
+          bonus: credits,
           status: 'completed',
           provider: 'creem',
           external_id: order?.id,
           metadata: {
-            plan_id,
+            product_id: product?.id,
             credits,
             customer_email: customer.email,
-            order_data: order
+            order_data: order,
+            product_data: product,
+            customer_data: customer
           }
         });
         
-        console.log('Credits recharged successfully:', result);
+        if (orderError) {
+          console.error('Insert order error:', orderError);
+        } else {
+          console.log('Order recorded successfully');
+        }
+      } else {
+        console.log('User not found for email:', customer.email);
       }
+    } else {
+      console.log('No customer email provided');
     }
 
   } catch (error) {
     console.error('Error handling checkout completed:', error);
   }
+}
+
+// 根据产品ID获取积分数量
+function getCreditsByProductId(productId: string): number {
+  const productCreditsMap: { [key: string]: number } = {
+    'prod_hjE2miByilwiAMNFFfRm7': 100, // 你的测试产品ID
+    // 生产环境产品ID映射
+    'prod_3MFSvuWDwkK316p64whLf6': 100, // 生产环境产品ID
+    // 添加更多产品ID映射
+  };
+  
+  return productCreditsMap[productId] || 0;
 }
 
 async function handleSubscriptionPaid(data: any) {
