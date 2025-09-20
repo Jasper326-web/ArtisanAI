@@ -7,18 +7,26 @@ export async function POST(req: NextRequest) {
     const body = await req.text();
     const signature = req.headers.get('creem-signature');
     
-    console.log('Creem webhook received:', { signature, bodyLength: body.length });
+    console.log('=== Creem Webhook Received ===');
+    console.log('Signature:', signature ? 'Present' : 'Missing');
+    console.log('Body length:', body.length);
+    console.log('Body preview:', body.substring(0, 200));
 
     // 验证 webhook 签名 - 使用官方示例
     const webhookSecret = process.env.CREEM_WEBHOOK_SECRET;
+    console.log('Webhook secret:', webhookSecret ? 'Set' : 'Not set');
+    
     if (webhookSecret && signature) {
-      if (!verifyWebhookSignature(body, signature, webhookSecret)) {
+      const isValid = verifyWebhookSignature(body, signature, webhookSecret);
+      console.log('Signature validation result:', isValid);
+      
+      if (!isValid) {
         console.error('Invalid webhook signature');
         return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
       }
-      console.log('Webhook signature verified successfully');
+      console.log('✅ Webhook signature verified successfully');
     } else {
-      console.log('Webhook signature verification skipped (no secret or signature)');
+      console.log('⚠️ Webhook signature verification skipped (no secret or signature)');
     }
 
     const data = JSON.parse(body);
@@ -66,21 +74,20 @@ async function handleCheckoutCompleted(data: any) {
   try {
     const { order, customer, product, metadata, request_id } = data;
     
-    console.log('Checkout completed:', { 
-      orderId: order?.id, 
-      customerEmail: customer?.email,
-      productId: product?.id,
-      amount: order?.amount,
-      currency: order?.currency,
-      request_id,
-      metadata
-    });
+    console.log('=== Checkout Completed Processing ===');
+    console.log('Order ID:', order?.id);
+    console.log('Customer email:', customer?.email);
+    console.log('Product ID:', product?.id);
+    console.log('Amount:', order?.amount);
+    console.log('Currency:', order?.currency);
+    console.log('Request ID:', request_id);
+    console.log('Metadata:', JSON.stringify(metadata, null, 2));
 
     // 使用官方示例的方式：从request_id获取用户ID
     const userId = request_id;
     
     if (userId) {
-      console.log('Processing payment for user ID:', userId);
+      console.log('✅ Processing payment for user ID:', userId);
       
       // 优先使用metadata中的credits，如果没有则根据产品ID确定
       let credits = metadata?.credits || getCreditsByProductId(product?.id);

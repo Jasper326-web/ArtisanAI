@@ -14,10 +14,12 @@ interface CheckoutRequest {
 
 export async function POST(req: NextRequest) {
   try {
-    console.log('Checkout request received');
+    console.log('=== Creem Checkout Request ===');
     console.log('API Key:', CREEM_API_KEY ? 'Set' : 'Not set');
+    console.log('API Key prefix:', CREEM_API_KEY?.substring(0, 20));
     console.log('API URL:', CREEM_API_URL);
     console.log('Test Mode:', CREEM_API_URL.includes('test-api'));
+    console.log('Environment:', process.env.CREEM_API_KEY?.startsWith('creem_live_') ? 'LIVE' : 'TEST');
     
     const body: CheckoutRequest = await req.json();
     const { plan_id, price, credits, user_id } = body;
@@ -46,7 +48,7 @@ export async function POST(req: NextRequest) {
     // 创建 Creem 结账会话 - 使用官方示例格式
     const requestBody = {
       product_id: productIdMap[plan_id],
-      success_url: process.env.CREEM_SUCCESS_URL || `https://artisans-ai.com/`,
+      success_url: process.env.CREEM_SUCCESS_URL || `https://artisans-ai.com/success`,
       request_id: user_id, // 直接使用用户ID作为request_id，这是关键
       metadata: {
         plan_id,
