@@ -1,4 +1,4 @@
--- 修复项 A - 强制幂等与 DB 唯一索引
+-- 修复项 A - 步骤 1: 数据清理和检查
 -- 在 Supabase 控制台的 SQL 编辑器中执行此脚本
 
 -- ========================================
@@ -61,38 +61,9 @@ WHERE external_id IS NOT NULL
 GROUP BY external_id
 HAVING COUNT(*) > 1;
 
--- ========================================
--- 步骤 3: 创建唯一索引
--- ========================================
-
--- 为external_id创建唯一索引（忽略NULL值）
--- 注意：CONCURRENTLY不能在事务中执行，需要单独运行
-CREATE UNIQUE INDEX idx_orders_external_id_unique 
-ON orders (external_id) 
-WHERE external_id IS NOT NULL;
-
--- 验证索引创建
-SELECT indexname, indexdef
-FROM pg_indexes
-WHERE tablename = 'orders' AND indexname = 'idx_orders_external_id_unique';
-
--- ========================================
--- 步骤 4: 测试唯一约束
--- ========================================
-
--- 测试插入重复的external_id（应该失败）
--- 注意：这只是一个测试，实际执行会失败
-/*
-INSERT INTO orders (user_id, amount, bonus, status, provider, external_id, metadata)
-VALUES ('test-user', 499, 300, 'completed', 'creem', 'test-duplicate-id', '{"test": true}');
-
-INSERT INTO orders (user_id, amount, bonus, status, provider, external_id, metadata)
-VALUES ('test-user-2', 499, 300, 'completed', 'creem', 'test-duplicate-id', '{"test": true}');
-*/
-
--- 显示最终状态
+-- 显示最终清理状态
 SELECT
-  'Index created successfully' as status,
+  'Data cleanup completed' as status,
   COUNT(*) as total_orders,
   COUNT(CASE WHEN user_id IS NULL THEN 1 END) as orphan_orders,
   COUNT(CASE WHEN external_id IS NOT NULL THEN 1 END) as orders_with_external_id
