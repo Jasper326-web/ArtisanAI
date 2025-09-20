@@ -154,18 +154,56 @@ async function handleCheckoutCompleted(data: any) {
       });
       
       if (credits > 0) {
-        // 充值积分
+        // 充值积分 - 使用直接的SQL操作而不是RPC
         console.log('Attempting to recharge credits:', { userId, credits });
-        const { data: result, error: rechargeError } = await supabase.rpc('recharge_credits', {
+        
+        // 先查询充值前的积分余额
+        const { data: beforeCredits } = await supabase
+          .from('credits')
+          .select('balance')
+          .eq('user_id', userId)
+          .maybeSingle();
+        
+        console.log('Credits before recharge:', beforeCredits?.balance || 0);
+        
+        // 方法1：尝试使用RPC函数
+        const { data: rpcResult, error: rpcError } = await supabase.rpc('recharge_credits', {
           p_user_id: userId,
           p_amount: credits
         });
         
-        if (rechargeError) {
-          console.error('Recharge credits error:', rechargeError);
+        if (rpcError) {
+          console.error('❌ RPC recharge failed, trying direct SQL:', rpcError);
+          
+          // 方法2：直接使用SQL操作
+          const { data: insertResult, error: insertError } = await supabase
+            .from('credits')
+            .upsert({
+              user_id: userId,
+              balance: (beforeCredits?.balance || 0) + credits,
+              updated_at: new Date().toISOString()
+            }, {
+              onConflict: 'user_id'
+            })
+            .select();
+          
+          if (insertError) {
+            console.error('❌ Direct SQL recharge failed:', insertError);
+          } else {
+            console.log('✅ Direct SQL recharge successful:', insertResult);
+          }
         } else {
-          console.log('Credits recharged successfully:', result);
+          console.log('✅ RPC recharge successful:', rpcResult);
         }
+        
+        // 最终验证积分更新
+        const { data: finalCredits } = await supabase
+          .from('credits')
+          .select('balance, updated_at')
+          .eq('user_id', userId)
+          .maybeSingle();
+        
+        console.log('Final credits verification:', finalCredits);
       } else {
         console.log('No credits to recharge');
       }
