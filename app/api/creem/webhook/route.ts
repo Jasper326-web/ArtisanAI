@@ -9,15 +9,16 @@ export async function POST(req: NextRequest) {
     
     console.log('Creem webhook received:', { signature, bodyLength: body.length });
 
-    // 验证 webhook 签名（临时禁用用于测试）
+    // 验证 webhook 签名 - 使用官方示例
     const webhookSecret = process.env.CREEM_WEBHOOK_SECRET;
     if (webhookSecret && signature) {
       if (!verifyWebhookSignature(body, signature, webhookSecret)) {
         console.error('Invalid webhook signature');
         return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
       }
+      console.log('Webhook signature verified successfully');
     } else {
-      console.log('Webhook signature verification skipped (testing mode)');
+      console.log('Webhook signature verification skipped (no secret or signature)');
     }
 
     const data = JSON.parse(body);
@@ -63,7 +64,7 @@ export async function POST(req: NextRequest) {
 
 async function handleCheckoutCompleted(data: any) {
   try {
-    const { order, customer, product, metadata } = data;
+    const { order, customer, product, metadata, request_id } = data;
     
     console.log('Checkout completed:', { 
       orderId: order?.id, 
@@ -71,17 +72,18 @@ async function handleCheckoutCompleted(data: any) {
       productId: product?.id,
       amount: order?.amount,
       currency: order?.currency,
+      request_id,
       metadata
     });
 
-    // 从metadata中获取用户ID
-    const userId = metadata?.user_id;
+    // 使用官方示例的方式：从request_id获取用户ID
+    const userId = request_id;
     
     if (userId) {
       console.log('Processing payment for user ID:', userId);
       
-      // 根据产品ID确定积分数量
-      const credits = getCreditsByProductId(product?.id);
+      // 优先使用metadata中的credits，如果没有则根据产品ID确定
+      let credits = metadata?.credits || getCreditsByProductId(product?.id);
       
       if (credits > 0) {
         // 充值积分
@@ -121,6 +123,7 @@ async function handleCheckoutCompleted(data: any) {
           product_id: product?.id,
           credits,
           customer_email: customer?.email,
+          request_id,
           order_data: order,
           product_data: product,
           customer_data: customer
@@ -133,7 +136,7 @@ async function handleCheckoutCompleted(data: any) {
         console.log('Order recorded successfully');
       }
     } else {
-      console.log('No user_id found in metadata');
+      console.log('No request_id found in webhook data');
     }
 
   } catch (error) {
@@ -151,16 +154,19 @@ function getCreditsByProductId(productId: string): number {
     // 生产环境产品ID映射
     'prod_3MFSvuWDwkK316p64whLf6': 300, // 小包 - 300积分
     
-    // 根据你的实际套餐配置
+    // 根据你的实际套餐配置 - 需要根据实际产品ID更新
     // 小包: $4.99 - 300积分
     // 中包: $9.99 - 700积分  
     // 大包: $19.99 - 1600积分
     // 超大包: $49.99 - 4500积分
     // 超级包: $99.99 - 10000积分
+    
+    // 临时：所有产品都返回300积分，直到你创建不同的产品
+    // 你可以通过metadata中的credits字段获取准确的积分数量
   };
   
   console.log('Product ID mapping:', { productId, credits: productCreditsMap[productId] });
-  return productCreditsMap[productId] || 0;
+  return productCreditsMap[productId] || 300; // 默认返回300积分
 }
 
 async function handleSubscriptionPaid(data: any) {

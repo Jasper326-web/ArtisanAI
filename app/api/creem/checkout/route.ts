@@ -43,15 +43,14 @@ export async function POST(req: NextRequest) {
       mega: process.env.CREEM_PRODUCT_MEGA || 'prod_hjE2miByilwiAMNFFfRm7',
     };
 
-    // 创建 Creem 结账会话
+    // 创建 Creem 结账会话 - 使用官方示例格式
     const requestBody = {
       product_id: productIdMap[plan_id],
       success_url: process.env.CREEM_SUCCESS_URL || `https://artisans-ai.com/`,
-      request_id: `artisan-ai-${plan_id}-${Date.now()}`,
+      request_id: user_id, // 直接使用用户ID作为request_id，这是关键
       metadata: {
         plan_id,
         credits,
-        user_id, // 传递用户ID到Creem
         user_agent: req.headers.get('user-agent') || '',
         ip: req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || '',
       }
