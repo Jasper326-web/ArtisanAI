@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
     };
 
     // 强制设置success_url，确保跳转到正确的页面
-    const successUrl = process.env.CREEM_SUCCESS_URL || `https://artisans-ai.com/success?source=creem`;
+    const successUrl = `https://artisans-ai.com/success`;
     
     // 创建 Creem 结账会话 - 使用官方示例格式
     const requestBody = {
