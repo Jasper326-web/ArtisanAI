@@ -153,80 +153,73 @@ async function handleCheckoutCompleted(data: any) {
         finalCredits: credits
       });
       
-      if (credits > 0) {
-        // 充值积分
-        console.log('Attempting to recharge credits:', { userId, credits });
-        
-        // 先查询充值前的积分余额
-        const { data: beforeCredits, error: beforeError } = await supabase
-          .from('credits')
-          .select('balance')
-          .eq('user_id', userId)
-          .maybeSingle();
-        
-        if (beforeError && beforeError.code !== 'PGRST116') {
-          console.error('查询充值前积分失败:', beforeError);
-        }
-        
-        console.log('Credits before recharge:', beforeCredits?.balance || 0);
-        
-        const { data: result, error: rechargeError } = await supabase.rpc('recharge_credits', {
-          p_user_id: userId,
-          p_amount: credits
-        });
-        
-        if (rechargeError) {
-          console.error('❌ Recharge credits error:', rechargeError);
-          console.error('Error details:', {
-            code: rechargeError.code,
-            message: rechargeError.message,
-            details: rechargeError.details,
-            hint: rechargeError.hint
-          });
-        } else {
-          console.log('✅ Credits recharged successfully:', result);
-          console.log('New balance:', result?.[0]?.balance);
-          
-          // 验证积分确实更新了
-          const { data: afterCredits, error: afterError } = await supabase
-            .from('credits')
-            .select('balance, updated_at')
-            .eq('user_id', userId)
-            .maybeSingle();
-          
-          if (afterError && afterError.code !== 'PGRST116') {
-            console.error('验证积分更新失败:', afterError);
-          }
-          
-          console.log('Credits after recharge verification:', afterCredits);
-        }
-      } else {
-        console.log('No credits to recharge');
-      }
+      // 积分充值逻辑已移至订单UPSERT后处理，避免重复充值
       
-      // 检查订单是否已存在（防重复处理）
+      // 强制幂等性检查：检查订单是否已存在（防重复处理）
       const { data: existingOrder, error: existingOrderError } = await supabase
         .from('orders')
-        .select('id, user_id, status')
+        .select('id, user_id, status, created_at, metadata')
         .eq('external_id', order?.id)
-        .single();
+        .maybeSingle();
       
       if (existingOrder) {
-        console.log('Order already exists:', {
+        console.log('🚫 Order already exists (idempotency check):', {
           orderId: existingOrder.id,
           userId: existingOrder.user_id,
           status: existingOrder.status,
-          externalId: order?.id
+          externalId: order?.id,
+          createdAt: existingOrder.created_at,
+          existingMetadata: existingOrder.metadata
         });
-        return;
+        
+        // 如果订单已存在但user_id为空（orphan订单），尝试匹配用户
+        if (existingOrder.user_id === null && userId) {
+          console.log('🔄 Attempting to link orphan order to user:', userId);
+          
+          // 更新orphan订单的user_id
+          const { error: updateError } = await supabase
+            .from('orders')
+            .update({ 
+              user_id: userId,
+              metadata: {
+                ...existingOrder.metadata,
+                linked_at: new Date().toISOString(),
+                linked_user_id: userId
+              }
+            })
+            .eq('id', existingOrder.id);
+          
+          if (updateError) {
+            console.error('❌ Failed to link orphan order:', updateError);
+          } else {
+            console.log('✅ Successfully linked orphan order to user');
+            
+            // 现在为用户充值积分（只充值一次）
+            if (credits > 0) {
+              console.log('💰 Recharging credits for linked order:', { userId, credits });
+              const { data: result, error: rechargeError } = await supabase.rpc('recharge_credits', {
+                p_user_id: userId,
+                p_amount: credits
+              });
+              
+              if (rechargeError) {
+                console.error('❌ Failed to recharge credits for linked order:', rechargeError);
+              } else {
+                console.log('✅ Credits recharged for linked order:', result);
+              }
+            }
+          }
+        }
+        
+        return; // 无论是否成功链接，都返回，避免重复处理
       }
       
       if (existingOrderError && existingOrderError.code !== 'PGRST116') {
-        console.error('Error checking existing order:', existingOrderError);
+        console.error('❌ Error checking existing order:', existingOrderError);
       }
       
-      // 记录订单
-      console.log('Inserting new order:', {
+      // 记录订单 - 使用UPSERT确保幂等性
+      console.log('🔄 Upserting order (idempotent):', {
         user_id: userId,
         external_id: order?.id,
         amount: order?.amount,
@@ -234,7 +227,7 @@ async function handleCheckoutCompleted(data: any) {
         customer_email: customer?.email
       });
       
-      const { data: insertedOrder, error: orderError } = await supabase.from('orders').insert({
+      const orderData = {
         user_id: userId,
         amount: order?.amount || 0,
         bonus: credits,
@@ -248,14 +241,48 @@ async function handleCheckoutCompleted(data: any) {
           request_id,
           order_data: order,
           product_data: product,
-          customer_data: customer
+          customer_data: customer,
+          webhook_processed_at: new Date().toISOString()
         }
-      }).select();
+      };
+      
+      // 使用UPSERT确保幂等性（如果external_id已存在，则更新，否则插入）
+      const { data: upsertedOrder, error: orderError } = await supabase
+        .from('orders')
+        .upsert(orderData, {
+          onConflict: 'external_id',
+          ignoreDuplicates: false
+        })
+        .select();
       
       if (orderError) {
-        console.error('Insert order error:', orderError);
+        console.error('❌ Upsert order error:', orderError);
+        console.error('Order data:', orderData);
       } else {
-        console.log('Order recorded successfully:', insertedOrder);
+        console.log('✅ Order upserted successfully:', upsertedOrder);
+        
+        // 只有在订单是新插入的情况下才充值积分（避免重复充值）
+        if (upsertedOrder && upsertedOrder.length > 0) {
+          const insertedOrder = upsertedOrder[0];
+          console.log('💰 Processing credits for new order:', {
+            orderId: insertedOrder.id,
+            userId: insertedOrder.user_id,
+            credits: credits
+          });
+          
+          if (credits > 0 && insertedOrder.user_id) {
+            const { data: result, error: rechargeError } = await supabase.rpc('recharge_credits', {
+              p_user_id: insertedOrder.user_id,
+              p_amount: credits
+            });
+            
+            if (rechargeError) {
+              console.error('❌ Recharge credits error after order upsert:', rechargeError);
+            } else {
+              console.log('✅ Credits recharged after order upsert:', result);
+            }
+          }
+        }
       }
     } else {
       console.log('No request_id found in webhook data');
