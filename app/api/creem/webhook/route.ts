@@ -7,6 +7,12 @@ export async function POST(req: NextRequest) {
     const body = await req.text();
     const signature = req.headers.get('creem-signature');
     
+    console.log('=== Creem Webhook Environment Check ===');
+    console.log('Webhook secret configured:', process.env.CREEM_WEBHOOK_SECRET ? 'Yes' : 'No');
+    console.log('Signature present:', signature ? 'Yes' : 'No');
+    console.log('Body length:', body.length);
+    console.log('User-Agent:', req.headers.get('user-agent'));
+    
     console.log('Creem webhook received:', { signature: signature ? 'Present' : 'Missing', bodyLength: body.length });
 
     // 验证 webhook 签名 - 使用官方示例
@@ -69,6 +75,19 @@ async function handleCheckoutCompleted(data: any) {
   try {
     const { order, customer, product, metadata, request_id } = data;
     
+    console.log('=== Webhook Data Analysis ===');
+    console.log('Raw webhook data structure:', {
+      hasOrder: !!order,
+      hasCustomer: !!customer,
+      hasProduct: !!product,
+      hasMetadata: !!metadata,
+      hasRequestId: !!request_id,
+      orderKeys: order ? Object.keys(order) : [],
+      customerKeys: customer ? Object.keys(customer) : [],
+      productKeys: product ? Object.keys(product) : [],
+      metadataKeys: metadata ? Object.keys(metadata) : []
+    });
+    
     console.log('Checkout completed:', { 
       orderId: order?.id, 
       customerEmail: customer?.email,
@@ -77,17 +96,66 @@ async function handleCheckoutCompleted(data: any) {
       request_id 
     });
 
-    // 使用官方示例的方式：从request_id获取用户ID
-    const userId = request_id;
+    // 健壮的request_id提取逻辑 - 兼容多种可能的payload结构
+    let userId = request_id || 
+                 metadata?.request_id || 
+                 metadata?.user_id || 
+                 order?.request_id || 
+                 order?.metadata?.request_id || 
+                 order?.metadata?.user_id;
+    
+    console.log('User ID extraction result:', {
+      primary_request_id: request_id,
+      metadata_request_id: metadata?.request_id,
+      metadata_user_id: metadata?.user_id,
+      order_request_id: order?.request_id,
+      order_metadata_request_id: order?.metadata?.request_id,
+      order_metadata_user_id: order?.metadata?.user_id,
+      final_user_id: userId
+    });
     
     if (userId) {
       console.log('Processing payment for user ID:', userId);
       
+      // 验证用户是否存在
+      const { data: userExists, error: userCheckError } = await supabase
+        .from('users')
+        .select('id, email')
+        .eq('id', userId)
+        .single();
+      
+      if (userCheckError) {
+        console.error('User check error:', userCheckError);
+        // 如果用户不存在，尝试创建用户记录
+        console.log('User not found, attempting to create user record...');
+        const { error: createUserError } = await supabase
+          .from('users')
+          .insert({
+            id: userId,
+            email: customer?.email || null,
+            created_at: new Date().toISOString()
+          });
+        
+        if (createUserError) {
+          console.error('Failed to create user record:', createUserError);
+        } else {
+          console.log('User record created successfully');
+        }
+      } else {
+        console.log('User exists:', userExists);
+      }
+      
       // 优先使用metadata中的credits，如果没有则根据产品ID确定
       let credits = metadata?.credits || getCreditsByProductId(product?.id);
+      console.log('Credits calculation:', {
+        metadataCredits: metadata?.credits,
+        productCredits: getCreditsByProductId(product?.id),
+        finalCredits: credits
+      });
       
       if (credits > 0) {
         // 充值积分
+        console.log('Attempting to recharge credits:', { userId, credits });
         const { data: result, error: rechargeError } = await supabase.rpc('recharge_credits', {
           p_user_id: userId,
           p_amount: credits
@@ -98,22 +166,41 @@ async function handleCheckoutCompleted(data: any) {
         } else {
           console.log('Credits recharged successfully:', result);
         }
+      } else {
+        console.log('No credits to recharge');
       }
       
       // 检查订单是否已存在（防重复处理）
-      const { data: existingOrder } = await supabase
+      const { data: existingOrder, error: existingOrderError } = await supabase
         .from('orders')
-        .select('id')
+        .select('id, user_id, status')
         .eq('external_id', order?.id)
         .single();
       
       if (existingOrder) {
-        console.log('Order already exists, skipping:', order?.id);
+        console.log('Order already exists:', {
+          orderId: existingOrder.id,
+          userId: existingOrder.user_id,
+          status: existingOrder.status,
+          externalId: order?.id
+        });
         return;
       }
       
+      if (existingOrderError && existingOrderError.code !== 'PGRST116') {
+        console.error('Error checking existing order:', existingOrderError);
+      }
+      
       // 记录订单
-      const { error: orderError } = await supabase.from('orders').insert({
+      console.log('Inserting new order:', {
+        user_id: userId,
+        external_id: order?.id,
+        amount: order?.amount,
+        credits: credits,
+        customer_email: customer?.email
+      });
+      
+      const { data: insertedOrder, error: orderError } = await supabase.from('orders').insert({
         user_id: userId,
         amount: order?.amount || 0,
         bonus: credits,
@@ -129,12 +216,12 @@ async function handleCheckoutCompleted(data: any) {
           product_data: product,
           customer_data: customer
         }
-      });
+      }).select();
       
       if (orderError) {
         console.error('Insert order error:', orderError);
       } else {
-        console.log('Order recorded successfully');
+        console.log('Order recorded successfully:', insertedOrder);
       }
     } else {
       console.log('No request_id found in webhook data');

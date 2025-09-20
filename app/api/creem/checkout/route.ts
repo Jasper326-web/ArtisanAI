@@ -5,6 +5,16 @@ const CREEM_API_URL = process.env.CREEM_API_KEY?.startsWith('creem_live_')
   ? 'https://api.creem.io/v1/checkouts' 
   : 'https://test-api.creem.io/v1/checkouts';
 
+// 环境配置验证
+const isTestMode = CREEM_API_URL.includes('test-api');
+const isLiveMode = CREEM_API_URL.includes('api.creem.io') && !isTestMode;
+
+console.log('=== Creem Environment Configuration ===');
+console.log('API Key type:', process.env.CREEM_API_KEY?.startsWith('creem_live_') ? 'LIVE' : 'TEST');
+console.log('API URL:', CREEM_API_URL);
+console.log('Environment mode:', isTestMode ? 'TEST' : isLiveMode ? 'LIVE' : 'UNKNOWN');
+console.log('Success URL will be:', process.env.CREEM_SUCCESS_URL || `https://artisans-ai.com/success?source=creem`);
+
 interface CheckoutRequest {
   plan_id: string;
   price: string;
@@ -38,10 +48,13 @@ export async function POST(req: NextRequest) {
       mega: process.env.CREEM_PRODUCT_MEGA || 'prod_hjE2miByilwiAMNFFfRm7',
     };
 
+    // 强制设置success_url，确保跳转到正确的页面
+    const successUrl = process.env.CREEM_SUCCESS_URL || `https://artisans-ai.com/success?source=creem`;
+    
     // 创建 Creem 结账会话 - 使用官方示例格式
     const requestBody = {
       product_id: productIdMap[plan_id],
-      success_url: process.env.CREEM_SUCCESS_URL || `https://artisans-ai.com/success`,
+      success_url: successUrl, // 强制设置，覆盖product默认设置
       request_id: user_id, // 直接使用用户ID作为request_id，这是关键
       metadata: {
         plan_id,
@@ -84,9 +97,19 @@ export async function POST(req: NextRequest) {
 
     const data = await response.json();
     
+    // 详细记录Creem返回的数据
+    console.log('Creem API response data:', {
+      checkout_url: data.checkout_url,
+      success_url: data.success_url || 'Not provided by Creem',
+      session_id: data.id,
+      status: data.status,
+      full_response_keys: Object.keys(data)
+    });
+    
     return NextResponse.json({
       checkout_url: data.checkout_url,
       session_id: data.id,
+      success_url: data.success_url, // 也返回success_url用于调试
     });
 
   } catch (error: any) {
