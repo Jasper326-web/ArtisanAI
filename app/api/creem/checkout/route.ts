@@ -14,17 +14,10 @@ interface CheckoutRequest {
 
 export async function POST(req: NextRequest) {
   try {
-    console.log('=== Creem Checkout Request ===');
-    console.log('API Key:', CREEM_API_KEY ? 'Set' : 'Not set');
-    console.log('API Key prefix:', CREEM_API_KEY?.substring(0, 20));
-    console.log('API URL:', CREEM_API_URL);
-    console.log('Test Mode:', CREEM_API_URL.includes('test-api'));
-    console.log('Environment:', process.env.CREEM_API_KEY?.startsWith('creem_live_') ? 'LIVE' : 'TEST');
-    
     const body: CheckoutRequest = await req.json();
     const { plan_id, price, credits, user_id } = body;
     
-    console.log('Request body:', { plan_id, price, credits, user_id });
+    console.log('Creem checkout request:', { plan_id, user_id, environment: CREEM_API_URL.includes('test-api') ? 'TEST' : 'LIVE' });
 
     // 支持所有积分包
     const validPlans = ['small', 'medium', 'large', 'xlarge', 'mega'];

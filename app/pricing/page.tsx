@@ -29,29 +29,25 @@ export default function PricingPage() {
   const { toast } = useToast();
   const [loading, setLoading] = useState<string | null>(null);
   const [user, setUser] = useState<{ id: string; email?: string } | null>(null);
-  const supabase = createClient();
 
   // 获取当前用户信息
   useEffect(() => {
-    console.log('🚀 Pricing页面组件已挂载');
+    const supabase = createClient();
+    
     const getSession = async () => {
-      console.log('🔍 开始获取用户会话...');
       try {
         const { data: { session }, error } = await supabase.auth.getSession();
-        console.log('📋 会话获取结果:', { session, error });
         
         if (session?.user) {
-          console.log('✅ 用户已登录:', session.user.id, session.user.email);
           setUser({
             id: session.user.id,
             email: session.user.email,
           });
         } else {
-          console.log('❌ 用户未登录');
           setUser(null);
         }
       } catch (error) {
-        console.error('💥 获取会话时出错:', error);
+        console.error('获取会话时出错:', error);
         setUser(null);
       }
     };
@@ -60,7 +56,6 @@ export default function PricingPage() {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('🔄 认证状态变化:', event, session?.user?.id);
         if (session?.user) {
           setUser({
             id: session.user.id,
@@ -73,7 +68,7 @@ export default function PricingPage() {
     );
 
     return () => subscription.unsubscribe();
-  }, [supabase]);
+  }, []); // 移除supabase依赖，避免无限循环
 
   const creditPacks: PricingPlan[] = [
     {
@@ -149,12 +144,7 @@ export default function PricingPage() {
   };
 
   const handlePurchase = async (plan: PricingPlan) => {
-    console.log('🛒 开始购买流程:', { plan: plan.id, user: user?.id });
-    console.log('🔍 当前用户状态:', user);
-    console.log('🔍 计划信息:', plan);
-    
     if (!plan.available) {
-      console.log('❌ 计划不可用');
       toast({
         title: t?.pricing?.coming_soon || 'Coming Soon',
         description: t?.pricing?.coming_soon_description || 'This plan will be available after testing is complete.',
@@ -165,8 +155,6 @@ export default function PricingPage() {
 
     // 检查用户是否已登录
     if (!user?.id) {
-      console.log('❌ 用户未登录，无法购买');
-      console.log('🔍 用户对象:', user);
       toast({
         title: '请先登录',
         description: '购买积分前请先登录您的账户。',
@@ -174,8 +162,6 @@ export default function PricingPage() {
       });
       return;
     }
-
-    console.log('✅ 用户已登录，继续购买流程');
 
     setLoading(plan.id);
     
@@ -294,12 +280,9 @@ export default function PricingPage() {
                   </div>
                   
                   {/* Purchase Button */}
-                  <Button
-                    disabled={loading === pack.id}
-                    onClick={() => {
-                      console.log('🖱️ 按钮被点击:', pack.id);
-                      handlePurchase(pack);
-                    }}
+             <Button
+               disabled={loading === pack.id}
+               onClick={() => handlePurchase(pack)}
                     className={`w-full ${
                       pack.popular
                         ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600'
