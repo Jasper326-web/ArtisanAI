@@ -51,10 +51,22 @@ $$;
 create or replace function public.recharge_credits(p_user_id uuid, p_amount int)
 returns table(balance int) language plpgsql as $$
 begin
-  insert into public.credits(user_id, balance)
-  values (p_user_id, greatest(0, p_amount))
-  on conflict (user_id) do update set balance = public.credits.balance + p_amount, updated_at = now();
+  -- 确保用户存在
+  insert into public.users (id, created_at)
+  values (p_user_id, now())
+  on conflict (id) do nothing;
+  
+  -- 确保用户有积分记录，新用户初始120积分
+  insert into public.credits (user_id, balance, updated_at)
+  values (p_user_id, 120, now())
+  on conflict (user_id) do nothing;
+  
+  -- 更新积分：现有余额 + 充值金额
+  update public.credits 
+  set balance = balance + p_amount, updated_at = now()
+  where user_id = p_user_id;
 
+  -- 返回新的积分余额
   return query select balance from public.credits where user_id = p_user_id;
 end;
 $$;
