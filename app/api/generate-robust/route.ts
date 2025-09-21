@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { createClient } from '@/lib/supabase-client';
-import { getAPIKeyManager } from '@/lib/openrouter';
+import { initAPIKeys } from '@/lib/init-api-keys';
+import { aiClient } from '@/lib/ai-client';
 import * as crypto from 'crypto';
 
 // 初始化 API Key 管理器
-const apiKeyManager = getAPIKeyManager();
+initAPIKeys();
 
 const COST_PER_GENERATION = 50;
 const MAX_RETRIES = 2;
@@ -169,23 +170,19 @@ export async function POST(req: NextRequest) {
           const base64Data = firstImage.split(',')[1];
           const mimeType = firstImage.split(',')[0].split(':')[1].split(';')[0];
           
-          // 这里需要调用你的图像编辑函数
-          // imageResult = await editImage(prompt, base64Data, mimeType);
-          imageResult = { success: false, error: 'Image editing not implemented yet' };
+          // 使用现有的AI客户端进行图像编辑
+          imageResult = await aiClient.editImage(prompt, base64Data, mimeType);
         } else {
           // 多张图片融合编辑
           console.log(`🔄 Processing multiple image fusion: ${images.length} images`);
-          // imageResult = await editMultipleImages(prompt, images);
-          imageResult = { success: false, error: 'Multiple image editing not implemented yet' };
+          imageResult = await aiClient.editMultipleImages(prompt, images);
         }
       } else {
         console.log("🎨 Using text-to-image generation");
         
-        // 使用现有的Gemini客户端
-        const { GeminiClient } = await import('@/lib/gemini');
-        const geminiClient = new GeminiClient();
-        imageResult = await geminiClient.generateImage(prompt);
-        apiProvider = 'gemini';
+        // 使用现有的AI客户端
+        imageResult = await aiClient.generateImage(prompt);
+        apiProvider = aiClient.getCurrentProvider();
       }
 
     } catch (apiError: any) {
