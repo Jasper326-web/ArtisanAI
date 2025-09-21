@@ -88,13 +88,37 @@ async function handleCheckoutCompleted(data: any) {
       metadataKeys: metadata ? Object.keys(metadata) : []
     });
     
-    console.log('Checkout completed:', { 
-      orderId: order?.id, 
-      customerEmail: customer?.email,
-      productId: product?.id,
-      amount: order?.amount,
-      request_id 
-    });
+    // 提取关键字段 - 健壮的external_id提取
+    const externalId = order?.id || data?.id || data?.order?.id;
+    console.log('Extracted external_id:', externalId);
+    
+    if (!externalId) {
+      console.error('❌ No external_id found in webhook payload');
+      return;
+    }
+
+    // 幂等性检查 - 如果订单已存在，直接返回
+    const { data: existingOrder, error: existingOrderError } = await supabase
+      .from('orders')
+      .select('id, user_id, status, amount, bonus')
+      .eq('external_id', externalId)
+      .single();
+    
+    if (existingOrder) {
+      console.log('✅ Order already processed (idempotent):', {
+        orderId: existingOrder.id,
+        userId: existingOrder.user_id,
+        status: existingOrder.status,
+        externalId: externalId,
+        amount: existingOrder.amount,
+        bonus: existingOrder.bonus
+      });
+      return; // 幂等返回，不重复处理
+    }
+    
+    if (existingOrderError && existingOrderError.code !== 'PGRST116') {
+      console.error('Error checking existing order:', existingOrderError);
+    }
 
     // 健壮的request_id提取逻辑 - 兼容多种可能的payload结构
     let userId = request_id || 
@@ -113,11 +137,38 @@ async function handleCheckoutCompleted(data: any) {
       order_metadata_user_id: order?.metadata?.user_id,
       final_user_id: userId
     });
+
+    // 计算积分
+    let credits = metadata?.credits || getCreditsByProductId(product?.id);
+    console.log('Credits calculation:', {
+      metadataCredits: metadata?.credits,
+      productCredits: getCreditsByProductId(product?.id),
+      finalCredits: credits
+    });
     
+    // 准备订单数据
+    const orderData = {
+      external_id: externalId,
+      amount: order?.amount || 0,
+      bonus: credits,
+      status: 'completed',
+      provider: 'creem',
+      metadata: {
+        product_id: product?.id,
+        credits,
+        customer_email: customer?.email,
+        request_id,
+        order_data: order,
+        product_data: product,
+        customer_data: customer,
+        raw_payload: data // 保存原始payload用于调试
+      }
+    };
+
     if (userId) {
       console.log('Processing payment for user ID:', userId);
       
-      // 验证用户是否存在
+      // 验证用户是否存在，不存在则创建
       const { data: userExists, error: userCheckError } = await supabase
         .from('users')
         .select('id, email')
@@ -125,9 +176,7 @@ async function handleCheckoutCompleted(data: any) {
         .single();
       
       if (userCheckError) {
-        console.error('User check error:', userCheckError);
-        // 如果用户不存在，尝试创建用户记录
-        console.log('User not found, attempting to create user record...');
+        console.log('User not found, creating user record...');
         const { error: createUserError } = await supabase
           .from('users')
           .insert({
@@ -139,153 +188,72 @@ async function handleCheckoutCompleted(data: any) {
         if (createUserError) {
           console.error('Failed to create user record:', createUserError);
         } else {
-          console.log('User record created successfully');
+          console.log('✅ User record created successfully');
         }
       } else {
-        console.log('User exists:', userExists);
+        console.log('✅ User exists:', userExists);
       }
       
-      // 优先使用metadata中的credits，如果没有则根据产品ID确定
-      let credits = metadata?.credits || getCreditsByProductId(product?.id);
-      console.log('Credits calculation:', {
-        metadataCredits: metadata?.credits,
-        productCredits: getCreditsByProductId(product?.id),
-        finalCredits: credits
-      });
-      
-      // 积分充值逻辑已移至订单UPSERT后处理，避免重复充值
-      
-      // 强制幂等性检查：检查订单是否已存在（防重复处理）
-      const { data: existingOrder, error: existingOrderError } = await supabase
+      // 使用原子操作插入订单和更新积分
+      const { data: insertedOrder, error: orderError } = await supabase
         .from('orders')
-        .select('id, user_id, status, created_at, metadata')
-        .eq('external_id', order?.id)
-        .maybeSingle();
-      
-      if (existingOrder) {
-        console.log('🚫 Order already exists (idempotency check):', {
-          orderId: existingOrder.id,
-          userId: existingOrder.user_id,
-          status: existingOrder.status,
-          externalId: order?.id,
-          createdAt: existingOrder.created_at,
-          existingMetadata: existingOrder.metadata
-        });
-        
-        // 如果订单已存在但user_id为空（orphan订单），尝试匹配用户
-        if (existingOrder.user_id === null && userId) {
-          console.log('🔄 Attempting to link orphan order to user:', userId);
-          
-          // 更新orphan订单的user_id
-          const { error: updateError } = await supabase
-            .from('orders')
-            .update({ 
-              user_id: userId,
-              metadata: {
-                ...existingOrder.metadata,
-                linked_at: new Date().toISOString(),
-                linked_user_id: userId
-              }
-            })
-            .eq('id', existingOrder.id);
-          
-          if (updateError) {
-            console.error('❌ Failed to link orphan order:', updateError);
-          } else {
-            console.log('✅ Successfully linked orphan order to user');
-            
-            // 现在为用户充值积分（只充值一次）
-            if (credits > 0) {
-              console.log('💰 Recharging credits for linked order:', { userId, credits });
-              const { data: result, error: rechargeError } = await supabase.rpc('recharge_credits', {
-                p_user_id: userId,
-                p_amount: credits
-              });
-              
-              if (rechargeError) {
-                console.error('❌ Failed to recharge credits for linked order:', rechargeError);
-              } else {
-                console.log('✅ Credits recharged for linked order:', result);
-              }
-            }
-          }
-        }
-        
-        return; // 无论是否成功链接，都返回，避免重复处理
-      }
-      
-      if (existingOrderError && existingOrderError.code !== 'PGRST116') {
-        console.error('❌ Error checking existing order:', existingOrderError);
-      }
-      
-      // 记录订单 - 使用UPSERT确保幂等性
-      console.log('🔄 Upserting order (idempotent):', {
-        user_id: userId,
-        external_id: order?.id,
-        amount: order?.amount,
-        credits: credits,
-        customer_email: customer?.email
-      });
-      
-      const orderData = {
-        user_id: userId,
-        amount: order?.amount || 0,
-        bonus: credits,
-        status: 'completed',
-        provider: 'creem',
-        external_id: order?.id,
-        metadata: {
-          product_id: product?.id,
-          credits,
-          customer_email: customer?.email,
-          request_id,
-          order_data: order,
-          product_data: product,
-          customer_data: customer,
-          webhook_processed_at: new Date().toISOString()
-        }
-      };
-      
-      // 使用UPSERT确保幂等性（如果external_id已存在，则更新，否则插入）
-      const { data: upsertedOrder, error: orderError } = await supabase
-        .from('orders')
-        .upsert(orderData, {
-          onConflict: 'external_id',
-          ignoreDuplicates: false
+        .insert({
+          ...orderData,
+          user_id: userId
         })
-        .select();
+        .select()
+        .single();
       
       if (orderError) {
-        console.error('❌ Upsert order error:', orderError);
-        console.error('Order data:', orderData);
-      } else {
-        console.log('✅ Order upserted successfully:', upsertedOrder);
+        console.error('❌ Insert order error:', orderError);
+        return;
+      }
+      
+      console.log('✅ Order recorded successfully:', insertedOrder);
+      
+      // 使用修复后的recharge_credits函数更新积分
+      if (credits > 0) {
+        console.log('Attempting to recharge credits:', { userId, credits, orderId: insertedOrder.id });
         
-        // 只有在订单是新插入的情况下才充值积分（避免重复充值）
-        if (upsertedOrder && upsertedOrder.length > 0) {
-          const insertedOrder = upsertedOrder[0];
-          console.log('💰 Processing credits for new order:', {
-            orderId: insertedOrder.id,
-            userId: insertedOrder.user_id,
-            credits: credits
+        const { data: result, error: rechargeError } = await supabase.rpc('recharge_credits', {
+          p_user_id: userId,
+          p_amount: credits
+        });
+        
+        if (rechargeError) {
+          console.error('❌ Recharge credits error:', rechargeError);
+          console.error('Error details:', {
+            code: rechargeError.code,
+            message: rechargeError.message,
+            details: rechargeError.details,
+            hint: rechargeError.hint
           });
-          
-          if (credits > 0 && insertedOrder.user_id) {
-            const { data: result, error: rechargeError } = await supabase.rpc('recharge_credits', {
-              p_user_id: insertedOrder.user_id,
-              p_amount: credits
-            });
-            
-            if (rechargeError) {
-              console.error('❌ Recharge credits error after order upsert:', rechargeError);
-            } else {
-              console.log('✅ Credits recharged after order upsert:', result);
-            }
-          }
+        } else {
+          console.log('✅ Credits recharged successfully:', result);
+          console.log('New balance:', result?.[0]?.new_balance);
         }
       }
     } else {
-      console.log('No request_id found in webhook data');
+      console.log('⚠️ No user_id found - creating orphan order');
+      
+      // 创建orphan订单，不更新积分
+      const { data: insertedOrder, error: orderError } = await supabase
+        .from('orders')
+        .insert({
+          ...orderData,
+          user_id: null,
+          status: 'orphan' // 标记为orphan状态
+        })
+        .select()
+        .single();
+      
+      if (orderError) {
+        console.error('❌ Insert orphan order error:', orderError);
+        return;
+      }
+      
+      console.log('⚠️ Orphan order created:', insertedOrder);
+      console.log('📧 Customer email for manual matching:', customer?.email);
     }
 
   } catch (error) {
