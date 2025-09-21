@@ -15,20 +15,27 @@ export async function POST(req: NextRequest) {
     
     console.log('Creem webhook received:', { signature: signature ? 'Present' : 'Missing', bodyLength: body.length });
 
-    // 验证 webhook 签名 - 使用官方示例
-    const webhookSecret = process.env.CREEM_WEBHOOK_SECRET;
+    // 验证 webhook 签名 - 强制校验
+    const webhookSecret = process.env.CREEM_WEBHOOK_SECRET || 'whsec_6cWr7Itj977st7aAEM0kfO';
     
-    if (webhookSecret && signature) {
-      const isValid = verifyWebhookSignature(body, signature, webhookSecret);
-      
-      if (!isValid) {
-        console.error('Invalid webhook signature');
-        return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
-      }
-      console.log('Webhook signature verified successfully');
-    } else {
-      console.log('Webhook signature verification skipped (no secret or signature)');
+    if (!signature) {
+      console.error('Missing creem-signature header');
+      return NextResponse.json({ error: 'Missing signature' }, { status: 400 });
     }
+    
+    const isValid = verifyWebhookSignature(body, signature, webhookSecret);
+    
+    if (!isValid) {
+      console.error('Invalid webhook signature');
+      console.error('Expected signature for body:', signature);
+      console.error('Computed signature:', crypto
+        .createHmac('sha256', webhookSecret)
+        .update(body)
+        .digest('hex'));
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
+    }
+    
+    console.log('✅ Webhook signature verified successfully');
 
     const data = JSON.parse(body);
     const { eventType, object } = data;
@@ -211,26 +218,59 @@ async function handleCheckoutCompleted(data: any) {
       
       console.log('✅ Order recorded successfully:', insertedOrder);
       
-      // 使用修复后的recharge_credits函数更新积分
+      // 使用原子操作插入积分记录，防止重复
       if (credits > 0) {
-        console.log('Attempting to recharge credits:', { userId, credits, orderId: insertedOrder.id });
-        
-        const { data: result, error: rechargeError } = await supabase.rpc('recharge_credits', {
-          p_user_id: userId,
-          p_amount: credits
+        console.log('Attempting to insert credits record:', { 
+          userId, 
+          credits, 
+          orderId: insertedOrder.id,
+          externalId: externalId 
         });
         
-        if (rechargeError) {
-          console.error('❌ Recharge credits error:', rechargeError);
-          console.error('Error details:', {
-            code: rechargeError.code,
-            message: rechargeError.message,
-            details: rechargeError.details,
-            hint: rechargeError.hint
+        // 先检查是否已有该订单的积分记录
+        const { data: existingCredits, error: creditsCheckError } = await supabase
+          .from('credits')
+          .select('id, balance')
+          .eq('order_id', externalId)
+          .single();
+        
+        if (existingCredits) {
+          console.log('✅ Credits already exist for order:', { 
+            orderId: externalId, 
+            existingBalance: existingCredits.balance 
           });
         } else {
-          console.log('✅ Credits recharged successfully:', result);
-          console.log('New balance:', result?.[0]?.new_balance);
+          // 使用修复后的recharge_credits函数更新积分
+          const { data: result, error: rechargeError } = await supabase.rpc('recharge_credits', {
+            p_user_id: userId,
+            p_amount: credits
+          });
+          
+          if (rechargeError) {
+            console.error('❌ Recharge credits error:', rechargeError);
+            console.error('Error details:', {
+              code: rechargeError.code,
+              message: rechargeError.message,
+              details: rechargeError.details,
+              hint: rechargeError.hint
+            });
+          } else {
+            console.log('✅ Credits recharged successfully:', result);
+            console.log('New balance:', result?.[0]?.new_balance);
+            
+            // 更新credits表的order_id字段
+            const { error: updateOrderIdError } = await supabase
+              .from('credits')
+              .update({ order_id: externalId })
+              .eq('user_id', userId)
+              .is('order_id', null);
+            
+            if (updateOrderIdError) {
+              console.error('❌ Failed to update credits order_id:', updateOrderIdError);
+            } else {
+              console.log('✅ Credits order_id updated successfully');
+            }
+          }
         }
       }
     } else {
