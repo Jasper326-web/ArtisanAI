@@ -1,19 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// 通过显式环境变量切换 test/live，避免通过 key 前缀误判
+const CREEM_ENV = process.env.CREEM_ENV || 'test';
 const CREEM_API_KEY = process.env.CREEM_API_KEY || 'creem_test_7Pio5ccVdDKTaSz6ijf5Te';
-const CREEM_API_URL = process.env.CREEM_API_KEY?.startsWith('creem_live_') 
-  ? 'https://api.creem.io/v1/checkouts' 
+const CREEM_API_URL = CREEM_ENV === 'live'
+  ? 'https://api.creem.io/v1/checkouts'
   : 'https://test-api.creem.io/v1/checkouts';
 
 // 环境配置验证
-const isTestMode = CREEM_API_URL.includes('test-api');
-const isLiveMode = CREEM_API_URL.includes('api.creem.io') && !isTestMode;
+const isTestMode = CREEM_ENV !== 'live';
+const isLiveMode = CREEM_ENV === 'live';
 
 console.log('=== Creem Environment Configuration ===');
-console.log('API Key type:', process.env.CREEM_API_KEY?.startsWith('creem_live_') ? 'LIVE' : 'TEST');
+console.log('CREEM_ENV:', CREEM_ENV);
 console.log('API URL:', CREEM_API_URL);
 console.log('Environment mode:', isTestMode ? 'TEST' : isLiveMode ? 'LIVE' : 'UNKNOWN');
-console.log('Success URL will be:', process.env.CREEM_SUCCESS_URL || `https://artisans-ai.com/success?source=creem`);
+console.log('Success URL will be:', process.env.CREEM_SUCCESS_URL || `https://artisans-ai.com/success`);
 
 interface CheckoutRequest {
   plan_id: string;
@@ -39,7 +41,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 产品ID映射 - 使用测试模式下的产品ID
+    // 产品ID映射 - 从环境变量读取（可配置为 live/test），并提供测试默认值兜底
     const productIdMap: Record<string, string> = {
       small: process.env.CREEM_PRODUCT_SMALL || 'prod_hjE2miByilwiAMNFFfRm7',
       medium: process.env.CREEM_PRODUCT_MEDIUM || 'prod_hjE2miByilwiAMNFFfRm7',
@@ -49,7 +51,7 @@ export async function POST(req: NextRequest) {
     };
 
     // 强制设置success_url，确保跳转到正确的页面
-    const successUrl = `https://artisans-ai.com/success`;
+    const successUrl = process.env.CREEM_SUCCESS_URL || `https://artisans-ai.com/success`;
     
     // 创建 Creem 结账会话 - 使用官方示例格式
     const requestBody = {
