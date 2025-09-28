@@ -134,6 +134,23 @@ export default function PricingPage() {
     }
   ];
 
+  const packIdToKey = (id: string) => {
+    switch (id) {
+      case 'small':
+        return 'starter';
+      case 'medium':
+        return 'standard';
+      case 'large':
+        return 'advanced';
+      case 'xlarge':
+        return 'professional';
+      case 'mega':
+        return 'studio';
+      default:
+        return undefined as unknown as keyof typeof t.pricing;
+    }
+  };
+
   // 计算额外积分奖励
   const getBonusCredits = (credits: number) => {
     if (credits >= 10000) return 2000; // 超级包额外2000积分
@@ -224,6 +241,13 @@ export default function PricingPage() {
             const bonusCredits = getBonusCredits(pack.credits);
             const totalCredits = pack.credits + bonusCredits;
             
+            const key = packIdToKey(pack.id) as any;
+            const i18nName = key && (t as any)?.pricing?.[key]?.name;
+            const i18nDesc = key && (t as any)?.pricing?.[key]?.description;
+            const feature1 = key && (t as any)?.pricing?.[key]?.feature1;
+            const feature2 = key && (t as any)?.pricing?.[key]?.feature2;
+            const feature3 = key && (t as any)?.pricing?.[key]?.feature3;
+
             return (
                 <Card 
                   key={pack.id}
@@ -253,7 +277,7 @@ export default function PricingPage() {
                   
                   {/* Pack Name */}
                   <h3 className="text-xl font-bold text-white mb-2">
-                    {pack.name}
+                    {i18nName || pack.name}
                   </h3>
                   
                   {/* Price */}
@@ -264,18 +288,18 @@ export default function PricingPage() {
                   {/* Credits Display */}
                   <div className="space-y-2 mb-6">
                     <div className="text-2xl font-bold text-blue-400">
-                      {pack.credits.toLocaleString()} 积分
+                      {pack.credits.toLocaleString()} {t?.pricing?.credits || '积分'}
                     </div>
                     {bonusCredits > 0 && (
                       <div className="text-sm text-green-400 font-medium">
-                        + {bonusCredits.toLocaleString()} 额外积分
+                      + {bonusCredits.toLocaleString()} {(t as any)?.pricing?.bonus_credits || '额外积分'}
                       </div>
                     )}
                     <div className="text-sm text-gray-400">
-                      总计: {totalCredits.toLocaleString()} 积分
+                      {((t as any)?.pricing?.total || '总计') + ': '} {totalCredits.toLocaleString()} {t?.pricing?.credits || '积分'}
                     </div>
                     <div className="text-xs text-gray-500">
-                      ≈ {Math.floor(totalCredits / 50)} 张图片
+                      ≈ {Math.floor(totalCredits / 50)} {(t?.pricing?.images || '图片')}
                     </div>
                   </div>
                   
@@ -302,7 +326,7 @@ export default function PricingPage() {
                   {/* Value Indicator */}
                   {bonusCredits > 0 && (
                     <div className="mt-3 text-xs text-green-400 font-medium">
-                      💰 超值优惠
+                      {(t as any)?.pricing?.value || '💰 超值优惠'}
                     </div>
                   )}
                 </CardContent>

@@ -7,11 +7,13 @@ import { Button } from '@/components/ui/button';
 import { CheckCircle, ArrowLeft, CreditCard } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import Logo from '@/components/logo';
+import { useLanguage } from '@/contexts/language-context';
 
 export default function SuccessPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [userCredits, setUserCredits] = useState<number | null>(null);
   const [user, setUser] = useState<{ id: string; email?: string } | null>(null);
@@ -59,8 +61,9 @@ export default function SuccessPage() {
         console.log('✅ 积分刷新成功:', newCredits);
         
         toast({
-          title: "支付成功！",
-          description: `您的积分已更新到 ${newCredits.toLocaleString()} 积分`,
+          title: t?.success?.title || "支付成功！",
+          description:
+            t?.success?.description || `您的积分已更新到 ${newCredits.toLocaleString()} 积分`,
           variant: "default",
         });
       } else {
@@ -92,10 +95,10 @@ export default function SuccessPage() {
         <div className="mb-6">
           <CheckCircle className="h-16 w-16 text-green-400 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-white mb-2">
-            支付成功！
+            {t?.success?.title || '支付成功！'}
           </h1>
           <p className="text-gray-300">
-            感谢您的购买，积分已添加到您的账户
+            {t?.success?.description || '感谢您的购买，积分已添加到您的账户'}
           </p>
         </div>
 
@@ -103,13 +106,13 @@ export default function SuccessPage() {
         <div className="mb-6 p-4 bg-white/10 rounded-lg border border-white/20">
           <div className="flex items-center justify-center mb-2">
             <CreditCard className="h-5 w-5 text-blue-400 mr-2" />
-            <span className="text-gray-300">当前积分</span>
+            <span className="text-gray-300">{t?.success?.current_credits || '当前积分'}</span>
           </div>
           <div className="text-3xl font-bold text-blue-400">
             {userCredits !== null ? (
               userCredits.toLocaleString()
             ) : (
-              <div className="animate-pulse">加载中...</div>
+              <div className="animate-pulse">{t?.common?.loading || '加载中...'}</div>
             )}
           </div>
         </div>
@@ -124,10 +127,10 @@ export default function SuccessPage() {
             {isRefreshing ? (
               <div className="flex items-center">
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                刷新积分中...
+                {t?.success?.refreshing || '刷新积分中...'}
               </div>
             ) : (
-              '刷新积分'
+              (t?.success?.refresh || '刷新积分')
             )}
           </Button>
           
@@ -137,7 +140,7 @@ export default function SuccessPage() {
             className="w-full bg-white/10 hover:bg-white/20 text-white border-white/20"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            返回首页
+            {t?.success?.back_home || '返回首页'}
           </Button>
         </div>
 

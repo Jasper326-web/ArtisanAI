@@ -3,8 +3,10 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import LightRays from '@/components/light-rays';
+import { useLanguage } from '@/contexts/language-context';
 
 export default function TermsPage() {
+  const { t } = useLanguage();
   return (
     <div className="min-h-screen relative">
       {/* Prism Background */}
@@ -17,7 +19,7 @@ export default function TermsPage() {
           <Card className="backdrop-blur-xl bg-card/30 border border-primary/30 shadow-2xl shadow-primary/10">
             <CardHeader>
               <CardTitle className="text-3xl font-bold text-center text-foreground mb-4 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]">
-                Terms of Service
+                {t?.legal?.terms?.title || 'Terms of Service'}
               </CardTitle>
             </CardHeader>
             <CardContent className="prose prose-invert max-w-none">
@@ -111,7 +113,7 @@ export default function TermsPage() {
                 </section>
 
                 <div className="text-sm text-muted-foreground mt-8 pt-6 border-t border-primary/20">
-                  <p>Last updated: {new Date().toLocaleDateString()}</p>
+                  <p>{t?.legal?.common?.last_updated || 'Last updated:'} {new Date().toLocaleDateString()}</p>
                 </div>
               </div>
             </CardContent>

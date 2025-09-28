@@ -181,6 +181,115 @@ const translations = {
         },
       },
     },
+    common: {
+      loading: "Loading...",
+    },
+    success: {
+      title: "Payment Successful!",
+      description: "Thank you for your purchase. Credits have been added to your account.",
+      current_credits: "Current Credits",
+      refresh: "Refresh Credits",
+      refreshing: "Refreshing...",
+      back_home: "Back to Home",
+    },
+    contact: {
+      title: "Get in Touch",
+      subtitle:
+        "Have questions about Artisan AI? Want to collaborate or need support? We'd love to hear from you. Send us a message and we'll respond within 24 hours.",
+      email_us: "Email Us",
+      response_time: "Response Time",
+      within_24h: "Within 24 hours",
+      support: "Support",
+      support_scope: "Technical & General",
+    },
+    legal: {
+      common: {
+        last_updated: "Last updated:",
+      },
+      privacy: {
+        title: "Privacy Policy",
+      },
+      terms: {
+        title: "Terms of Service",
+      },
+      refund: {
+        title: "Refund Policy",
+      },
+      cookies: {
+        title: "Cookie Policy",
+      },
+    },
+    auth: {
+      email: "Email",
+      emailPlaceholder: "Enter your email",
+      password: "Password",
+      passwordPlaceholder: "Enter your password",
+      confirmPassword: "Confirm Password",
+      confirmPasswordPlaceholder: "Confirm your password",
+      name: "Full Name",
+      namePlaceholder: "Enter your full name",
+      or: "Or continue with",
+      google: "Continue with Google",
+      errors: {
+        required: "Email and password are required",
+        nameRequired: "Name is required",
+        passwordMismatch: "Passwords do not match",
+        passwordLength: "Password must be at least 6 characters",
+        emailRequired: "Email is required",
+        generic: "An unexpected error occurred",
+      },
+      signIn: {
+        title: "Sign In",
+        description: "Sign in to your account",
+        tab: "Sign In",
+        loading: "Signing in...",
+        button: "Sign In",
+        success: "Signed in successfully!",
+      },
+      signUp: {
+        title: "Create Account",
+        description: "Create a new account",
+        tab: "Sign Up",
+        loading: "Creating account...",
+        button: "Create Account",
+        success: "Account created successfully!",
+        confirmEmail: "Please check your email to confirm your account",
+      },
+      forgotPassword: {
+        description: "Forgot your password?",
+        tab: "Reset now",
+        success: "Password reset email sent!",
+      },
+    },
+    feedback: {
+      title: "Feedback & Updates",
+      success: "Thank you for your feedback!",
+      error: "Failed to submit feedback. Please try again.",
+      type: "Type",
+      types: {
+        bug: "Bug Report",
+        feature: "Feature Request",
+        improvement: "Improvement",
+        other: "Other",
+      },
+      rating: "Rating",
+      content: "Your Feedback",
+      placeholder: "Tell us what you think...",
+      name: "Name (Optional)",
+      namePlaceholder: "Your name",
+      email: "Email (Optional)",
+      emailPlaceholder: "your@email.com",
+      submitting: "Submitting...",
+      submit: "Submit Feedback",
+      updates: {
+        title: "Recent Updates",
+        types: {
+          feature: "Feature",
+          fix: "Fix",
+          improvement: "Improvement",
+        },
+      },
+    },
   },
   zh: {
     nav: {
@@ -340,6 +449,115 @@ const translations = {
         canCommercial: {
           q: "我可以商业使用生成的图像吗？",
           a: "是的，您对使用自己的照片和提示生成的图像拥有完全的商业权利。",
+        },
+      },
+    },
+    common: {
+      loading: "加载中...",
+    },
+    success: {
+      title: "支付成功！",
+      description: "感谢您的购买，积分已添加到您的账户",
+      current_credits: "当前积分",
+      refresh: "刷新积分",
+      refreshing: "刷新积分中...",
+      back_home: "返回首页",
+    },
+    contact: {
+      title: "联系我们",
+      subtitle:
+        "对 Artisan AI 有疑问？想要合作或需要支持？欢迎与我们联系。发送消息后我们会在 24 小时内回复。",
+      email_us: "电子邮件",
+      response_time: "响应时间",
+      within_24h: "24 小时内",
+      support: "支持",
+      support_scope: "技术与通用问题",
+    },
+    legal: {
+      common: {
+        last_updated: "最后更新：",
+      },
+      privacy: {
+        title: "隐私政策",
+      },
+      terms: {
+        title: "服务条款",
+      },
+      refund: {
+        title: "退款政策",
+      },
+      cookies: {
+        title: "Cookie 政策",
+      },
+    },
+    auth: {
+      email: "邮箱",
+      emailPlaceholder: "请输入邮箱",
+      password: "密码",
+      passwordPlaceholder: "请输入密码",
+      confirmPassword: "确认密码",
+      confirmPasswordPlaceholder: "请再次输入密码",
+      name: "姓名",
+      namePlaceholder: "请输入姓名",
+      or: "或使用以下方式继续",
+      google: "使用 Google 继续",
+      errors: {
+        required: "邮箱与密码为必填",
+        nameRequired: "姓名为必填",
+        passwordMismatch: "两次输入的密码不一致",
+        passwordLength: "密码长度至少 6 位",
+        emailRequired: "邮箱为必填",
+        generic: "发生了意外错误",
+      },
+      signIn: {
+        title: "登录",
+        description: "登录到你的账户",
+        tab: "登录",
+        loading: "登录中...",
+        button: "登录",
+        success: "登录成功！",
+      },
+      signUp: {
+        title: "创建账户",
+        description: "注册一个新账户",
+        tab: "注册",
+        loading: "创建账户中...",
+        button: "创建账户",
+        success: "账户创建成功！",
+        confirmEmail: "请前往邮箱完成验证",
+      },
+      forgotPassword: {
+        description: "忘记密码？",
+        tab: "立即重置",
+        success: "重置密码邮件已发送！",
+      },
+    },
+    feedback: {
+      title: "反馈与更新",
+      success: "感谢你的反馈！",
+      error: "提交失败，请稍后重试。",
+      type: "类型",
+      types: {
+        bug: "问题反馈",
+        feature: "功能请求",
+        improvement: "优化建议",
+        other: "其他",
+      },
+      rating: "评分",
+      content: "你的反馈",
+      placeholder: "告诉我们你的想法...",
+      name: "姓名（可选）",
+      namePlaceholder: "你的姓名",
+      email: "邮箱（可选）",
+      emailPlaceholder: "your@email.com",
+      submitting: "提交中...",
+      submit: "提交反馈",
+      updates: {
+        title: "最近更新",
+        types: {
+          feature: "新功能",
+          fix: "修复",
+          improvement: "改进",
         },
       },
     },
@@ -1316,7 +1534,7 @@ const translations = {
 interface LanguageContextType {
   language: Language
   setLanguage: (lang: Language) => void
-  t: typeof translations.en
+  t: any
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)

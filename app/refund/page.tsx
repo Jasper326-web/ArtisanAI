@@ -3,8 +3,10 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import LightRays from '@/components/light-rays';
+import { useLanguage } from '@/contexts/language-context';
 
 export default function RefundPage() {
+  const { t } = useLanguage();
   return (
     <div className="min-h-screen relative">
       {/* Light Rays Background */}
@@ -17,7 +19,7 @@ export default function RefundPage() {
           <Card className="backdrop-blur-xl bg-card/30 border border-primary/30 shadow-2xl shadow-primary/10">
             <CardHeader>
               <CardTitle className="text-3xl font-bold text-center text-foreground mb-4 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]">
-                Refund Policy
+                {t?.legal?.refund?.title || 'Refund Policy'}
               </CardTitle>
             </CardHeader>
             <CardContent className="prose prose-invert max-w-none">
@@ -110,7 +112,7 @@ export default function RefundPage() {
 
                 <div className="mt-8 p-4 bg-muted/20 rounded-lg border border-primary/20">
                   <p className="text-sm text-muted-foreground">
-                    <strong>Last Updated:</strong> {new Date().toLocaleDateString()}
+                    <strong>{t?.legal?.common?.last_updated || 'Last updated:'}</strong> {new Date().toLocaleDateString()}
                   </p>
                   <p className="text-sm text-muted-foreground mt-2">
                     This refund policy is subject to change. We will notify users of any 
