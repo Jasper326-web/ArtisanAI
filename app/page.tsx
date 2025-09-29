@@ -397,15 +397,15 @@ export default function AIImageGenerator() {
         <section id="consistency" className="py-32 px-4 sm:px-6 lg:px-8 bg-transparent">
           <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-4 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]">
-            Perfect Character Consistency
+            {t?.home?.consistency?.title || 'Perfect Character Consistency'}
           </h2>
           <p className="text-center text-muted-foreground mb-16 max-w-3xl mx-auto text-lg">
-            目前人物一致性最强的模型，没有之一 - 在不同风格、服装和场景中保持同一人物，完美保留独特面部特征
+            {t?.home?.consistency?.subtitle || 'The strongest model for character consistency – maintain the same person across styles, outfits and scenes while preserving unique facial features'}
           </p>
 
           {/* Case Study 1: Male Model */}
           <div className="mb-32">
-            <h3 className="text-2xl font-bold text-foreground mb-8 text-center">Case Study 1: Style Transformation</h3>
+            <h3 className="text-2xl font-bold text-foreground mb-8 text-center">{t?.home?.case1?.title || 'Case Study 1: Style Transformation'}</h3>
             
             <div className="flex flex-col lg:flex-row items-center gap-8 mx-auto px-4">
               {/* Left Side - Input Materials */}
@@ -419,10 +419,10 @@ export default function AIImageGenerator() {
                       className="w-full max-h-[350px] object-cover rounded-xl"
                     />
                     <div className="absolute top-4 left-4 bg-primary/90 backdrop-blur-sm rounded-lg px-3 py-2">
-                      <span className="text-white font-semibold text-sm">Original</span>
+                      <span className="text-white font-semibold text-sm">{t?.home?.common?.original || 'Original'}</span>
                     </div>
                   </div>
-                  <p className="text-sm text-muted-foreground">Base Model</p>
+                  <p className="text-sm text-muted-foreground">{t?.home?.case1?.baseModel || 'Base Model'}</p>
                 </div>
 
                 {/* Style References */}
@@ -430,7 +430,7 @@ export default function AIImageGenerator() {
                   <div className="relative overflow-hidden rounded-xl border-2 border-accent/30 shadow-lg bg-gradient-to-br from-accent/10 to-primary/10 p-2">
                     <img 
                       src="/s1.jpg" 
-                      alt="Sunglasses Style" 
+                      alt={t?.home?.case1?.sunglasses || 'Sunglasses'} 
                       className="w-full h-24 object-cover rounded-lg"
                     />
                     <div className="absolute bottom-2 left-2 bg-accent/90 backdrop-blur-sm rounded px-2 py-1">
@@ -441,7 +441,7 @@ export default function AIImageGenerator() {
                   <div className="relative overflow-hidden rounded-xl border-2 border-accent/30 shadow-lg bg-gradient-to-br from-accent/10 to-primary/10 p-2">
                     <img 
                       src="/s2.jpg" 
-                      alt="Skateboard Style" 
+                      alt={t?.home?.case1?.skateboard || 'Skateboard'} 
                       className="w-full h-24 object-cover rounded-lg"
                     />
                     <div className="absolute bottom-2 left-2 bg-accent/90 backdrop-blur-sm rounded px-2 py-1">
@@ -449,7 +449,7 @@ export default function AIImageGenerator() {
                     </div>
                   </div>
                 </div>
-                <p className="text-sm text-muted-foreground text-center">Style References</p>
+                <p className="text-sm text-muted-foreground text-center">{t?.home?.case1?.styleReferences || 'Style References'}</p>
               </div>
 
               {/* Arrow */}
@@ -470,8 +470,8 @@ export default function AIImageGenerator() {
                   </div>
                 </div>
                 <div className="mt-6 space-y-2">
-                  <p className="text-lg text-foreground font-bold">Perfect Fusion</p>
-                  <p className="text-sm text-muted-foreground">Same face, new style</p>
+                  <p className="text-lg text-foreground font-bold">{t?.home?.case1?.perfectFusion || 'Perfect Fusion'}</p>
+                  <p className="text-sm text-muted-foreground">{t?.home?.case1?.sameFace || 'Same face, new style'}</p>
                 </div>
               </div>
             </div>
@@ -656,7 +656,7 @@ export default function AIImageGenerator() {
                     <div className="relative inline-block">
                       <div className="relative overflow-hidden rounded-2xl border-4 border-accent/30 shadow-2xl shadow-accent/20 bg-gradient-to-br from-accent/10 to-primary/10 p-2">
                         <img 
-                          src="/g6.png" 
+                          src="/g5.png" 
                           alt="New Tattoo Added" 
                           className="w-full max-h-[400px] object-cover rounded-xl"
                         />

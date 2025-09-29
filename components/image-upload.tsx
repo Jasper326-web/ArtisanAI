@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { processImageUpload, UploadedImage, UploadOptions } from '@/lib/upload';
+import { useLanguage } from '@/contexts/language-context';
 import { cn } from '@/lib/utils';
 
 interface ImageUploadProps {
@@ -24,6 +25,7 @@ export function ImageUpload({
   className,
   disabled = false,
 }: ImageUploadProps) {
+  const { t } = useLanguage();
   const [images, setImages] = useState<UploadedImage[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -147,20 +149,23 @@ export function ImageUpload({
           </div>
           
           <h3 className="text-lg font-semibold mb-2">
-            {isUploading ? 'Processing Images...' : '上传图片并输入提示词'}
+            {isUploading ? (t?.hero?.processing || 'Processing Images...') : (t?.hero?.uploadText || '上传图片并输入提示词')}
           </h3>
           
           <p className="text-sm text-muted-foreground mb-4">
-            Drag and drop images here, or click to browse
+            {t?.upload?.dropHere || 'Drag and drop images here, or click to browse'}
           </p>
           
           <p className="text-xs text-muted-foreground">
-            Supports JPEG, PNG, WebP • Max {maxImages} images • {(maxSize / 1024 / 1024).toFixed(0)}MB each
+            {(t?.upload?.supportsTpl || 'Supports JPEG, PNG, WebP • Max {max} images • {size}MB each')
+              .replace('{max}', String(maxImages))
+              .replace('{size}', String((maxSize / 1024 / 1024).toFixed(0)))}
           </p>
           
           {maxImages > 1 && (
             <p className="text-xs text-primary/80 mt-2">
-              💡 Upload multiple images to create a fusion of their best features (up to {maxImages} images supported)
+              {'💡 ' + (t?.upload?.tipTpl || 'Upload multiple images to create a fusion of their best features (up to {max} images supported)')
+                .replace('{max}', String(maxImages))}
             </p>
           )}
 
@@ -202,7 +207,9 @@ export function ImageUpload({
       {images.length > 0 && (
         <div className="space-y-3">
           <h4 className="text-sm font-medium text-muted-foreground">
-            Reference Images ({images.length}/{maxImages})
+            {(t?.upload?.referenceImages || 'Reference Images ({count}/{max})')
+              .replace('{count}', String(images.length))
+              .replace('{max}', String(maxImages))}
           </h4>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {images.map((image) => (
@@ -250,7 +257,7 @@ export function ImageUpload({
           className="w-full"
         >
           <ImageIcon className="w-4 h-4 mr-2" />
-          Choose Images
+          {t?.upload?.chooseImages || t?.hero?.chooseImages || 'Choose Images'}
         </Button>
       )}
     </div>
