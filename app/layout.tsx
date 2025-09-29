@@ -8,7 +8,6 @@ import { LanguageProvider } from "@/contexts/language-context"
 import { ThemeProvider } from "next-themes"
 import { Toaster } from "@/components/ui/toaster"
 import { Navigation } from "@/components/navigation"
-import SplashCursor from "@/components/splash-cursor"
 import { FeedbackPanel } from "@/components/feedback-panel"
 import { Suspense } from "react"
 
@@ -53,8 +52,6 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <LanguageProvider>
-              {/* 可选：全局启用炫酷鼠标流体特效（注意GPU占用） */}
-              <SplashCursor DYE_RESOLUTION={1024} COLOR_UPDATE_SPEED={8} BACK_COLOR={{ r: 0.1, g: 0.0, b: 0.2 }} />
               <Navigation />
               <main>{children}</main>
               <FeedbackPanel />
