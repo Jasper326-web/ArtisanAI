@@ -656,7 +656,7 @@ export default function AIImageGenerator() {
                     <div className="relative inline-block">
                       <div className="relative overflow-hidden rounded-2xl border-4 border-accent/30 shadow-2xl shadow-accent/20 bg-gradient-to-br from-accent/10 to-primary/10 p-2">
                         <img 
-                          src="/g5.png" 
+                          src="/g6.png" 
                           alt="New Tattoo Added" 
                           className="w-full max-h-[400px] object-cover rounded-xl"
                         />
