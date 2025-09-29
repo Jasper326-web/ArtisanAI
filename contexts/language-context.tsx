@@ -60,6 +60,48 @@ const translations = {
         detail: "Professional-quality edits in seconds, not hours.",
       },
     },
+    home: {
+      common: {
+        original: "Original",
+        generated: "Generated",
+      },
+      consistency: {
+        title: "Perfect Character Consistency",
+        subtitle:
+          "The strongest model for character consistency – maintain the same person across styles, outfits and scenes while preserving unique facial features",
+      },
+      case1: {
+        title: "Case Study 1: Style Transformation",
+        baseModel: "Base Model",
+        sunglasses: "Sunglasses",
+        skateboard: "Skateboard",
+        styleReferences: "Style References",
+        generatedResult: "Generated Result",
+        perfectFusion: "Perfect Fusion",
+        sameFace: "Same face, new style",
+      },
+      case2: {
+        title: "Case Study 2: Outfit Change",
+        baseModel: "Base Model",
+        greenDress: "Green Dress",
+        styleReference: "Style Reference",
+        generatedResult: "Generated Result",
+        perfectMatch: "Perfect Match",
+        samePerson: "Same person, new outfit",
+      },
+      whyConsistency: {
+        title: "Why Character Consistency Matters",
+        facialRecognition: "Facial Recognition",
+        facialRecognitionDesc:
+          "AI preserves unique facial features, bone structure, and expressions across all generations",
+        styleFlexibility: "Style Flexibility",
+        styleFlexibilityDesc:
+          "Change outfits, accessories, and backgrounds while maintaining the same person",
+        professionalQuality: "Professional Quality",
+        professionalQualityDesc:
+          "High-resolution, studio-quality images that look natural and professional",
+      },
+    },
     upload: {
       dropHere: "Drag and drop images here, or click to browse",
       supportsTpl: "Supports JPEG, PNG, WebP • Max {max} images • {size}MB each",
@@ -348,6 +390,48 @@ const translations = {
         title: "高级照片编辑",
         desc: "使用AI精确编辑更改发型、背景、表情等。",
         detail: "几秒钟内完成专业质量的编辑，而不是几小时。",
+      },
+    },
+    home: {
+      common: {
+        original: "Original",
+        generated: "Generated",
+      },
+      consistency: {
+        title: "完美人物一致性",
+        subtitle:
+          "目前人物一致性最强的模型——在不同风格、服装和场景中保持同一人物，完美保留独特面部特征",
+      },
+      case1: {
+        title: "案例一：风格转换",
+        baseModel: "基础模型",
+        sunglasses: "墨镜",
+        skateboard: "滑板",
+        styleReferences: "风格参考",
+        generatedResult: "生成结果",
+        perfectFusion: "完美融合",
+        sameFace: "同一张脸，不同风格",
+      },
+      case2: {
+        title: "案例二：穿搭更换",
+        baseModel: "基础模型",
+        greenDress: "绿色连衣裙",
+        styleReference: "风格参考",
+        generatedResult: "生成结果",
+        perfectMatch: "完美匹配",
+        samePerson: "同一人物，不同穿搭",
+      },
+      whyConsistency: {
+        title: "为什么人物一致性很重要",
+        facialRecognition: "面部识别",
+        facialRecognitionDesc:
+          "AI 在所有生成中保留独特的面部特征、骨骼结构与表情",
+        styleFlexibility: "风格灵活性",
+        styleFlexibilityDesc:
+          "更换服装、配饰与背景的同时保持同一人物",
+        professionalQuality: "专业品质",
+        professionalQualityDesc:
+          "高分辨率、影棚级图像，自然且专业",
       },
     },
     comparison: {
