@@ -254,7 +254,7 @@ export function ImageUpload({
           variant="outline"
           onClick={openFileDialog}
           disabled={disabled}
-          className="w-full"
+          className="w-full text-foreground border-primary/50 hover:bg-white/10 hover:text-foreground active:scale-[0.98] transition-colors duration-150"
         >
           <ImageIcon className="w-4 h-4 mr-2" />
           {t?.upload?.chooseImages || t?.hero?.chooseImages || 'Choose Images'}
