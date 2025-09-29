@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback, useState, useRef } from 'react';
-import { Upload, X, Image as ImageIcon, AlertCircle } from 'lucide-react';
+import { Upload, X, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -248,18 +248,7 @@ export function ImageUpload({
         </div>
       )}
 
-      {/* Upload Button (Alternative) */}
-      {images.length === 0 && !isUploading && (
-        <Button
-          variant="outline"
-          onClick={openFileDialog}
-          disabled={disabled}
-          className="w-full text-foreground border-primary/50 hover:bg-white/10 hover:text-foreground active:scale-[0.98] transition-colors duration-150"
-        >
-          <ImageIcon className="w-4 h-4 mr-2" />
-          {t?.upload?.chooseImages || t?.hero?.chooseImages || 'Choose Images'}
-        </Button>
-      )}
+      {/* Removed duplicate "Choose Images" button under the upload box */}
     </div>
   );
 }
