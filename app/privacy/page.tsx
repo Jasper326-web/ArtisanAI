@@ -23,142 +23,87 @@ export default function PrivacyPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="prose prose-invert max-w-none">
-              <div className="space-y-6 text-muted-foreground">
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">1. Information We Collect</h2>
-                  <p>We collect information you provide directly to us, such as when you:</p>
-                  <ul className="list-disc list-inside ml-4 space-y-1">
-                    <li>Create an account or profile</li>
-                    <li>Upload images or content</li>
-                    <li>Make purchases or transactions</li>
-                    <li>Contact us for support</li>
-                    <li>Participate in surveys or promotions</li>
-                  </ul>
-                </section>
+              <div className="space-y-8 text-muted-foreground">
+                {/* Introduction */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.privacy?.sections?.introduction?.title || '1. Introduction'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.privacy?.sections?.introduction?.content || 'This Privacy Policy describes how ArtisanAI collects, uses, and protects your personal information.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">2. How We Use Your Information</h2>
-                  <p>We use the information we collect to:</p>
-                  <ul className="list-disc list-inside ml-4 space-y-1">
-                    <li>Provide, maintain, and improve our services</li>
-                    <li>Process transactions and send related information</li>
-                    <li>Send technical notices, updates, and support messages</li>
-                    <li>Respond to your comments and questions</li>
-                    <li>Monitor and analyze trends and usage</li>
-                  </ul>
-                </section>
+                {/* Information Collection */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.privacy?.sections?.information_collection?.title || '2. Information We Collect'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.privacy?.sections?.information_collection?.content || 'We collect information you provide directly to us, such as when you create an account, upload images, or contact us.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">3. AI Processing and Image Data</h2>
-                  <p>
-                    When you upload images to ArtisanAI, we process them using artificial intelligence to generate new content. 
-                    Your uploaded images are processed securely and temporarily. We do not store your uploaded images or generated results on our servers.
-                    All generated images are provided to you for immediate download and are not retained by our system.
-                  </p>
-                </section>
+                {/* Usage Information */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.privacy?.sections?.usage_information?.title || '3. Usage Information'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.privacy?.sections?.usage_information?.content || 'We automatically collect certain information about your use of our services, including device information, IP address, and usage patterns.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">4. Information Sharing</h2>
-                  <p>
-                    We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, except:
-                  </p>
-                  <ul className="list-disc list-inside ml-4 space-y-1">
-                    <li>To trusted service providers who assist us in operating our website</li>
-                    <li>When required by law or to protect our rights</li>
-                    <li>In connection with a business transfer or acquisition</li>
-                  </ul>
-                </section>
+                {/* Cookies */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.privacy?.sections?.cookies?.title || '4. Cookies and Tracking'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.privacy?.sections?.cookies?.content || 'We use cookies and similar technologies to enhance your experience, analyze usage patterns, and provide personalized content.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">5. Data Security</h2>
-                  <p>
-                    We implement appropriate security measures to protect your personal information against unauthorized access, 
-                    alteration, disclosure, or destruction. However, no method of transmission over the internet is 100% secure.
-                  </p>
-                </section>
+                {/* Data Usage */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.privacy?.sections?.data_usage?.title || '5. How We Use Your Information'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.privacy?.sections?.data_usage?.content || 'We use your information to provide, maintain, and improve our services, process transactions, and ensure platform security.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">6. Cookies and Tracking</h2>
-                  <p>
-                    We use cookies and similar tracking technologies to enhance your experience on our website. 
-                    You can control cookie settings through your browser preferences or our cookie consent banner.
-                  </p>
-                </section>
+                {/* Data Sharing */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.privacy?.sections?.data_sharing?.title || '6. Information Sharing'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.privacy?.sections?.data_sharing?.content || 'We do not sell your personal information. We may share your information with service providers or when required by law.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">7. Your Rights (GDPR/CCPA)</h2>
-                  <p>You have the following rights regarding your personal data:</p>
-                  <ul className="list-disc list-inside ml-4 space-y-1">
-                    <li><strong>Access:</strong> Request a copy of your personal data</li>
-                    <li><strong>Rectification:</strong> Correct inaccurate or incomplete data</li>
-                    <li><strong>Erasure:</strong> Request deletion of your personal data</li>
-                    <li><strong>Portability:</strong> Export your data in a machine-readable format</li>
-                    <li><strong>Restriction:</strong> Limit how we process your data</li>
-                    <li><strong>Objection:</strong> Object to certain types of data processing</li>
-                  </ul>
-                  <p className="mt-2">
-                    To exercise these rights, contact us at privacy@artisans-ai.com. 
-                    We will respond within 30 days.
-                  </p>
-                </section>
+                {/* Data Security */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.privacy?.sections?.data_security?.title || '7. Data Security'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.privacy?.sections?.data_security?.content || 'We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">8. Data Retention</h2>
-                  <p>
-                    We retain your personal data only as long as necessary to provide our services 
-                    and comply with legal obligations. Account data is retained until you delete 
-                    your account, and transaction data is retained for 7 years for tax purposes.
-                    Uploaded images and generated content are not stored and are processed only temporarily.
-                  </p>
-                </section>
+                {/* Data Retention */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.privacy?.sections?.data_retention?.title || '8. Data Retention'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.privacy?.sections?.data_retention?.content || 'We retain your personal information for as long as necessary to provide our services and fulfill the purposes outlined in this Privacy Policy.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">7. Third-Party Services</h2>
-                  <p>
-                    Our service may contain links to third-party websites or services. We are not responsible for the privacy 
-                    practices of these third parties. We encourage you to read their privacy policies.
-                  </p>
-                </section>
+                {/* Your Rights */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.privacy?.sections?.your_rights?.title || '9. Your Rights'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.privacy?.sections?.your_rights?.content || 'You have the right to access, update, or delete your personal information. You may also opt out of certain communications from us.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">8. Children's Privacy</h2>
-                  <p>
-                    Our service is not intended for children under 13. We do not knowingly collect personal information 
-                    from children under 13. If you are a parent and believe your child has provided us with personal information, 
-                    please contact us.
-                  </p>
-                </section>
+                {/* Children's Privacy */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.privacy?.sections?.children_privacy?.title || '10. Children\'s Privacy'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.privacy?.sections?.children_privacy?.content || 'Our services are not intended for children under 13. We do not knowingly collect personal information from children under 13.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">9. Your Rights</h2>
-                  <p>You have the right to:</p>
-                  <ul className="list-disc list-inside ml-4 space-y-1">
-                    <li>Access your personal information</li>
-                    <li>Correct inaccurate information</li>
-                    <li>Delete your account and data</li>
-                    <li>Opt-out of certain communications</li>
-                    <li>Data portability</li>
-                  </ul>
-                </section>
+                {/* International Transfers */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.privacy?.sections?.international_transfers?.title || '11. International Data Transfers'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.privacy?.sections?.international_transfers?.content || 'Your information may be transferred to and processed in countries other than your own. We ensure appropriate safeguards are in place.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">10. Changes to This Policy</h2>
-                  <p>
-                    We may update this privacy policy from time to time. We will notify you of any changes by posting 
-                    the new policy on this page and updating the "Last updated" date.
-                  </p>
-                </section>
+                {/* Policy Changes */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.privacy?.sections?.policy_changes?.title || '12. Changes to This Policy'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.privacy?.sections?.policy_changes?.content || 'We may update this Privacy Policy from time to time. We will notify you of any material changes through our platform or by email.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">11. Contact Us</h2>
-                  <p>
-                    If you have any questions about this Privacy Policy, please contact us at: 
-                    <a href="mailto:jdfz13zqy@gmail.com" className="text-primary hover:underline">jdfz13zqy@gmail.com</a>
-                  </p>
-                </section>
+                {/* Contact */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.privacy?.sections?.contact?.title || '13. Contact Us'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.privacy?.sections?.contact?.content || 'If you have any questions about this Privacy Policy, please contact us at jdfz13zqy@gmail.com.'}</p>
+                </div>
 
                 <div className="text-sm text-muted-foreground mt-8 pt-6 border-t border-primary/20">
-                  <p>{t?.legal?.common?.last_updated || 'Last updated:'} {new Date().toLocaleDateString()}</p>
+                  <p>{t?.legal?.common?.last_updated || '最后更新:'} {t?.legal?.common?.date || 'December 2024'}</p>
                 </div>
               </div>
             </CardContent>

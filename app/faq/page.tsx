@@ -109,12 +109,14 @@ export default function FAQPage() {
                   {t.faq.contact?.subtitle ||
                     "Can't find the answer you're looking for? Our support team is here to help."}
                 </p>
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-primary-foreground shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] transition-all duration-300"
-                >
-                  {t.faq.contact?.button || "Contact Support"}
-                </Button>
+                <Link href="/contact">
+                  <Button
+                    size="lg"
+                    className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-primary-foreground shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] transition-all duration-300"
+                  >
+                    {t.faq.contact?.button || "Contact Support"}
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           </div>

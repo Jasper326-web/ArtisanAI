@@ -23,101 +23,81 @@ export default function RefundPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="prose prose-invert max-w-none">
-              <div className="space-y-6 text-muted-foreground">
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">1. Refund Eligibility</h2>
-                  <p>
-                    We offer refunds for credit purchases under the following circumstances:
-                  </p>
-                  <ul className="list-disc list-inside ml-4 space-y-1">
-                    <li>Technical issues preventing service usage within 24 hours of purchase</li>
-                    <li>Duplicate purchases made in error</li>
-                    <li>Service unavailability for more than 48 hours</li>
-                    <li>Billing errors on our part</li>
-                  </ul>
-                </section>
+              <div className="space-y-8 text-muted-foreground">
+                {/* Introduction */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.refund?.sections?.introduction?.title || '1. Refund Policy Overview'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.refund?.sections?.introduction?.content || 'This Refund Policy outlines the terms and conditions for refunds on ArtisanAI services. Please read this policy carefully before making a purchase.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">2. Refund Timeframe</h2>
-                  <p>
-                    Refund requests must be submitted within 30 days of the original purchase date. 
-                    Refunds will be processed within 5-10 business days after approval.
-                  </p>
-                </section>
+                {/* Refund Eligibility */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.refund?.sections?.refund_eligibility?.title || '2. Refund Eligibility'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.refund?.sections?.refund_eligibility?.content || 'Refunds may be considered for technical issues that prevent service delivery, billing errors, or duplicate charges. Refunds are not available for completed AI generation services.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">3. Non-Refundable Items</h2>
-                  <p>The following are not eligible for refunds:</p>
-                  <ul className="list-disc list-inside ml-4 space-y-1">
-                    <li>Credits that have been used to generate images</li>
-                    <li>Purchases made more than 30 days ago</li>
-                    <li>Refunds requested due to dissatisfaction with generated content quality</li>
-                    <li>Refunds for unused credits after 90 days of inactivity</li>
-                  </ul>
-                </section>
+                {/* Technical Issues */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.refund?.sections?.technical_issues?.title || '3. Technical Issues'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.refund?.sections?.technical_issues?.content || 'If you experience technical problems that prevent you from using our services, please contact our support team within 7 days of the issue occurring. We will investigate and may provide a refund or credit.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">4. How to Request a Refund</h2>
-                  <p>To request a refund, please:</p>
-                  <ol className="list-decimal list-inside ml-4 space-y-1">
-                    <li>Contact our support team at support@artisans-ai.com</li>
-                    <li>Include your order number and reason for refund</li>
-                    <li>Provide any relevant screenshots or documentation</li>
-                    <li>Allow 2-3 business days for review</li>
-                  </ol>
-                </section>
+                {/* Billing Errors */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.refund?.sections?.billing_errors?.title || '4. Billing Errors'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.refund?.sections?.billing_errors?.content || 'If you believe you have been charged incorrectly, please contact us immediately. We will review the charge and provide a refund if an error is confirmed.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">5. Refund Processing</h2>
-                  <p>
-                    Approved refunds will be processed to the original payment method used for the purchase. 
-                    Processing times may vary depending on your payment provider:
-                  </p>
-                  <ul className="list-disc list-inside ml-4 space-y-1">
-                    <li>Credit/Debit Cards: 5-10 business days</li>
-                    <li>PayPal: 3-5 business days</li>
-                    <li>Bank Transfers: 7-14 business days</li>
-                  </ul>
-                </section>
+                {/* Service Quality */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.refund?.sections?.service_quality?.title || '5. Service Quality Issues'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.refund?.sections?.service_quality?.content || 'If you are dissatisfied with the quality of AI-generated content, please contact support within 24 hours. We may offer credits or re-generation of content.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">6. Partial Refunds</h2>
-                  <p>
-                    In cases where only some credits have been used, we may offer partial refunds 
-                    for the unused portion. The refund amount will be calculated based on the 
-                    original purchase price and remaining credit balance.
-                  </p>
-                </section>
+                {/* Refund Process */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.refund?.sections?.refund_process?.title || '6. Refund Process'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.refund?.sections?.refund_process?.content || 'To request a refund, contact us at jdfz13zqy@gmail.com with your order details and reason for the refund request. We will respond within 2-3 business days.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">7. Dispute Resolution</h2>
-                  <p>
-                    If you are not satisfied with our refund decision, you may contact us to 
-                    discuss alternative solutions. We are committed to resolving all customer 
-                    concerns fairly and promptly.
-                  </p>
-                </section>
+                {/* Processing Time */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.refund?.sections?.processing_time?.title || '7. Processing Time'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.refund?.sections?.processing_time?.content || 'Approved refunds will be processed within 5-10 business days. The refund will be credited to the original payment method used for the purchase.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">8. Contact Information</h2>
-                  <p>
-                    For refund requests or questions about this policy, please contact us:
-                  </p>
-                  <ul className="list-disc list-inside ml-4 space-y-1">
-                    <li>Email: support@artisans-ai.com</li>
-                    <li>Response Time: Within 24 hours</li>
-                    <li>Business Hours: Monday - Friday, 9 AM - 6 PM (UTC)</li>
-                  </ul>
-                </section>
+                {/* Non-Refundable */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.refund?.sections?.non_refundable?.title || '8. Non-Refundable Items'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.refund?.sections?.non_refundable?.content || 'The following are not eligible for refunds: completed AI generation services, credits that have been used, and purchases made more than 30 days ago.'}</p>
+                </div>
 
-                <div className="mt-8 p-4 bg-muted/20 rounded-lg border border-primary/20">
-                  <p className="text-sm text-muted-foreground">
-                    <strong>{t?.legal?.common?.last_updated || 'Last updated:'}</strong> {new Date().toLocaleDateString()}
-                  </p>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    This refund policy is subject to change. We will notify users of any 
-                    significant changes via email or website notification.
-                  </p>
+                {/* Credit Alternatives */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.refund?.sections?.credit_alternatives?.title || '9. Credit Alternatives'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.refund?.sections?.credit_alternatives?.content || 'In some cases, we may offer account credits instead of refunds. Credits can be used for future purchases and do not expire.'}</p>
+                </div>
+
+                {/* Chargebacks */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.refund?.sections?.chargebacks?.title || '10. Chargebacks'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.refund?.sections?.chargebacks?.content || 'If you initiate a chargeback with your bank, please contact us first to resolve the issue. Unnecessary chargebacks may result in account suspension.'}</p>
+                </div>
+
+                {/* Policy Changes */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.refund?.sections?.policy_changes?.title || '11. Policy Changes'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.refund?.sections?.policy_changes?.content || 'We reserve the right to modify this refund policy at any time. Changes will be posted on this page and will apply to future purchases.'}</p>
+                </div>
+
+                {/* Contact */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.refund?.sections?.contact?.title || '12. Contact Us'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.refund?.sections?.contact?.content || 'For refund requests or questions about this policy, please contact us at jdfz13zqy@gmail.com.'}</p>
+                </div>
+
+                <div className="text-sm text-muted-foreground mt-8 pt-6 border-t border-primary/20">
+                  <p>{t?.legal?.common?.last_updated || '最后更新:'} {t?.legal?.common?.date || 'December 2024'}</p>
                 </div>
               </div>
             </CardContent>

@@ -1,70 +1,35 @@
 "use client"
 
 import type React from "react"
-import { createContext, useContext, useState, useEffect } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 
-export type Language = "en" | "zh" | "es" | "fr" | "de" | "ja" | "ko" | "pt" | "ru" | "ar"
+export type Language = "en" | "zh"
 
 export const languages: { code: Language; name: string; nativeName: string }[] = [
   { code: "en", name: "English", nativeName: "English" },
   { code: "zh", name: "Chinese", nativeName: "中文" },
-  { code: "es", name: "Spanish", nativeName: "Español" },
-  { code: "fr", name: "French", nativeName: "Français" },
-  { code: "de", name: "German", nativeName: "Deutsch" },
-  { code: "ja", name: "Japanese", nativeName: "日本語" },
-  { code: "ko", name: "Korean", nativeName: "한국어" },
-  { code: "pt", name: "Portuguese", nativeName: "Português" },
-  { code: "ru", name: "Russian", nativeName: "Русский" },
-  { code: "ar", name: "Arabic", nativeName: "العربية" },
 ]
 
 const translations = {
   en: {
-    nav: {
-      home: "Home",
-      pricing: "Pricing",
-      faq: "FAQ",
-    },
-    hero: {
-      // Structured keys for precise two-tone headline rendering
-      title: "Fire Your Photographer",
-      titlePrefix: "Fire Your Photographer",
-      titleAnywhere: "",
-      subtitle: "The Most Powerful AI Image Generation Model - Keep the same you, anywhere",
-      uploadText: "Upload your photos",
-      uploadSubtext: "Drag & drop or click to select multiple images",
-      processing: "Processing Images...",
-      supports: "Supports JPEG, PNG, WebP • Max {max} images • {size}MB each",
-      uploadTip: "💡 Upload multiple images to create a fusion of their best features (up to {max} images supported)",
-      chooseImages: "Choose Images",
-      referenceImages: "Reference Images",
-      placeholder:
-        "Describe your vision... (e.g., 'professional headshot in a modern office', '3D figurine on a wooden desk')",
-      generateBtn: "Generate Now",
-    },
-    features: {
-      title: "Unleash Your Creative Vision",
-      person: {
-        title: "Person + Object Generation",
-        desc: "Upload person photos with props or backgrounds to generate highly consistent new images in any style.",
-        detail: "Perfect for product shots, lifestyle photos, and creative compositions.",
+    howItWorks: {
+      title: "How It Works",
+      subtitle: "Simple and transparent pricing",
+      upload: {
+        title: "1. Upload",
+        desc: "Upload photos and describe your vision with detailed text prompts.",
       },
-      model3d: {
-        title: "3D Model Generation",
-        desc: "Transform full-body photos into stunning 3D figurine renderings with multiple viewing angles.",
-        detail: "Create collectible figurines, game characters, and 3D avatars.",
+      generate: {
+        title: "2. Generate",
+        desc: "Our AI processes your input and creates beautiful, consistent images in seconds.",
       },
-      editing: {
-        title: "Advanced Photo Editing",
-        desc: "Change hairstyles, backgrounds, expressions, and more with AI-powered precision editing.",
-        detail: "Professional-quality edits in seconds, not hours.",
+      download: {
+        title: "3. Download & Share",
+        desc: "Download high-resolution images or share directly to your favorite platforms.",
       },
     },
     home: {
-      common: {
-        original: "Original",
-        generated: "Generated",
-      },
+      common: { original: "Original", generated: "Generated", reference: "Reference" },
       consistency: {
         title: "Perfect Character Consistency",
         subtitle:
@@ -77,17 +42,16 @@ const translations = {
         skateboard: "Skateboard",
         styleReferences: "Style References",
         generatedResult: "Generated Result",
-        perfectFusion: "Perfect Fusion",
+        perfectFusion: "Generated Perfect Fusion",
         sameFace: "Same face, new style",
       },
       case2: {
         title: "Case Study 2: Outfit Change",
         baseModel: "Base Model",
-        greenDress: "Green Dress",
         styleReference: "Style Reference",
-        generatedResult: "Generated Result",
         perfectMatch: "Perfect Match",
-        samePerson: "Same person, new outfit",
+        samePersonNewOutfit: "Same person, new outfit",
+        greenDress: "Green Dress",
       },
       whyConsistency: {
         title: "Why Character Consistency Matters",
@@ -101,302 +65,674 @@ const translations = {
         professionalQualityDesc:
           "High-resolution, studio-quality images that look natural and professional",
       },
+      editing: {
+        title: "Advanced AI Photo Editing",
+        subtitle:
+          "Delete your photo editing software! Remove watermarks and tattoos flawlessly, from basic retouching to creative transformations - experience the power of AI photo editing",
+        step1: {
+          title: "Step 1: Original Photo",
+          original: "Original Photo with Tattoo",
+          description: "Girl with chest tattoo",
+          detail: "Starting point - natural photo with existing tattoo",
+        },
+        step2: {
+          title: "Step 2: Remove Tattoo",
+          result: "Tattoo Removed",
+          description: "Tattoo Completely Removed",
+          detail: "AI seamlessly removes the chest tattoo while preserving skin texture",
+        },
+        step3: {
+          title: "Step 3: Add New Tattoo",
+          reference: {
+            title: "Reference Tattoo Design",
+            description: "New tattoo design to be added",
+          },
+          result: {
+            title: "Generated Result",
+            description: "New Tattoo Applied",
+            detail: "AI adds the new tattoo design to the same chest position",
+          },
+        },
+        step4: {
+          title: "Step 4: Creative Styling",
+          result: "Hair and Makeup Changed",
+          description: "Hair Color & Makeup Changed",
+          detail:
+            "AI transforms hair color and lipstick while maintaining facial features",
+        },
+        step5: {
+          title: "Step 5: Expression Editing",
+          result: "Smiling Expression",
+          description: "Natural Smile Added",
+          detail:
+            "AI adds a natural smile while preserving the person's unique facial structure",
+        },
+        caseStudy2: {
+          title: "Case Study 2: Accessory Replacement",
+          original: {
+            title: "Original Photo",
+            description: "Woman with Original Necklace",
+            detail: "Starting point with existing accessory",
+          },
+          reference: {
+            title: "New Necklace Design",
+            description: "New necklace design to replace the original",
+          },
+          result: {
+            title: "Generated Result",
+            description: "Necklace Successfully Replaced",
+            detail:
+              "AI seamlessly replaces the original necklace with the new design while maintaining natural lighting and shadows",
+          },
+        },
+        whyChoose: {
+          title: "Why Choose Our AI Photo Editor?",
+          features: {
+      professional: {
+              icon: "🎨",
+              title: "Professional Quality",
+              description: "Studio-grade editing results with natural-looking outcomes",
+            },
+            fast: {
+              icon: "⚡",
+              title: "Lightning Fast",
+              description: "Get results in seconds, not hours of manual editing",
+            },
+            precise: {
+              icon: "🎯",
+              title: "Precise Control",
+              description: "Fine-tune every detail with advanced AI algorithms",
+            },
+          },
+        },
+      },
+      model3d: {
+        title: "AI 3D Model Generation",
+        subtitle:
+          "Personalized 3D model generation - can be further processed in 3D software, from real photos to anime characters, creating exclusive 3D figurines",
+        caseStudy1: {
+          title: "Case Study 1: Real Person to 3D Figurine",
+          original: {
+            title: "Original Photo",
+            description: "Real Person Photo",
+            detail: "High-quality portrait for 3D conversion",
+          },
+          result: {
+            title: "3D Figurine Result",
+            description: "Professional 3D Figurine",
+            detail:
+              "AI converts real person into detailed 3D collectible figurine",
+          },
+        },
+        caseStudy2: {
+          title: "Case Study 2: Anime Characters to 3D Figurines",
+          example1: {
+            title: "Anime Character 1",
+            original: { 
+              title: "Original Anime Art",
+              detail: "Original anime artwork for 3D conversion"
+            },
+            result: {
+              title: "3D Figurine Result",
+              description: "3D Anime Figurine",
+              detail:
+                "AI transforms 2D anime into detailed 3D collectible",
+            },
+          },
+          example2: {
+            title: "Anime Character 2",
+            original: { 
+              title: "Original Anime Art",
+              detail: "Another anime artwork for 3D conversion"
+            },
+            result: {
+              title: "3D Figurine Result",
+              description: "3D Anime Figurine",
+              detail:
+                "AI creates detailed 3D figurine from 2D anime art",
+            },
+          },
+        },
+        caseStudy3: {
+          title: "Case Study 3: Building to 3D Model",
+          original: { title: "Original Building Photo" },
+          result: {
+            title: "3D Model Results",
+            view1: {
+              title: "3D Model - View 1",
+              description: "First perspective of the 3D building model",
+            },
+            view2: {
+              title: "3D Model - View 2",
+              description:
+                "Different perspective of the same 3D building model",
+            },
+          },
+        },
+        whyChoose: {
+          title: "Why Choose Our 3D Generation?",
+      features: {
+            fidelity: {
+              icon: "🎯",
+              title: "High Fidelity",
+              description:
+                "Preserve every detail from original photos and artwork",
+            },
+            styles: {
+              icon: "🎨",
+              title: "Multiple Styles",
+              description:
+                "Works with real photos, anime, and any 2D artwork",
+            },
+            quality: {
+              icon: "🏆",
+              title: "Collectible Quality",
+              description:
+                "Professional-grade 3D models ready for printing",
+            },
+          },
+        },
+      },
+      product: {
+        title: "AI Product Photography & Poster Design",
+        subtitle:
+          "Fire your product photographer and poster designer! Multi-dimensional product + scene + character display, one-click generation of professional product posters",
+        caseStudy1: {
+          title: "Case Study 1: Essential Oil Product",
+          step1: {
+            title: "Step 1: Original Product",
+            description: "Essential Oil Product",
+            detail: "Starting point - clean product photo for marketing",
+          },
+          step2: { title: "Step 2: Model Integration" },
+          step3: { title: "Step 3: Product in Hand" },
+          step4: { title: "Step 4: Professional Poster Design" },
+        },
+        caseStudy2: {
+          title: "Case Study 2: Men's Skincare Product",
+          original: {
+            title: "Men's Skincare Product",
+            description: "Men's Skincare Product",
+            detail: "Professional men's skincare product for marketing campaign",
+          },
+          result: {
+            title: "Professional Product Poster",
+            description: "Men's Skincare Product Poster",
+            detail:
+              "AI creates professional product poster with modern design and branding",
+          },
+        },
+        whyChoose: {
+          title: "Why Choose Our AI Product Photography?",
+          features: {
+            professional: {
+              icon: "📸",
+              title: "Professional Quality",
+              description:
+                "Studio-grade product photography without expensive equipment",
+            },
+            fast: {
+              icon: "⚡",
+              title: "Lightning Fast",
+              description:
+                "Generate multiple product shots and posters in minutes",
+            },
+            creative: {
+              icon: "🎨",
+              title: "Creative Control",
+              description:
+                "Customize scenes, models, and layouts for your brand",
+            },
+          },
+        },
+      },
     },
-    upload: {
+    hero: {
+      title: "Fire Your Photographer",
+      subtitle: "Artisan AI — Nano-Banana Powered Image Generation for Consistent, Realistic Results",
+      placeholder: "Describe your vision...",
+      generate: "Generate",
+      generateBtn: "Generate",
+      upload: "Upload Images",
+      processing: "Processing Images...",
+      uploadText: "Upload images and enter prompts",
+    },
+      upload: {
       dropHere: "Drag and drop images here, or click to browse",
       supportsTpl: "Supports JPEG, PNG, WebP • Max {max} images • {size}MB each",
       tipTpl: "Upload multiple images to create a fusion of their best features (up to {max} images supported)",
-      chooseImages: "Choose Images",
-      referenceImages: "Reference Images ({count}/{max})",
+    },
+    nav: {
+      home: "Home",
+      pricing: "Pricing",
+      faq: "FAQ",
+      contact: "Contact",
+    },
+    morePlay: {
+      title: "More Creative Possibilities",
+      subtitle: "Explore More Creative Possibilities",
+      description: "Discover the endless creative potential of Nano-Banana with these exciting tasks",
+      tasks: {
+        action: {
+          title: "Action Tasks",
+          description: "We randomly define a set of action instructions, requiring the model to adjust the subject's posture while preserving original identity details and background. This can generate rich derivative actions. For example, making a 'yes' gesture, crossing arms, or introducing new props like hats or sunglasses to create rich action expressions.",
+          image: "11.png"
+        },
+        background: {
+          title: "Background Tasks", 
+          description: "We define approximately 250 different scene locations, covering landmarks, natural landscapes, and common indoor and outdoor environments. This task requires replacing the original background with new scenes while preserving the subject's personality. For example, switching backgrounds to indoor photography studios, outdoor snowy mountains, or various scenic landmarks.",
+          image: "22.png"
+        },
+        hairstyle: {
+          title: "Hairstyle Tasks",
+          description: "We further explore hairstyle and hair color modification tasks based on portrait data, utilizing Nano-banana to edit the subject's hair details. For example, changing straight bangs to wavy curls or buns, and changing black hair to blonde, red, or other colors.",
+          image: "33.png"
+        },
+        time: {
+          title: "Time Tasks",
+          description: "We place portrait data in different historical or temporal contexts, requiring clothing styles and background details to match the specified era. For example, a character might be placed in a 1905 daily life scene, or in a 2000 millennium environment.",
+          image: "44.png"
+        },
+        interaction: {
+          title: "Human-Computer Interaction Tasks",
+          description: "We randomly select 2-4 images from the basic identity set and use GPT to generate interaction-oriented instructions. This task is not just about placing people side by side, but emphasizes interpersonal actions and interactions. For example, two people drinking coffee and chatting, or a four-person band performing together. These instructions are then combined with Nano-banana to synthesize images that capture rich interactive semantics.",
+          image: "55.png"
+        },
+        ootd: {
+          title: "OOTD Tasks",
+          description: "We collect clothing samples from online resources and randomly select 2-6 pieces of clothing to match with portraits for display. The generated samples need to maintain facial feature consistency while incorporating pose changes to better highlight clothing details and presentation effects.",
+          image: "66.png"
+        }
+      }
     },
     comparison: {
       title: "Why Choose ArtisanAI?",
+      subtitle: "Compare with other AI image generation platforms",
+      description: "Artisan-ai (powered by Nano-Banana) redefines AI image generation with unmatched realism and identity consistency. It outperforms even GPT-4o and Qwen-Image, keeping the same face perfectly consistent across background, pose, and style changes — a level of precision no other model has achieved.",
       features: {
-        consistency: "Portrait Consistency",
+        consistency: "Character Consistency",
         figurine: "3D Figurine Generation",
         inputs: "Multiple Input Types",
+        identity: "Identity Preservation",
+        quality: "Professional Quality",
         speed: "Processing Speed",
+        model3d: "3D Model Generation",
+        multipleInputs: "Multiple Input Types",
+        processingSpeed: "Processing Speed",
+        easyToWork: "Easy to Work",
       },
-    },
-    howItWorks: {
-      title: "How It Works",
-      upload: {
-        title: "1. Upload",
-        desc: "Upload your photos and describe your vision with detailed text prompts.",
-      },
-      generate: {
-        title: "2. Generate",
-        desc: "Our AI processes your inputs and creates stunning, consistent images in seconds.",
-      },
-      download: {
-        title: "3. Download & Share",
-        desc: "Download high-resolution images or share directly to your favorite platforms.",
+      table: {
+        feature: "Feature",
+        artisanAI: "ArtisanAI",
+        midjourney: "MidJourney",
+        qwenImage: "Qwen-Image",
+        gpt4o: "GPT-4o",
+        limited: "Limited",
+        good: "Good",
+        basic: "Basic",
+        no: "No",
+        textOnly: "Text Only",
+        slow: "Slow",
+        medium: "Medium",
+        fast: "Fast",
+        poor: "Poor",
+        excellent: "Excellent",
       },
     },
     pricing: {
-      title: "Simple, Transparent Pricing",
-      subtitle: "Choose the perfect plan for your creative needs. Start with free credits and scale as you grow.",
-      most_popular: "Most Popular",
-      credits: "Credits",
-      images: "Images",
-      credits_per_image: "credits per image",
-      purchase_now: "Purchase Now",
-      processing: "Processing...",
-      coming_soon: "Coming Soon",
-      coming_soon_description: "This plan will be available after testing is complete.",
-      purchase_error: "Purchase Error",
-      purchase_error_description: "Failed to create checkout session. Please try again.",
-      testing_mode: "Testing Mode",
-      why_choose_us: "Why Choose ArtisanAI?",
-      feature1_title: "High Quality",
-      feature1_description: "Professional-grade AI models for stunning results",
-      feature2_title: "Fast Processing",
-      feature2_description: "Generate images in seconds, not minutes",
-      feature3_title: "Consistent Results",
-      feature3_description: "Maintain character consistency across all generations",
-      starter: {
-        name: "Starter Pack",
-        description: "Perfect for beginners",
-        feature1: "300 Credits included",
-        feature2: "6 High-quality images",
-        feature3: "Email support"
-      },
-      standard: {
-        name: "Standard Pack",
-        description: "Most popular choice",
-        feature1: "700 Credits included",
-        feature2: "14 High-quality images",
-        feature3: "Priority support"
-      },
-      advanced: {
-        name: "Advanced Pack",
-        description: "Better value",
-        feature1: "1,600 Credits included",
-        feature2: "32 High-quality images",
-        feature3: "Priority support"
-      },
-      professional: {
-        name: "Professional Pack",
-        description: "For creators",
-        feature1: "4,500 Credits included",
-        feature2: "90 High-quality images",
-        feature3: "Premium support"
-      },
-      studio: {
-        name: "Studio Pack",
-        description: "For teams",
-        feature1: "10,000 Credits included",
-        feature2: "200 High-quality images",
-        feature3: "Dedicated support"
-      }
+      title: "Pricing", 
+      subtitle: "Simple and transparent pricing",
+      pointsSystem: "Points System",
+      freeStarter: "Free Starter",
+      freeStarterDesc: "Perfect for trying out the platform",
+      perGeneration: "Per Generation",
+      perGenerationDesc: "High-quality AI generation",
+      purchaseCredits: "Purchase Credits",
+      secureCheckout: "Secure checkout powered by Creem",
     },
-    gallery: {
-      title: "Community Gallery",
-      viewMore: "View More Creations",
-    },
-    footer: {
-      tagline: "Creating the future of AI-powered image generation with consistency and creativity.",
-      product: "Product",
-      support: "Support",
-      legal: "Legal",
-      copyright: "© 2024 ArtisanAI. All rights reserved.",
-      features: "Features",
-      api: "API",
-      helpCenter: "Help Center",
-      contact: "Contact",
-      status: "Status",
-      termsOfService: "Terms of Service",
-      privacyPolicy: "Privacy Policy",
-      cookiePolicy: "Cookie Policy",
-    },
-    faq: {
-      title: "Frequently Asked Questions",
-      subtitle: "Find answers to common questions about ArtisanAI",
-      questions: {
-        whatIs: {
-          q: "What is ArtisanAI?",
-          a: "ArtisanAI is an advanced AI-powered image generation platform that specializes in creating highly consistent portraits and 3D figurines from your photos.",
-        },
-        howConsistent: {
-          q: "How does ArtisanAI ensure portrait consistency?",
-          a: "Our proprietary AI technology analyzes facial features, expressions, and characteristics to maintain consistency across different styles and scenarios.",
-        },
-        whatFormats: {
-          q: "What image formats are supported?",
-          a: "We support JPG, PNG, and WebP formats for uploads. Generated images are provided in high-resolution PNG format.",
-        },
-        howLong: {
-          q: "How long does generation take?",
-          a: "Most generations complete within 30-60 seconds, depending on complexity and current server load.",
-        },
-        canCommercial: {
-          q: "Can I use generated images commercially?",
-          a: "Yes, you have full commercial rights to images generated using your own photos and prompts.",
-        },
-      },
-    },
-    common: {
-      loading: "Loading...",
-    },
-    success: {
-      title: "Payment Successful!",
-      description: "Thank you for your purchase. Credits have been added to your account.",
-      current_credits: "Current Credits",
-      refresh: "Refresh Credits",
-      refreshing: "Refreshing...",
-      back_home: "Back to Home",
-    },
-    contact: {
-      title: "Get in Touch",
-      subtitle:
-        "Have questions about Artisan AI? Want to collaborate or need support? We'd love to hear from you. Send us a message and we'll respond within 24 hours.",
+    success: { title: "Payment Success", refresh: "Refresh", back_home: "Back to Home" },
+    contact: { 
+      title: "Contact", 
+      subtitle: "Have questions about Artisan AI? Want to collaborate or need support? We'd love to hear from you. Send us a message and we'll respond within 24 hours.",
       email_us: "Email Us",
       response_time: "Response Time",
       within_24h: "Within 24 hours",
       support: "Support",
       support_scope: "Technical & General",
+      form: {
+        title: "Contact Us",
+        name: "Name",
+        email: "Email",
+        subject: "Subject",
+        message: "Message",
+        attachment: "Attachment (Optional)",
+        name_placeholder: "Your full name",
+        email_placeholder: "your.email@example.com",
+        subject_placeholder: "What's this about?",
+        message_placeholder: "Tell us more about your inquiry...",
+        file_formats: "Supported formats: JPEG, PNG, GIF, WebP (max 10MB)",
+        no_file_selected: "No file selected",
+        send_message: "Send Message",
+        sending: "Sending...",
+        message_sent: "Message Sent!",
+        message_sent_desc: "Thank you for contacting us. We'll get back to you within 24 hours.",
+        send_another: "Send Another Message",
+        file_too_large: "File too large",
+        file_too_large_desc: "Please select a file smaller than 10MB.",
+        invalid_file_type: "Invalid file type",
+        invalid_file_type_desc: "Please select an image file (JPEG, PNG, GIF, WebP).",
+        message_sent_success: "Message sent successfully!",
+        message_sent_success_desc: "Thank you for contacting us. We'll get back to you soon.",
+        failed_to_send: "Failed to send message",
+        failed_to_send_desc: "Please try again later.",
+        network_error: "Network error",
+        network_error_desc: "Please check your connection and try again.",
+        failed_to_send_error: "Failed to send message. Please try again."
+      }
     },
-    legal: {
-      common: {
-        last_updated: "Last updated:",
+    legal: { 
+      common: { last_updated: "Last updated", date: "December 2024" },
+      terms: {
+        title: "Terms of Service",
+        content: "Terms of Service content is under construction. Chinese version coming soon.",
+        coming_soon: "Terms of Service content is under construction. Chinese version coming soon.",
+        sections: {
+          introduction: {
+            title: "1. Introduction",
+            content: "Welcome to ArtisanAI. These Terms of Service ('Terms') govern your use of our AI-powered image generation platform. By accessing or using our services, you agree to be bound by these Terms."
+          },
+          acceptance: {
+            title: "2. Acceptance of Terms",
+            content: "By using ArtisanAI, you acknowledge that you have read, understood, and agree to be bound by these Terms. If you do not agree to these Terms, please do not use our services."
+          },
+          services: {
+            title: "3. Description of Services",
+            content: "ArtisanAI provides AI-powered image generation services, including but not limited to character consistency, 3D figurine generation, and style transformation. Our services are powered by advanced AI models including Nano-Banana technology."
+          },
+          user_accounts: {
+            title: "4. User Accounts",
+            content: "To access certain features, you may need to create an account. You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account."
+          },
+          acceptable_use: {
+            title: "5. Acceptable Use",
+            content: "You agree to use our services only for lawful purposes and in accordance with these Terms. You may not use our services to generate content that is illegal, harmful, threatening, abusive, or violates any applicable laws or regulations."
+          },
+          intellectual_property: {
+            title: "6. Intellectual Property",
+            content: "The ArtisanAI platform, including its design, functionality, and underlying technology, is protected by intellectual property laws. You retain ownership of content you generate, but grant us a license to provide our services."
+          },
+          privacy: {
+            title: "7. Privacy",
+            content: "Your privacy is important to us. Please review our Privacy Policy, which also governs your use of our services, to understand our practices."
+          },
+          payment: {
+            title: "8. Payment and Billing",
+            content: "Certain features of our service require payment. All fees are non-refundable unless otherwise stated. We reserve the right to change our pricing with reasonable notice."
+          },
+          termination: {
+            title: "9. Termination",
+            content: "We may terminate or suspend your account and access to our services at our sole discretion, without prior notice, for conduct that we believe violates these Terms or is harmful to other users."
+          },
+          disclaimers: {
+            title: "10. Disclaimers",
+            content: "Our services are provided 'as is' without warranties of any kind. We do not guarantee that our services will be uninterrupted, error-free, or meet your specific requirements."
+          },
+          limitation: {
+            title: "11. Limitation of Liability",
+            content: "To the maximum extent permitted by law, ArtisanAI shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of our services."
+          },
+          changes: {
+            title: "12. Changes to Terms",
+            content: "We reserve the right to modify these Terms at any time. We will notify users of any material changes through our platform or by email. Continued use of our services after changes constitutes acceptance of the new Terms."
+          },
+          contact: {
+            title: "13. Contact Information",
+            content: "If you have any questions about these Terms, please contact us at jdfz13zqy@gmail.com."
+          }
+        }
       },
       privacy: {
         title: "Privacy Policy",
-      },
-      terms: {
-        title: "Terms of Service",
-      },
-      refund: {
-        title: "Refund Policy",
+        content: "Privacy Policy content is under construction. Chinese version coming soon.",
+        coming_soon: "Privacy Policy content is under construction. Chinese version coming soon.",
+        sections: {
+          introduction: {
+            title: "1. Introduction",
+            content: "This Privacy Policy describes how ArtisanAI ('we', 'us', or 'our') collects, uses, and protects your personal information when you use our AI-powered image generation platform."
+          },
+          information_collection: {
+            title: "2. Information We Collect",
+            content: "We collect information you provide directly to us, such as when you create an account, upload images, or contact us. This may include your name, email address, and uploaded content."
+          },
+          usage_information: {
+            title: "3. Usage Information",
+            content: "We automatically collect certain information about your use of our services, including device information, IP address, browser type, and usage patterns."
+          },
+          cookies: {
+            title: "4. Cookies and Tracking",
+            content: "We use cookies and similar technologies to enhance your experience, analyze usage patterns, and provide personalized content. You can control cookie settings through your browser."
+          },
+          data_usage: {
+            title: "5. How We Use Your Information",
+            content: "We use your information to provide, maintain, and improve our services, process transactions, communicate with you, and ensure platform security."
+          },
+          data_sharing: {
+            title: "6. Information Sharing",
+            content: "We do not sell your personal information. We may share your information with service providers who assist us in operating our platform, or when required by law."
+          },
+          data_security: {
+            title: "7. Data Security",
+            content: "We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction."
+          },
+          data_retention: {
+            title: "8. Data Retention",
+            content: "We retain your personal information for as long as necessary to provide our services and fulfill the purposes outlined in this Privacy Policy."
+          },
+          your_rights: {
+            title: "9. Your Rights",
+            content: "You have the right to access, update, or delete your personal information. You may also opt out of certain communications from us."
+          },
+          children_privacy: {
+            title: "10. Children's Privacy",
+            content: "Our services are not intended for children under 13. We do not knowingly collect personal information from children under 13."
+          },
+          international_transfers: {
+            title: "11. International Data Transfers",
+            content: "Your information may be transferred to and processed in countries other than your own. We ensure appropriate safeguards are in place."
+          },
+          policy_changes: {
+            title: "12. Changes to This Policy",
+            content: "We may update this Privacy Policy from time to time. We will notify you of any material changes through our platform or by email."
+          },
+          contact: {
+            title: "13. Contact Us",
+            content: "If you have any questions about this Privacy Policy, please contact us at jdfz13zqy@gmail.com."
+          }
+        }
       },
       cookies: {
         title: "Cookie Policy",
+        content: "Cookie Policy content is under construction. Chinese version coming soon.",
+        coming_soon: "Cookie Policy content is under construction. Chinese version coming soon.",
+        sections: {
+          introduction: {
+            title: "1. What Are Cookies",
+            content: "Cookies are small text files that are stored on your device when you visit our website. They help us provide you with a better experience and understand how you use our services."
+          },
+          types_of_cookies: {
+            title: "2. Types of Cookies We Use",
+            content: "We use essential cookies for website functionality, analytics cookies to understand usage patterns, and preference cookies to remember your settings and preferences."
+          },
+          essential_cookies: {
+            title: "3. Essential Cookies",
+            content: "These cookies are necessary for the website to function properly. They enable basic functions like page navigation, access to secure areas, and authentication."
+          },
+          analytics_cookies: {
+            title: "4. Analytics Cookies",
+            content: "We use analytics cookies to understand how visitors interact with our website, helping us improve performance and user experience."
+          },
+          preference_cookies: {
+            title: "5. Preference Cookies",
+            content: "These cookies remember your choices and preferences, such as language settings, to provide a personalized experience on future visits."
+          },
+          third_party_cookies: {
+            title: "6. Third-Party Cookies",
+            content: "Some cookies are set by third-party services we use, such as analytics providers. These help us understand user behavior and improve our services."
+          },
+          cookie_management: {
+            title: "7. Managing Cookies",
+            content: "You can control cookies through your browser settings. You can delete existing cookies and choose to block future cookies, though this may affect website functionality."
+          },
+          browser_settings: {
+            title: "8. Browser Settings",
+            content: "Most browsers allow you to refuse cookies or delete them. Please refer to your browser's help documentation for specific instructions on cookie management."
+          },
+          cookie_consent: {
+            title: "9. Cookie Consent",
+            content: "By continuing to use our website, you consent to our use of cookies as described in this policy. You can withdraw consent at any time through your browser settings."
+          },
+          updates: {
+            title: "10. Updates to This Policy",
+            content: "We may update this Cookie Policy from time to time. Any changes will be posted on this page with an updated revision date."
+          },
+          contact: {
+            title: "11. Contact Us",
+            content: "If you have questions about our use of cookies, please contact us at jdfz13zqy@gmail.com."
+          }
+        }
       },
+      refund: {
+        title: "Refund Policy",
+        content: "Refund Policy content is under construction. Chinese version coming soon.",
+        coming_soon: "Refund Policy content is under construction. Chinese version coming soon.",
+        sections: {
+          introduction: {
+            title: "1. Refund Policy Overview",
+            content: "This Refund Policy outlines the terms and conditions for refunds on ArtisanAI services. Please read this policy carefully before making a purchase."
+          },
+          refund_eligibility: {
+            title: "2. Refund Eligibility",
+            content: "Refunds may be considered for technical issues that prevent service delivery, billing errors, or duplicate charges. Refunds are not available for completed AI generation services."
+          },
+          technical_issues: {
+            title: "3. Technical Issues",
+            content: "If you experience technical problems that prevent you from using our services, please contact our support team within 7 days of the issue occurring. We will investigate and may provide a refund or credit."
+          },
+          billing_errors: {
+            title: "4. Billing Errors",
+            content: "If you believe you have been charged incorrectly, please contact us immediately. We will review the charge and provide a refund if an error is confirmed."
+          },
+          service_quality: {
+            title: "5. Service Quality Issues",
+            content: "If you are dissatisfied with the quality of AI-generated content, please contact support within 24 hours. We may offer credits or re-generation of content."
+          },
+          refund_process: {
+            title: "6. Refund Process",
+            content: "To request a refund, contact us at jdfz13zqy@gmail.com with your order details and reason for the refund request. We will respond within 2-3 business days."
+          },
+          processing_time: {
+            title: "7. Processing Time",
+            content: "Approved refunds will be processed within 5-10 business days. The refund will be credited to the original payment method used for the purchase."
+          },
+          non_refundable: {
+            title: "8. Non-Refundable Items",
+            content: "The following are not eligible for refunds: completed AI generation services, credits that have been used, and purchases made more than 30 days ago."
+          },
+          credit_alternatives: {
+            title: "9. Credit Alternatives",
+            content: "In some cases, we may offer account credits instead of refunds. Credits can be used for future purchases and do not expire."
+          },
+          chargebacks: {
+            title: "10. Chargebacks",
+            content: "If you initiate a chargeback with your bank, please contact us first to resolve the issue. Unnecessary chargebacks may result in account suspension."
+          },
+          policy_changes: {
+            title: "11. Policy Changes",
+            content: "We reserve the right to modify this refund policy at any time. Changes will be posted on this page and will apply to future purchases."
+          },
+          contact: {
+            title: "12. Contact Us",
+            content: "For refund requests or questions about this policy, please contact us at jdfz13zqy@gmail.com."
+          }
+        }
+      }
     },
-    auth: {
-      email: "Email",
-      emailPlaceholder: "Enter your email",
-      password: "Password",
-      passwordPlaceholder: "Enter your password",
-      confirmPassword: "Confirm Password",
-      confirmPasswordPlaceholder: "Confirm your password",
-      name: "Full Name",
-      namePlaceholder: "Enter your full name",
-      or: "Or continue with",
-      google: "Continue with Google",
-      errors: {
-        required: "Email and password are required",
-        nameRequired: "Name is required",
-        passwordMismatch: "Passwords do not match",
-        passwordLength: "Password must be at least 6 characters",
-        emailRequired: "Email is required",
-        generic: "An unexpected error occurred",
-      },
-      signIn: {
-        title: "Sign In",
-        description: "Sign in to your account",
-        tab: "Sign In",
-        loading: "Signing in...",
-        button: "Sign In",
-        success: "Signed in successfully!",
-      },
-      signUp: {
-        title: "Create Account",
-        description: "Create a new account",
-        tab: "Sign Up",
-        loading: "Creating account...",
-        button: "Create Account",
-        success: "Account created successfully!",
-        confirmEmail: "Please check your email to confirm your account",
-      },
-      forgotPassword: {
-        description: "Forgot your password?",
-        tab: "Reset now",
-        success: "Password reset email sent!",
-      },
+    footer: {
+      tagline: "Creating the future of AI-driven image generation with consistency and creativity.",
+      product: "Product",
+      features: "Features",
+      api: "API",
+      support: "Support",
+      contact: "Contact",
+      legal: "Legal",
+      termsOfService: "Terms of Service",
+      privacyPolicy: "Privacy Policy",
+      cookiePolicy: "Cookie Policy",
+      refundPolicy: "Refund Policy",
+      copyright: "© 2024 ArtisanAI. All rights reserved.",
     },
     feedback: {
-      title: "Feedback & Updates",
-      success: "Thank you for your feedback!",
-      error: "Failed to submit feedback. Please try again.",
-      type: "Type",
-      types: {
-        bug: "Bug Report",
-        feature: "Feature Request",
-        improvement: "Improvement",
-        other: "Other",
-      },
-      rating: "Rating",
-      content: "Your Feedback",
-      placeholder: "Tell us what you think...",
-      name: "Name (Optional)",
-      namePlaceholder: "Your name",
-      email: "Email (Optional)",
-      emailPlaceholder: "your@email.com",
+      title: "Share Your Feedback",
+      subtitle: "Help us improve ArtisanAI with your thoughts and suggestions.",
+      placeholder: "Tell us what you think about ArtisanAI...",
+      submit: "Submit",
       submitting: "Submitting...",
-      submit: "Submit Feedback",
-      updates: {
-        title: "Recent Updates",
-        types: {
-          feature: "Feature",
-          fix: "Fix",
-          improvement: "Improvement",
-        },
+      success: {
+        title: "Feedback Submitted Successfully!",
+        description: "Thank you for your valuable feedback, we will seriously consider your suggestions."
       },
+      error: {
+        title: "Submission Failed",
+        description: "Please try again later or contact us through other means."
+      },
+      network: {
+        title: "Network Error",
+        description: "Please check your network connection and try again."
+      }
+    },
+    faq: {
+      breadcrumb: "Back to Home",
+      title: "Frequently Asked Questions",
+      subtitle: "Find answers to common questions about ArtisanAI",
+      questions: {
+        q1: {
+          q: "What is ArtisanAI?",
+          a: "ArtisanAI is an AI-powered image generation platform that creates stunning, consistent results with character consistency across different styles and scenes."
+        },
+        q2: {
+          q: "How does character consistency work?",
+          a: "Our advanced AI preserves unique facial features, bone structure, and expressions across all generations, ensuring the same person appears consistently in different styles and outfits."
+        },
+        q3: {
+          q: "What file formats are supported?",
+          a: "We support JPEG, PNG, and WebP formats. You can upload up to 15 images, each with a maximum size of 10MB."
+        },
+        q4: {
+          q: "How long does generation take?",
+          a: "Most generations complete within 10-30 seconds, depending on the complexity of your request and current server load."
+        },
+        q5: {
+          q: "Can I use generated images commercially?",
+          a: "Yes, all images generated through ArtisanAI can be used for commercial purposes. Please review our Terms of Service for complete details."
+        }
+      },
+      contact: {
+        title: "Still have questions?",
+        subtitle: "Can't find what you're looking for? Our support team is here to help.",
+        button: "Contact Support"
+      }
     },
   },
   zh: {
-    nav: {
-      home: "首页",
-      pricing: "定价",
-      faq: "常见问题",
-    },
-    hero: {
-      // Structured keys for precise two-tone headline rendering
-      title: "解雇你的摄影师",
-      titlePrefix: "解雇你的摄影师",
-      titleAnywhere: "",
-      subtitle: "最强AI生图模型面世 - 保持同样的你，在任何地方",
-      uploadText: "上传您的照片",
-      uploadSubtext: "拖放或点击选择多张图片",
-      processing: "正在处理图片...",
-      supports: "支持 JPEG、PNG、WebP • 最多 {max} 张 • 单张 {size}MB",
-      uploadTip: "💡 可上传多张图片融合最佳特征（最多支持 {max} 张）",
-      chooseImages: "选择图片",
-      referenceImages: "参考图片 ({count}/{max})",
-      placeholder: "描述您的愿景...（例如：'现代办公室中的专业头像'，'木桌上的3D手办'）",
-      generateBtn: "立即生成",
-    },
-    upload: {
-      dropHere: "将图片拖拽到此处，或点击浏览",
-      supportsTpl: "支持 JPEG、PNG、WebP • 最多 {max} 张 • 单张 {size}MB",
-      tipTpl: "可上传多张图片融合最佳特征（最多支持 {max} 张）",
-      chooseImages: "选择图片",
-      referenceImages: "参考图片 ({count}/{max})",
-    },
-    features: {
-      title: "释放您的创意愿景",
-      person: {
-        title: "人物+物体生成",
-        desc: "上传带有道具或背景的人物照片，以任何风格生成高度一致的新图像。",
-        detail: "非常适合产品拍摄、生活方式照片和创意构图。",
-      },
-      model3d: {
-        title: "3D模型生成",
-        desc: "将全身照片转换为具有多个视角的精美3D手办渲染。",
-        detail: "创建收藏手办、游戏角色和3D头像。",
-      },
-      editing: {
-        title: "高级照片编辑",
-        desc: "使用AI精确编辑更改发型、背景、表情等。",
-        detail: "几秒钟内完成专业质量的编辑，而不是几小时。",
-      },
+    howItWorks: {
+      title: "工作原理",
+      subtitle: "简单透明的价格",
+      upload: { title: "1. 上传", desc: "上传您的照片并用详细的文本提示描述您的愿景。" },
+      generate: { title: "2. 生成", desc: "AI 将处理您的输入并在数秒内生成精美且一致的图像。" },
+      download: { title: "3. 下载与分享", desc: "下载高分辨率图像或直接分享至您喜爱的社交平台。" },
     },
     home: {
-      common: {
-        original: "Original",
-        generated: "Generated",
-      },
+      common: { original: "Original", generated: "Generated", reference: "Reference" },
       consistency: {
         title: "完美人物一致性",
         subtitle:
@@ -405,1239 +741,617 @@ const translations = {
       case1: {
         title: "案例一：风格转换",
         baseModel: "基础模型",
-        sunglasses: "墨镜",
+        sunglasses: "太阳镜",
         skateboard: "滑板",
         styleReferences: "风格参考",
         generatedResult: "生成结果",
         perfectFusion: "完美融合",
-        sameFace: "同一张脸，不同风格",
+        sameFace: "同一张脸，新风格",
       },
       case2: {
-        title: "案例二：穿搭更换",
+        title: "案例二：服装更换",
         baseModel: "基础模型",
-        greenDress: "绿色连衣裙",
         styleReference: "风格参考",
-        generatedResult: "生成结果",
         perfectMatch: "完美匹配",
-        samePerson: "同一人物，不同穿搭",
+        samePersonNewOutfit: "同一人，新服装",
+        greenDress: "绿色连衣裙",
       },
       whyConsistency: {
         title: "为什么人物一致性很重要",
         facialRecognition: "面部识别",
-        facialRecognitionDesc:
-          "AI 在所有生成中保留独特的面部特征、骨骼结构与表情",
+        facialRecognitionDesc: "AI 在所有生成中保留独特的面部特征、骨骼结构与表情",
         styleFlexibility: "风格灵活性",
-        styleFlexibilityDesc:
-          "更换服装、配饰与背景的同时保持同一人物",
+        styleFlexibilityDesc: "更换服装、配饰与背景的同时保持同一人物",
         professionalQuality: "专业品质",
-        professionalQualityDesc:
-          "高分辨率、影棚级图像，自然且专业",
+        professionalQualityDesc: "高分辨率、影棚级图像，自然且专业",
       },
+      editing: {
+        title: "高级AI照片编辑",
+        subtitle:
+          "删掉你的P图软件！去水印、去纹身毫无瑕疵，从基础修图到创意变换 - 体验AI照片编辑的强大力量",
+        step1: {
+          title: "步骤1：原始照片",
+          original: "带纹身的原始照片",
+          description: "胸口处带有纹身的女孩",
+          detail: "起始点 - 带有现有纹身的自然照片",
+        },
+        step2: {
+          title: "步骤2：去除纹身",
+          result: "纹身已去除",
+          description: "纹身完全移除",
+          detail: "AI无缝移除胸口纹身，同时保持皮肤纹理",
+        },
+        step3: {
+          title: "步骤3：添加新纹身",
+          reference: { title: "参考纹身设计", description: "要添加的新纹身设计" },
+          result: { title: "生成结果", description: "新纹身已应用", detail: "AI将新纹身设计添加到同一胸口位置" },
+        },
+        step4: {
+          title: "步骤4：创意造型",
+          result: "发型和妆容已改变",
+          description: "发色和妆容改变",
+          detail: "AI改变发色和口红，同时保持面部特征",
+        },
+        step5: {
+          title: "步骤5：表情编辑",
+          result: "微笑表情",
+          description: "自然微笑已添加",
+          detail: "AI添加自然微笑，同时保持人物独特的面部结构",
+        },
+        caseStudy2: {
+          title: "案例研究2：配饰替换",
+          original: { title: "原始照片", description: "戴原始项链的女人", detail: "带有现有配饰的起始点" },
+          reference: { title: "新项链设计", description: "替换原始项链的新项链设计" },
+          result: {
+            title: "生成结果",
+            description: "项链成功替换",
+            detail: "AI无缝替换原始项链与新设计，同时保持自然光线和阴影",
+          },
+        },
+        whyChoose: {
+          title: "为什么选择我们的AI照片编辑器？",
+          features: {
+            professional: { icon: "🎨", title: "专业品质", description: "影棚级编辑结果，自然逼真" },
+            fast: { icon: "⚡", title: "闪电般快速", description: "几秒钟内获得结果，而不是几小时的手动编辑" },
+            precise: { icon: "🎯", title: "精确控制", description: "使用先进的AI算法微调每个细节" },
+          },
+        },
+      },
+      model3d: {
+        title: "AI 3D模型生成",
+        subtitle:
+          "个人定制3D模型生成 - 可在3D软件中二次加工，从真人照片到动漫角色，打造专属3D手办",
+        caseStudy1: {
+          title: "案例一：真人到3D手办",
+          original: { title: "原始照片", description: "真人照片", detail: "高质量人像用于3D转换" },
+          result: { title: "3D手办结果", description: "专业3D手办", detail: "AI将真人转换为细致的3D收藏手办" },
+        },
+        caseStudy2: {
+          title: "案例二：动漫角色到3D手办",
+          example1: {
+            title: "动漫角色1",
+            original: { 
+              title: "原始动漫图",
+              detail: "用于3D转换的原始动漫艺术作品"
+            },
+            result: { title: "3D手办结果", description: "3D动漫手办", detail: "AI将2D动漫转换为精细3D收藏手办" },
+          },
+          example2: {
+            title: "动漫角色2",
+            original: { 
+              title: "原始动漫图",
+              detail: "用于3D转换的另一个动漫艺术作品"
+            },
+            result: { title: "3D手办结果", description: "3D动漫手办", detail: "AI从2D动漫图生成细致3D手办" },
+          },
+        },
+        caseStudy3: {
+          title: "案例三：建筑到3D模型",
+          original: { 
+            title: "建筑原始照片",
+            description: "真实建筑照片",
+            detail: "用于3D转换的高质量建筑照片"
+          },
+          result: {
+            title: "3D模型结果",
+            view1: { title: "3D模型 - 视角1", description: "3D建筑模型的第一视角" },
+            view2: { title: "3D模型 - 视角2", description: "同一3D建筑模型的不同视角" },
+          },
+        },
+        whyChoose: {
+          title: "为什么选择我们的3D生成？",
+          features: {
+            fidelity: { icon: "🎯", title: "高保真", description: "保留原始照片与艺术作品中的每个细节" },
+            styles: { icon: "🎨", title: "多种风格", description: "支持真实照片、动漫及任何2D艺术作品" },
+            quality: { icon: "🏆", title: "收藏级品质", description: "专业级3D模型，随时可打印" },
+          },
+        },
+      },
+      product: {
+        title: "AI产品摄影与海报设计",
+        subtitle:
+          "解雇你的产品摄影师、海报制作师！产品+场景+人物多方位展示，一键生成专业级产品海报",
+        caseStudy1: {
+          title: "案例一：精油产品",
+          step1: { title: "步骤1：原始产品", description: "精油产品", detail: "起始点 - 干净的产品照片用于营销" },
+          step2: { 
+            title: "步骤2：模特融合",
+            result: {
+              description: "专业模特",
+              detail: "AI选择并融合专业模特进行产品展示"
+            }
+          },
+          step3: { 
+            title: "步骤3：手持产品",
+            result: {
+              description: "自然产品互动",
+              detail: "AI创建真实的手持产品场景，姿势自然"
+            }
+          },
+          step4: { 
+            title: "步骤4：专业海报设计",
+            result: {
+              description: "营销就绪海报",
+              detail: "AI生成包含产品、模特和专业布局的完整营销海报"
+            }
+          },
+        },
+        caseStudy2: {
+          title: "案例二：男士护肤产品",
+          original: { title: "男士护肤产品", description: "男士护肤产品", detail: "用于营销活动的专业男士护肤产品" },
+          result: {
+            title: "专业产品海报",
+            description: "男士护肤产品海报",
+            detail: "AI生成现代设计与品牌风格的专业产品海报",
+          },
+        },
+        whyChoose: {
+          title: "为什么选择我们的AI产品摄影？",
+    features: {
+            professional: { icon: "📸", title: "专业品质", description: "无需昂贵设备即可获得影棚级产品摄影" },
+            fast: { icon: "⚡", title: "极速生成", description: "几分钟内生成多张产品照与海报" },
+            creative: { icon: "🎨", title: "创意可控", description: "可按品牌自定义场景、模特与布局" },
+          },
+        },
+      },
+    },
+    hero: {
+      title: "解雇你的摄影师",
+      subtitle: "Artisan AI — 基于Nano-Banana的高一致性AI图像生成",
+      placeholder: "描述您的愿景...",
+      generate: "生成",
+      generateBtn: "生成",
+      upload: "上传图片",
+      processing: "正在处理图片...",
+      uploadText: "上传图片并输入提示词",
+    },
+      upload: {
+      dropHere: "拖拽图片到此处，或点击浏览",
+      supportsTpl: "支持 JPEG、PNG、WebP • 最多 {max} 张图片 • 每张 {size}MB",
+      tipTpl: "上传多张图片以融合它们的最佳特征（最多支持 {max} 张图片）",
+    },
+    nav: {
+      home: "首页",
+      pricing: "定价",
+      faq: "常见问题",
+      contact: "联系我们",
+    },
+    morePlay: {
+      title: "更多创意玩法",
+      subtitle: "等你探索更多玩法",
+      description: "发现Nano-Banana的无限创意潜力，体验这些令人兴奋的任务",
+      tasks: {
+        action: {
+          title: "动作任务",
+          description: "我们随机定义一组动作指令，要求模型在保留原始身份细节和背景的同时调整主体的姿势。这能够生成丰富的衍生动作。例如，做出\"是\"的手势、交叉双臂，或引入帽子或墨镜等新道具来创造丰富的动作表情。",
+          image: "11.png"
+        },
+        background: {
+          title: "背景任务",
+          description: "我们定义了大约250个不同的场景位置，涵盖地标、自然景观以及常见的室内外环境。该任务要求将原始背景替换为新的场景，同时保留拍摄对象的个性。例如，将背景切换为室内摄影工作室、户外雪山或各种风景地标。",
+          image: "22.png"
+        },
+        hairstyle: {
+          title: "发型任务",
+          description: "我们进一步探索基于肖像数据的发型和发色修改任务，利用Nano-banana编辑拍摄对象的头发细节。例如，将直刘海改为波浪卷发或发髻，以及将黑发改为金色、红色或其他颜色。",
+          image: "33.png"
+        },
+        time: {
+          title: "时间任务",
+          description: "我们将肖像数据置于不同的历史或时间背景中，要求服装风格和背景细节与指定的时代相符。例如，一个人物可能被置于1905年的日常生活场景中，也可能被置于2000年的千禧年环境中。",
+          image: "44.png"
+        },
+        interaction: {
+          title: "人机交互任务",
+          description: "我们从基础身份集中随机选取2-4张图像，并使用GPT生成以交互为导向的指令。该任务并非仅仅将人物并排摆放，而是强调人际动作和互动。例如，两个人喝咖啡聊天，或者四人组乐队一起表演。这些指令随后与Nano-banana结合使用，合成能够捕捉丰富交互语义的图像。",
+          image: "55.png"
+        },
+        ootd: {
+          title: "OOTD任务",
+          description: "我们从线上资源中收集服装样衣，并随机选取2-6件服装与人像进行搭配展示。生成的样衣需要保持面部特征的一致性，同时融入姿势变化，以更好地凸显服装的细节和呈现效果。",
+          image: "66.png"
+        }
+      }
     },
     comparison: {
       title: "为什么选择ArtisanAI？",
+      subtitle: "与其他AI图像生成平台对比",
+      description: "Artisan-ai（基于Nano-Banana） 重新定义了 AI 图像生成，在逼真度与身份一致性方面无可匹敌。它的表现超越了 GPT-4o 与 Qwen-Image，即使在更换背景、姿势或风格时，也能完美保持同一张面孔的连贯性——这是其他模型尚未达到的精准水准。",
       features: {
-        consistency: "肖像一致性",
+        consistency: "人物一致性",
         figurine: "3D手办生成",
         inputs: "多种输入类型",
+        identity: "身份保持",
+        quality: "专业级质量",
         speed: "处理速度",
+        model3d: "3D模型生成",
+        multipleInputs: "多种输入类型",
+        processingSpeed: "处理速度",
+        easyToWork: "易于使用",
       },
-    },
-    howItWorks: {
-      title: "工作原理",
-      upload: {
-        title: "1. 上传",
-        desc: "上传您的照片并用详细的文本提示描述您的愿景。",
-      },
-      generate: {
-        title: "2. 生成",
-        desc: "我们的AI处理您的输入，在几秒钟内创建令人惊叹的一致图像。",
-      },
-      download: {
-        title: "3. 下载和分享",
-        desc: "下载高分辨率图像或直接分享到您喜爱的平台。",
+      table: {
+        feature: "功能",
+        artisanAI: "ArtisanAI",
+        midjourney: "MidJourney",
+        qwenImage: "Qwen-Image",
+        gpt4o: "GPT-4o",
+        limited: "有限",
+        good: "良好",
+        basic: "基础",
+        no: "无",
+        textOnly: "仅文本",
+        slow: "慢",
+        medium: "中等",
+        fast: "快",
+        poor: "差",
+        excellent: "优秀",
       },
     },
     pricing: {
-      title: "简单透明的定价",
-      subtitle: "选择适合你创意需求的完美计划。从免费积分开始，随成长而扩展。",
-      most_popular: "最受欢迎",
-      credits: "积分",
-      images: "图片",
-      credits_per_image: "积分每张图片",
-      purchase_now: "立即购买",
-      processing: "处理中...",
-      coming_soon: "即将推出",
-      coming_soon_description: "此计划将在测试完成后提供。",
-      purchase_error: "购买错误",
-      purchase_error_description: "创建结账会话失败。请重试。",
-      testing_mode: "测试模式",
-      why_choose_us: "为什么选择ArtisanAI？",
-      feature1_title: "高质量",
-      feature1_description: "专业级AI模型，带来令人惊叹的结果",
-      feature2_title: "快速处理",
-      feature2_description: "几秒钟内生成图像，而不是几分钟",
-      feature3_title: "一致的结果",
-      feature3_description: "在所有生成中保持角色一致性",
-      starter: {
-        name: "入门包",
-        description: "适合初学者",
-        feature1: "包含300积分",
-        feature2: "6张高质量图片",
-        feature3: "邮件支持"
-      },
-      standard: {
-        name: "标准包",
-        description: "最受欢迎的选择",
-        feature1: "包含700积分",
-        feature2: "14张高质量图片",
-        feature3: "优先支持"
-      },
-      advanced: {
-        name: "高级包",
-        description: "更好的价值",
-        feature1: "包含1,600积分",
-        feature2: "32张高质量图片",
-        feature3: "优先支持"
-      },
-      professional: {
-        name: "专业包",
-        description: "为创作者设计",
-        feature1: "包含4,500积分",
-        feature2: "90张高质量图片",
-        feature3: "高级支持"
-      },
-      studio: {
-        name: "工作室包",
-        description: "为团队设计",
-        feature1: "包含10,000积分",
-        feature2: "200张高质量图片",
-        feature3: "专属支持"
+      title: "定价", 
+      subtitle: "简单透明的价格",
+      pointsSystem: "积分系统",
+      freeStarter: "免费入门",
+      freeStarterDesc: "完美适合试用平台",
+      perGeneration: "每次生成",
+      perGenerationDesc: "高质量AI生成",
+      purchaseCredits: "购买积分",
+      secureCheckout: "由Creem提供安全结账",
+    },
+    success: { title: "支付成功", refresh: "刷新", back_home: "返回首页" },
+    contact: { 
+      title: "联系我们", 
+      subtitle: "对Artisan AI有疑问？想要合作或需要支持？我们很乐意听到您的声音。发送消息给我们，我们将在24小时内回复。",
+      email_us: "邮件联系",
+      response_time: "回复时间",
+      within_24h: "24小时内",
+      support: "支持",
+      support_scope: "技术 & 通用",
+      form: {
+        title: "联系我们",
+        name: "姓名",
+        email: "邮箱",
+        subject: "主题",
+        message: "消息",
+        attachment: "附件（可选）",
+        name_placeholder: "您的全名",
+        email_placeholder: "your.email@example.com",
+        subject_placeholder: "这是关于什么的？",
+        message_placeholder: "告诉我们更多关于您的询问...",
+        file_formats: "支持格式：JPEG、PNG、GIF、WebP（最大10MB）",
+        no_file_selected: "未选择任何文件",
+        send_message: "发送消息",
+        sending: "发送中...",
+        message_sent: "消息已发送！",
+        message_sent_desc: "感谢您联系我们。我们将在24小时内回复您。",
+        send_another: "发送另一条消息",
+        file_too_large: "文件过大",
+        file_too_large_desc: "请选择小于10MB的文件。",
+        invalid_file_type: "无效文件类型",
+        invalid_file_type_desc: "请选择图片文件（JPEG、PNG、GIF、WebP）。",
+        message_sent_success: "消息发送成功！",
+        message_sent_success_desc: "感谢您联系我们。我们会尽快回复您。",
+        failed_to_send: "发送消息失败",
+        failed_to_send_desc: "请稍后重试。",
+        network_error: "网络错误",
+        network_error_desc: "请检查您的连接并重试。",
+        failed_to_send_error: "发送消息失败。请重试。"
       }
     },
-    gallery: {
-      title: "社区画廊",
-      viewMore: "查看更多作品",
-    },
-    footer: {
-      tagline: "用一致性和创造力创造AI驱动图像生成的未来。",
-      product: "产品",
-      support: "支持",
-      legal: "法律",
-      copyright: "© 2024 ArtisanAI. 保留所有权利。",
-      features: "功能",
-      api: "API",
-      helpCenter: "帮助中心",
-      contact: "联系我们",
-      status: "状态",
-      termsOfService: "服务条款",
-      privacyPolicy: "隐私政策",
-      cookiePolicy: "Cookie政策",
-    },
-    faq: {
-      title: "常见问题",
-      subtitle: "找到关于ArtisanAI常见问题的答案",
-      questions: {
-        whatIs: {
-          q: "什么是ArtisanAI？",
-          a: "ArtisanAI是一个先进的AI驱动图像生成平台，专门从您的照片创建高度一致的肖像和3D手办。",
-        },
-        howConsistent: {
-          q: "ArtisanAI如何确保肖像一致性？",
-          a: "我们的专有AI技术分析面部特征、表情和特征，以在不同风格和场景中保持一致性。",
-        },
-        whatFormats: {
-          q: "支持哪些图像格式？",
-          a: "我们支持JPG、PNG和WebP格式上传。生成的图像以高分辨率PNG格式提供。",
-        },
-        howLong: {
-          q: "生成需要多长时间？",
-          a: "大多数生成在30-60秒内完成，具体取决于复杂性和当前服务器负载。",
-        },
-        canCommercial: {
-          q: "我可以商业使用生成的图像吗？",
-          a: "是的，您对使用自己的照片和提示生成的图像拥有完全的商业权利。",
-        },
-      },
-    },
-    common: {
-      loading: "加载中...",
-    },
-    success: {
-      title: "支付成功！",
-      description: "感谢您的购买，积分已添加到您的账户",
-      current_credits: "当前积分",
-      refresh: "刷新积分",
-      refreshing: "刷新积分中...",
-      back_home: "返回首页",
-    },
-    contact: {
-      title: "联系我们",
-      subtitle:
-        "对 Artisan AI 有疑问？想要合作或需要支持？欢迎与我们联系。发送消息后我们会在 24 小时内回复。",
-      email_us: "电子邮件",
-      response_time: "响应时间",
-      within_24h: "24 小时内",
-      support: "支持",
-      support_scope: "技术与通用问题",
-    },
-    legal: {
-      common: {
-        last_updated: "最后更新：",
+    legal: { 
+      common: { last_updated: "最后更新", date: "2024年12月" },
+      terms: {
+        title: "服务条款",
+        content: "服务条款内容正在建设中，敬请期待完整版本。",
+        coming_soon: "服务条款内容正在建设中，敬请期待完整版本。",
+        sections: {
+          introduction: {
+            title: "1. 介绍",
+            content: "欢迎使用ArtisanAI。本服务条款（'条款'）规范您对我们AI驱动的图像生成平台的使用。通过访问或使用我们的服务，您同意受这些条款的约束。"
+          },
+          acceptance: {
+            title: "2. 条款接受",
+            content: "通过使用ArtisanAI，您确认已阅读、理解并同意受这些条款的约束。如果您不同意这些条款，请不要使用我们的服务。"
+          },
+          services: {
+            title: "3. 服务描述",
+            content: "ArtisanAI提供AI驱动的图像生成服务，包括但不限于人物一致性、3D手办生成和风格转换。我们的服务由先进的AI模型提供支持，包括Nano-Banana技术。"
+          },
+          user_accounts: {
+            title: "4. 用户账户",
+            content: "要访问某些功能，您可能需要创建一个账户。您有责任维护账户凭据的机密性，并对您账户下发生的所有活动负责。"
+          },
+          acceptable_use: {
+            title: "5. 可接受使用",
+            content: "您同意仅将我们的服务用于合法目的，并符合这些条款。您不得使用我们的服务生成非法、有害、威胁、滥用或违反任何适用法律法规的内容。"
+          },
+          intellectual_property: {
+            title: "6. 知识产权",
+            content: "ArtisanAI平台，包括其设计、功能和底层技术，受知识产权法保护。您保留生成内容的所有权，但授予我们提供服务的许可。"
+          },
+          privacy: {
+            title: "7. 隐私",
+            content: "您的隐私对我们很重要。请查看我们的隐私政策，该政策也规范您对我们服务的使用，以了解我们的做法。"
+          },
+          payment: {
+            title: "8. 付款和计费",
+            content: "我们服务的某些功能需要付费。除非另有说明，所有费用均不可退还。我们保留在合理通知下更改价格的权利。"
+          },
+          termination: {
+            title: "9. 终止",
+            content: "我们可自行决定终止或暂停您的账户和对我们服务的访问，无需事先通知，对于我们认为违反这些条款或对其他用户有害的行为。"
+          },
+          disclaimers: {
+            title: "10. 免责声明",
+            content: "我们的服务按'现状'提供，不提供任何形式的保证。我们不保证我们的服务将不间断、无错误或满足您的特定要求。"
+          },
+          limitation: {
+            title: "11. 责任限制",
+            content: "在法律允许的最大范围内，ArtisanAI不对因使用我们的服务而产生的任何间接、偶然、特殊、后果性或惩罚性损害承担责任。"
+          },
+          changes: {
+            title: "12. 条款变更",
+            content: "我们保留随时修改这些条款的权利。我们将通过我们的平台或电子邮件通知用户任何重大变更。在变更后继续使用我们的服务即构成接受新条款。"
+          },
+          contact: {
+            title: "13. 联系信息",
+            content: "如果您对这些条款有任何疑问，请通过jdfz13zqy@gmail.com联系我们。"
+          }
+        }
       },
       privacy: {
         title: "隐私政策",
+        content: "隐私政策内容正在建设中，敬请期待中文版本。",
+        coming_soon: "隐私政策内容正在建设中，敬请期待中文版本。",
+        sections: {
+          introduction: {
+            title: "1. 介绍",
+            content: "本隐私政策描述了ArtisanAI（'我们'、'我们的'）在您使用我们AI驱动的图像生成平台时如何收集、使用和保护您的个人信息。"
+          },
+          information_collection: {
+            title: "2. 我们收集的信息",
+            content: "我们收集您直接提供给我们的信息，例如当您创建账户、上传图像或联系我们时。这可能包括您的姓名、电子邮件地址和上传的内容。"
+          },
+          usage_information: {
+            title: "3. 使用信息",
+            content: "我们自动收集有关您使用我们服务的某些信息，包括设备信息、IP地址、浏览器类型和使用模式。"
+          },
+          cookies: {
+            title: "4. Cookie和跟踪",
+            content: "我们使用Cookie和类似技术来增强您的体验、分析使用模式并提供个性化内容。您可以通过浏览器控制Cookie设置。"
+          },
+          data_usage: {
+            title: "5. 我们如何使用您的信息",
+            content: "我们使用您的信息来提供、维护和改进我们的服务，处理交易，与您沟通，并确保平台安全。"
+          },
+          data_sharing: {
+            title: "6. 信息共享",
+            content: "我们不出售您的个人信息。我们可能与协助我们运营平台的服务提供商共享您的信息，或在法律要求时共享。"
+          },
+          data_security: {
+            title: "7. 数据安全",
+            content: "我们实施适当的安全措施来保护您的个人信息免受未经授权的访问、更改、披露或破坏。"
+          },
+          data_retention: {
+            title: "8. 数据保留",
+            content: "我们保留您的个人信息，只要有必要提供我们的服务并履行本隐私政策中概述的目的。"
+          },
+          your_rights: {
+            title: "9. 您的权利",
+            content: "您有权访问、更新或删除您的个人信息。您也可以选择退出我们的某些通信。"
+          },
+          children_privacy: {
+            title: "10. 儿童隐私",
+            content: "我们的服务不适用于13岁以下的儿童。我们不会故意收集13岁以下儿童的个人信息。"
+          },
+          international_transfers: {
+            title: "11. 国际数据传输",
+            content: "您的信息可能会被传输到您所在国家以外的国家并在那里处理。我们确保有适当的保障措施。"
+          },
+          policy_changes: {
+            title: "12. 政策变更",
+            content: "我们可能会不时更新本隐私政策。我们将通过我们的平台或电子邮件通知您任何重大变更。"
+          },
+          contact: {
+            title: "13. 联系我们",
+            content: "如果您对本隐私政策有任何疑问，请通过jdfz13zqy@gmail.com联系我们。"
+          }
+        }
       },
-      terms: {
-        title: "服务条款",
+      cookies: {
+        title: "Cookie政策",
+        content: "Cookie政策内容正在建设中，敬请期待中文版本。",
+        coming_soon: "Cookie政策内容正在建设中，敬请期待中文版本。",
+        sections: {
+          introduction: {
+            title: "1. 什么是Cookie",
+            content: "Cookie是您访问我们网站时存储在您设备上的小文本文件。它们帮助我们为您提供更好的体验并了解您如何使用我们的服务。"
+          },
+          types_of_cookies: {
+            title: "2. 我们使用的Cookie类型",
+            content: "我们使用基本Cookie用于网站功能，分析Cookie来了解使用模式，以及偏好Cookie来记住您的设置和偏好。"
+          },
+          essential_cookies: {
+            title: "3. 基本Cookie",
+            content: "这些Cookie对于网站正常运行是必要的。它们启用基本功能，如页面导航、访问安全区域和身份验证。"
+          },
+          analytics_cookies: {
+            title: "4. 分析Cookie",
+            content: "我们使用分析Cookie来了解访问者如何与我们的网站互动，帮助我们改善性能用户体验。"
+          },
+          preference_cookies: {
+            title: "5. 偏好Cookie",
+            content: "这些Cookie记住您的选择和偏好，如语言设置，以便在未来的访问中提供个性化体验。"
+          },
+          third_party_cookies: {
+            title: "6. 第三方Cookie",
+            content: "一些Cookie由我们使用的第三方服务设置，如分析提供商。这些帮助我们了解用户行为并改善我们的服务。"
+          },
+          cookie_management: {
+            title: "7. 管理Cookie",
+            content: "您可以通过浏览器设置控制Cookie。您可以删除现有Cookie并选择阻止未来的Cookie，尽管这可能会影响网站功能。"
+          },
+          browser_settings: {
+            title: "8. 浏览器设置",
+            content: "大多数浏览器允许您拒绝Cookie或删除它们。请参考您浏览器的帮助文档获取Cookie管理的具体说明。"
+          },
+          cookie_consent: {
+            title: "9. Cookie同意",
+            content: "通过继续使用我们的网站，您同意我们按照本政策中描述的方式使用Cookie。您可以随时通过浏览器设置撤回同意。"
+          },
+          updates: {
+            title: "10. 政策更新",
+            content: "我们可能会不时更新本Cookie政策。任何更改都将在此页面上发布，并附有更新的修订日期。"
+          },
+          contact: {
+            title: "11. 联系我们",
+            content: "如果您对我们使用Cookie有疑问，请通过jdfz13zqy@gmail.com联系我们。"
+          }
+        }
       },
       refund: {
         title: "退款政策",
-      },
-      cookies: {
-        title: "Cookie 政策",
-      },
+        content: "退款政策内容正在建设中，敬请期待中文版本。",
+        coming_soon: "退款政策内容正在建设中，敬请期待中文版本。",
+        sections: {
+          introduction: {
+            title: "1. 退款政策概述",
+            content: "本退款政策概述了ArtisanAI服务退款的条款和条件。请在购买前仔细阅读本政策。"
+          },
+          refund_eligibility: {
+            title: "2. 退款资格",
+            content: "对于阻止服务交付的技术问题、计费错误或重复收费，可考虑退款。已完成的AI生成服务不提供退款。"
+          },
+          technical_issues: {
+            title: "3. 技术问题",
+            content: "如果您遇到阻止您使用我们服务的技术问题，请在问题发生后的7天内联系我们的支持团队。我们将进行调查并可能提供退款或积分。"
+          },
+          billing_errors: {
+            title: "4. 计费错误",
+            content: "如果您认为被错误收费，请立即联系我们。我们将审查收费情况，如果确认有错误，将提供退款。"
+          },
+          service_quality: {
+            title: "5. 服务质量问题",
+            content: "如果您对AI生成内容的质量不满意，请在24小时内联系支持。我们可能提供积分或重新生成内容。"
+          },
+          refund_process: {
+            title: "6. 退款流程",
+            content: "要申请退款，请通过jdfz13zqy@gmail.com联系我们，提供您的订单详情和退款申请原因。我们将在2-3个工作日内回复。"
+          },
+          processing_time: {
+            title: "7. 处理时间",
+            content: "已批准的退款将在5-10个工作日内处理。退款将记入用于购买的原付款方式。"
+          },
+          non_refundable: {
+            title: "8. 不可退款项目",
+            content: "以下项目不符合退款条件：已完成的AI生成服务、已使用的积分，以及30天前进行的购买。"
+          },
+          credit_alternatives: {
+            title: "9. 积分替代方案",
+            content: "在某些情况下，我们可能提供账户积分而不是退款。积分可用于未来购买且不会过期。"
+          },
+          chargebacks: {
+            title: "10. 拒付",
+            content: "如果您与银行发起拒付，请先联系我们解决问题。不必要的拒付可能导致账户暂停。"
+          },
+          policy_changes: {
+            title: "11. 政策变更",
+            content: "我们保留随时修改本退款政策的权利。变更将在此页面上发布，并适用于未来的购买。"
+          },
+          contact: {
+            title: "12. 联系我们",
+            content: "如需退款申请或对本政策有疑问，请通过jdfz13zqy@gmail.com联系我们。"
+          }
+        }
+      }
     },
-    auth: {
-      email: "邮箱",
-      emailPlaceholder: "请输入邮箱",
-      password: "密码",
-      passwordPlaceholder: "请输入密码",
-      confirmPassword: "确认密码",
-      confirmPasswordPlaceholder: "请再次输入密码",
-      name: "姓名",
-      namePlaceholder: "请输入姓名",
-      or: "或使用以下方式继续",
-      google: "使用 Google 继续",
-      errors: {
-        required: "邮箱与密码为必填",
-        nameRequired: "姓名为必填",
-        passwordMismatch: "两次输入的密码不一致",
-        passwordLength: "密码长度至少 6 位",
-        emailRequired: "邮箱为必填",
-        generic: "发生了意外错误",
-      },
-      signIn: {
-        title: "登录",
-        description: "登录到你的账户",
-        tab: "登录",
-        loading: "登录中...",
-        button: "登录",
-        success: "登录成功！",
-      },
-      signUp: {
-        title: "创建账户",
-        description: "注册一个新账户",
-        tab: "注册",
-        loading: "创建账户中...",
-        button: "创建账户",
-        success: "账户创建成功！",
-        confirmEmail: "请前往邮箱完成验证",
-      },
-      forgotPassword: {
-        description: "忘记密码？",
-        tab: "立即重置",
-        success: "重置密码邮件已发送！",
-      },
+    footer: {
+      tagline: "以一致性和创造力创造AI驱动图像生成的未来。",
+      product: "产品",
+      features: "功能",
+      api: "API",
+      support: "支持",
+      contact: "联系我们",
+      legal: "法律条款",
+      termsOfService: "服务条款",
+      privacyPolicy: "隐私政策",
+      cookiePolicy: "Cookie政策",
+      refundPolicy: "退款政策",
+      copyright: "© 2024 ArtisanAI. 全著作権所有。",
     },
     feedback: {
-      title: "反馈与更新",
-      success: "感谢你的反馈！",
-      error: "提交失败，请稍后重试。",
-      type: "类型",
-      types: {
-        bug: "问题反馈",
-        feature: "功能请求",
-        improvement: "优化建议",
-        other: "其他",
-      },
-      rating: "评分",
-      content: "你的反馈",
-      placeholder: "告诉我们你的想法...",
-      name: "姓名（可选）",
-      namePlaceholder: "你的姓名",
-      email: "邮箱（可选）",
-      emailPlaceholder: "your@email.com",
+      title: "分享您的反馈",
+      subtitle: "帮助我们通过您的想法和建议改进ArtisanAI。",
+      placeholder: "告诉我们您对ArtisanAI的想法...",
+      submit: "提交",
       submitting: "提交中...",
-      submit: "提交反馈",
-      updates: {
-        title: "最近更新",
-        types: {
-          feature: "新功能",
-          fix: "修复",
-          improvement: "改进",
-        },
+      success: {
+        title: "反馈提交成功！",
+        description: "感谢您的宝贵意见，我们会认真考虑您的建议。"
       },
-    },
-  },
-  es: {
-    nav: {
-      home: "Inicio",
-      pricing: "Precios",
-      faq: "Preguntas Frecuentes",
-    },
-    hero: {
-      title: "Despide a tu fotógrafo",
-      titlePrefix: "Despide a tu fotógrafo",
-      titleAnywhere: "",
-      subtitle: "El modelo de generación de imágenes AI más poderoso - Mantén el mismo tú, en cualquier lugar",
-      uploadText: "Sube tus fotos",
-      uploadSubtext: "Arrastra y suelta o haz clic para seleccionar múltiples imágenes",
-      placeholder:
-        "Describe tu visión... (ej., 'foto profesional en una oficina moderna', 'figurita 3D en un escritorio de madera')",
-      generateBtn: "Generar Ahora",
-    },
-    features: {
-      title: "Libera Tu Visión Creativa",
-      person: {
-        title: "Generación Persona + Objeto",
-        desc: "Sube fotos de personas con accesorios o fondos para generar nuevas imágenes altamente consistentes en cualquier estilo.",
-        detail: "Perfecto para fotos de productos, fotos de estilo de vida y composiciones creativas.",
+      error: {
+        title: "提交失败",
+        description: "请稍后重试，或通过其他方式联系我们。"
       },
-      model3d: {
-        title: "Generación de Modelos 3D",
-        desc: "Transforma fotos de cuerpo completo en impresionantes renderizados de figuritas 3D con múltiples ángulos de vista.",
-        detail: "Crea figuritas coleccionables, personajes de juegos y avatares 3D.",
-      },
-      editing: {
-        title: "Edición Avanzada de Fotos",
-        desc: "Cambia peinados, fondos, expresiones y más con edición de precisión impulsada por IA.",
-        detail: "Ediciones de calidad profesional en segundos, no horas.",
-      },
-    },
-    comparison: {
-      title: "¿Por Qué Elegir ArtisanAI?",
-      features: {
-        consistency: "Consistencia de Retratos",
-        figurine: "Generación de Figuritas 3D",
-        inputs: "Múltiples Tipos de Entrada",
-        speed: "Velocidad de Procesamiento",
-      },
-    },
-    howItWorks: {
-      title: "Cómo Funciona",
-      upload: {
-        title: "1. Subir",
-        desc: "Sube tus fotos y describe tu visión con prompts de texto detallados.",
-      },
-      generate: {
-        title: "2. Generar",
-        desc: "Nuestra IA procesa tus entradas y crea imágenes impresionantes y consistentes en segundos.",
-      },
-      download: {
-        title: "3. Descargar y Compartir",
-        desc: "Descarga imágenes de alta resolución o comparte directamente en tus plataformas favoritas.",
-      },
-    },
-    pricing: {
-      title: "Precios Simples y Transparentes",
-      subtitle: "Comienza con 120 puntos gratis. Cada generación cuesta 50 puntos.",
-      free: {
-        title: "Inicio Gratuito",
-        points: "120 Puntos",
-        desc: "Perfecto para probar la plataforma",
-      },
-      perGen: {
-        title: "Por Generación",
-        points: "50 Puntos",
-        desc: "Generación IA de alta calidad",
-      },
-      purchaseBtn: "Comprar Más Puntos",
-      secure: "Procesamiento de pagos seguro vía integración Cream",
-    },
-    gallery: {
-      title: "Galería de la Comunidad",
-      viewMore: "Ver Más Creaciones",
-    },
-    footer: {
-      tagline: "Creando el futuro de la generación de imágenes impulsada por IA con consistencia y creatividad.",
-      product: "Producto",
-      support: "Soporte",
-      legal: "Legal",
-      copyright: "© 2024 ArtisanAI. Todos los derechos reservados.",
-      features: "Características",
-      api: "API",
-      helpCenter: "Centro de Ayuda",
-      contact: "Contacto",
-      status: "Estado",
-      termsOfService: "Términos de Servicio",
-      privacyPolicy: "Política de Privacidad",
-      cookiePolicy: "Política de Cookies",
+      network: {
+        title: "网络错误",
+        description: "请检查网络连接后重试。"
+      }
     },
     faq: {
-      title: "Preguntas Frecuentes",
-      subtitle: "Encuentra respuestas a preguntas comunes sobre ArtisanAI",
+      breadcrumb: "返回首页",
+      title: "常见问题",
+      subtitle: "找到关于ArtisanAI常见问题的答案",
       questions: {
-        whatIs: {
-          q: "¿Qué es ArtisanAI?",
-          a: "ArtisanAI es una plataforma avanzada de generación de imágenes impulsada por IA que se especializa en crear retratos altamente consistentes y figuritas 3D a partir de tus fotos.",
+        q1: {
+          q: "什么是ArtisanAI？",
+          a: "ArtisanAI是一个AI驱动的图像生成平台，能够创建令人惊叹的一致结果，在不同风格和场景中保持人物一致性。"
         },
-        howConsistent: {
-          q: "¿Cómo asegura ArtisanAI la consistencia de retratos?",
-          a: "Nuestra tecnología IA propietaria analiza características faciales, expresiones y características para mantener consistencia a través de diferentes estilos y escenarios.",
+        q2: {
+          q: "人物一致性是如何工作的？",
+          a: "我们的先进AI在所有生成中保留独特的面部特征、骨骼结构和表情，确保同一人物在不同风格和服装中保持一致。"
         },
-        whatFormats: {
-          q: "¿Qué formatos de imagen son compatibles?",
-          a: "Soportamos formatos JPG, PNG y WebP para subidas. Las imágenes generadas se proporcionan en formato PNG de alta resolución.",
+        q3: {
+          q: "支持哪些文件格式？",
+          a: "我们支持JPEG、PNG和WebP格式。您可以上传最多15张图片，每张最大10MB。"
         },
-        howLong: {
-          q: "¿Cuánto tiempo toma la generación?",
-          a: "La mayoría de las generaciones se completan en 30-60 segundos, dependiendo de la complejidad y la carga actual del servidor.",
+        q4: {
+          q: "生成需要多长时间？",
+          a: "大多数生成在10-30秒内完成，具体取决于您请求的复杂性和当前服务器负载。"
         },
-        canCommercial: {
-          q: "¿Puedo usar las imágenes generadas comercialmente?",
-          a: "Sí, tienes derechos comerciales completos sobre las imágenes generadas usando tus propias fotos y prompts.",
-        },
+        q5: {
+          q: "生成的图片可以商用吗？",
+          a: "是的，通过ArtisanAI生成的所有图片都可以用于商业用途。请查看我们的服务条款了解完整详情。"
+        }
       },
+      contact: {
+        title: "还有问题？",
+        subtitle: "找不到您要的内容？我们的支持团队随时为您提供帮助。",
+        button: "联系支持"
+      }
     },
   },
-  fr: {
-    nav: {
-      home: "Accueil",
-      pricing: "Tarifs",
-      faq: "FAQ",
-    },
-    hero: {
-      title: "Licenciez votre photographe",
-      titlePrefix: "Licenciez votre photographe",
-      titleAnywhere: "",
-      subtitle: "Le modèle de génération d'images IA le plus puissant - Gardez le même vous, partout",
-      uploadText: "Téléchargez vos photos",
-      uploadSubtext: "Glissez-déposez ou cliquez pour sélectionner plusieurs images",
-      placeholder:
-        "Décrivez votre vision... (ex., 'photo professionnelle dans un bureau moderne', 'figurine 3D sur un bureau en bois')",
-      generateBtn: "Générer Maintenant",
-    },
-    features: {
-      title: "Libérez Votre Vision Créative",
-      person: {
-        title: "Génération Personne + Objet",
-        desc: "Téléchargez des photos de personnes avec des accessoires ou des arrière-plans pour générer de nouvelles images hautement cohérentes dans n'importe quel style.",
-        detail: "Parfait pour les photos de produits, les photos de style de vie et les compositions créatives.",
-      },
-      model3d: {
-        title: "Génération de Modèles 3D",
-        desc: "Transformez des photos en pied en superbes rendus de figurines 3D avec plusieurs angles de vue.",
-        detail: "Créez des figurines de collection, des personnages de jeu et des avatars 3D.",
-      },
-      editing: {
-        title: "Édition Photo Avancée",
-        desc: "Changez les coiffures, les arrière-plans, les expressions et plus avec l'édition de précision alimentée par l'IA.",
-        detail: "Éditions de qualité professionnelle en secondes, pas en heures.",
-      },
-    },
-    comparison: {
-      title: "Pourquoi Choisir ArtisanAI?",
-      features: {
-        consistency: "Cohérence des Portraits",
-        figurine: "Génération de Figurines 3D",
-        inputs: "Multiples Types d'Entrée",
-        speed: "Vitesse de Traitement",
-      },
-    },
-    howItWorks: {
-      title: "Comment Ça Marche",
-      upload: {
-        title: "1. Télécharger",
-        desc: "Téléchargez vos photos et décrivez votre vision avec des prompts texte détaillés.",
-      },
-      generate: {
-        title: "2. Générer",
-        desc: "Notre IA traite vos entrées et crée des images époustouflantes et cohérentes en secondes.",
-      },
-      download: {
-        title: "3. Télécharger et Partager",
-        desc: "Téléchargez des images haute résolution ou partagez directement sur vos plateformes préférées.",
-      },
-    },
-    pricing: {
-      title: "Tarifs Simples et Transparents",
-      subtitle: "Commencez avec 120 points gratuits. Chaque génération coûte 50 points.",
-      free: {
-        title: "Démarrage Gratuit",
-        points: "120 Points",
-        desc: "Parfait pour essayer la plateforme",
-      },
-      perGen: {
-        title: "Par Génération",
-        points: "50 Points",
-        desc: "Génération IA de haute qualité",
-      },
-      purchaseBtn: "Acheter Plus de Points",
-      secure: "Traitement de paiement sécurisé via l'intégration Cream",
-    },
-    gallery: {
-      title: "Galerie Communautaire",
-      viewMore: "Voir Plus de Créations",
-    },
-    footer: {
-      tagline: "Créer l'avenir de la génération d'images alimentée par l'IA avec cohérence et créativité.",
-      product: "Produit",
-      support: "Support",
-      legal: "Légal",
-      copyright: "© 2024 ArtisanAI. Tous droits réservés.",
-      features: "Fonctionnalités",
-      api: "API",
-      helpCenter: "Centre d'Aide",
-      contact: "Contact",
-      status: "Statut",
-      termsOfService: "Conditions de Service",
-      privacyPolicy: "Politique de Confidentialité",
-      cookiePolicy: "Politique des Cookies",
-    },
-    faq: {
-      title: "Questions Fréquemment Posées",
-      subtitle: "Trouvez des réponses aux questions courantes sur ArtisanAI",
-      questions: {
-        whatIs: {
-          q: "Qu'est-ce qu'ArtisanAI?",
-          a: "ArtisanAI est une plateforme avancée de génération d'images alimentée par l'IA qui se spécialise dans la création de portraits hautement cohérents et de figurines 3D à partir de vos photos.",
-        },
-        howConsistent: {
-          q: "Comment ArtisanAI assure-t-il la cohérence des portraits?",
-          a: "Notre technologie IA propriétaire analyse les traits du visage, les expressions et les caractéristiques pour maintenir la cohérence à travers différents styles et scénarios.",
-        },
-        whatFormats: {
-          q: "Quels formats d'image sont pris en charge?",
-          a: "Nous prenons en charge les formats JPG, PNG et WebP pour les téléchargements. Les images générées sont fournies au format PNG haute résolution.",
-        },
-        howLong: {
-          q: "Combien de temps prend la génération?",
-          a: "La plupart des générations se terminent en 30-60 secondes, selon la complexité et la charge actuelle du serveur.",
-        },
-        canCommercial: {
-          q: "Puis-je utiliser les images générées commercialement?",
-          a: "Oui, vous avez des droits commerciaux complets sur les images générées en utilisant vos propres photos et prompts.",
-        },
-      },
-    },
-  },
-  de: {
-    nav: {
-      home: "Startseite",
-      pricing: "Preise",
-      faq: "FAQ",
-    },
-    hero: {
-      title: "Entlassen Sie Ihren Fotografen",
-      titlePrefix: "Entlassen Sie Ihren Fotografen",
-      titleAnywhere: "",
-      subtitle: "Das leistungsstärkste KI-Bildgenerierungsmodell - Bleiben Sie überall derselbe",
-      uploadText: "Lade deine Fotos hoch",
-      uploadSubtext: "Ziehen & ablegen oder klicken, um mehrere Bilder auszuwählen",
-      placeholder:
-        "Beschreibe deine Vision... (z.B. 'professionelles Headshot in einem modernen Büro', '3D-Figur auf einem Holzschreibtisch')",
-      generateBtn: "Jetzt Generieren",
-    },
-    features: {
-      title: "Entfessle Deine Kreative Vision",
-      person: {
-        title: "Person + Objekt Generierung",
-        desc: "Lade Personenfotos mit Requisiten oder Hintergründen hoch, um hochkonsistente neue Bilder in jedem Stil zu generieren.",
-        detail: "Perfekt für Produktaufnahmen, Lifestyle-Fotos und kreative Kompositionen.",
-      },
-      model3d: {
-        title: "3D-Modell Generierung",
-        desc: "Verwandle Ganzkörperfotos in atemberaubende 3D-Figuren-Renderings mit mehreren Betrachtungswinkeln.",
-        detail: "Erstelle Sammelfiguren, Spielcharaktere und 3D-Avatare.",
-      },
-      editing: {
-        title: "Erweiterte Fotobearbeitung",
-        desc: "Ändere Frisuren, Hintergründe, Ausdrücke und mehr mit KI-gestützter Präzisionsbearbeitung.",
-        detail: "Professionelle Bearbeitungen in Sekunden, nicht Stunden.",
-      },
-    },
-    comparison: {
-      title: "Warum ArtisanAI Wählen?",
-      features: {
-        consistency: "Porträt-Konsistenz",
-        figurine: "3D-Figuren Generierung",
-        inputs: "Mehrere Eingabetypen",
-        speed: "Verarbeitungsgeschwindigkeit",
-      },
-    },
-    howItWorks: {
-      title: "Wie Es Funktioniert",
-      upload: {
-        title: "1. Hochladen",
-        desc: "Lade deine Fotos hoch und beschreibe deine Vision mit detaillierten Textprompts.",
-      },
-      generate: {
-        title: "2. Generieren",
-        desc: "Unsere KI verarbeitet deine Eingaben und erstellt atemberaubende, konsistente Bilder in Sekunden.",
-      },
-      download: {
-        title: "3. Herunterladen & Teilen",
-        desc: "Lade hochauflösende Bilder herunter oder teile direkt auf deinen Lieblingsplattformen.",
-      },
-    },
-    pricing: {
-      title: "Einfache, Transparente Preise",
-      subtitle: "Starte mit 120 kostenlosen Punkten. Jede Generierung kostet 50 Punkte.",
-      free: {
-        title: "Kostenloser Start",
-        points: "120 Punkte",
-        desc: "Perfekt zum Ausprobieren der Plattform",
-      },
-      perGen: {
-        title: "Pro Generierung",
-        points: "50 Punkte",
-        desc: "Hochwertige KI-Generierung",
-      },
-      purchaseBtn: "Mehr Punkte Kaufen",
-      secure: "Sichere Zahlungsabwicklung über Cream-Integration",
-    },
-    gallery: {
-      title: "Community-Galerie",
-      viewMore: "Mehr Kreationen Ansehen",
-    },
-    footer: {
-      tagline: "Die Zukunft der KI-gestützten Bildgenerierung mit Konsistenz und Kreativität schaffen.",
-      product: "Produkt",
-      support: "Support",
-      legal: "Rechtliches",
-      copyright: "© 2024 ArtisanAI. Alle Rechte vorbehalten.",
-      features: "Funktionen",
-      api: "API",
-      helpCenter: "Hilfezentrum",
-      contact: "Kontakt",
-      status: "Status",
-      termsOfService: "Nutzungsbedingungen",
-      privacyPolicy: "Datenschutzrichtlinie",
-      cookiePolicy: "Cookie-Richtlinie",
-    },
-    faq: {
-      title: "Häufig Gestellte Fragen",
-      subtitle: "Finde Antworten auf häufige Fragen zu ArtisanAI",
-      questions: {
-        whatIs: {
-          q: "Was ist ArtisanAI?",
-          a: "ArtisanAI ist eine fortschrittliche KI-gestützte Bildgenerierungsplattform, die sich auf die Erstellung hochkonsistenter Porträts und 3D-Figuren aus deinen Fotos spezialisiert hat.",
-        },
-        howConsistent: {
-          q: "Wie gewährleistet ArtisanAI Porträt-Konsistenz?",
-          a: "Unsere proprietäre KI-Technologie analysiert Gesichtszüge, Ausdrücke und Eigenschaften, um Konsistenz über verschiedene Stile und Szenarien hinweg zu gewährleisten.",
-        },
-        whatFormats: {
-          q: "Welche Bildformate werden unterstützt?",
-          a: "Wir unterstützen JPG-, PNG- und WebP-Formate für Uploads. Generierte Bilder werden im hochauflösenden PNG-Format bereitgestellt.",
-        },
-        howLong: {
-          q: "Wie lange dauert die Generierung?",
-          a: "Die meisten Generierungen werden in 30-60 Sekunden abgeschlossen, abhängig von der Komplexität und der aktuellen Serverlast.",
-        },
-        canCommercial: {
-          q: "Kann ich generierte Bilder kommerziell nutzen?",
-          a: "Ja, du hast vollständige kommerzielle Rechte an Bildern, die mit deinen eigenen Fotos und Prompts generiert wurden.",
-        },
-      },
-    },
-  },
-  ja: {
-    nav: {
-      home: "ホーム",
-      pricing: "料金",
-      faq: "よくある質問",
-    },
-    hero: {
-      title: "カメラマンを解雇しよう",
-      titlePrefix: "カメラマンを解雇しよう",
-      titleAnywhere: "",
-      subtitle: "最強のAI画像生成モデル - どこでも同じあなたで",
-      uploadText: "写真をアップロード",
-      uploadSubtext: "ドラッグ＆ドロップまたはクリックして複数の画像を選択",
-      placeholder:
-        "あなたのビジョンを説明してください...（例：「モダンなオフィスでのプロフェッショナルなヘッドショット」、「木製デスクの上の3Dフィギュア」）",
-      generateBtn: "今すぐ生成",
-    },
-    features: {
-      title: "創造的なビジョンを解き放つ",
-      person: {
-        title: "人物＋オブジェクト生成",
-        desc: "小道具や背景のある人物写真をアップロードして、あらゆるスタイルで高度に一貫した新しい画像を生成します。",
-        detail: "商品撮影、ライフスタイル写真、クリエイティブな構成に最適です。",
-      },
-      model3d: {
-        title: "3Dモデル生成",
-        desc: "全身写真を複数の視点を持つ美しい3Dフィギュアレンダリングに変換します。",
-        detail: "コレクタブルフィギュア、ゲームキャラクター、3Dアバターを作成します。",
-      },
-      editing: {
-        title: "高度な写真編集",
-        desc: "AI搭載の精密編集で髪型、背景、表情などを変更します。",
-        detail: "数時間ではなく数秒でプロ品質の編集。",
-      },
-    },
-    comparison: {
-      title: "なぜArtisanAIを選ぶのか？",
-      features: {
-        consistency: "ポートレートの一貫性",
-        figurine: "3Dフィギュア生成",
-        inputs: "複数の入力タイプ",
-        speed: "処理速度",
-      },
-    },
-    howItWorks: {
-      title: "仕組み",
-      upload: {
-        title: "1. アップロード",
-        desc: "写真をアップロードし、詳細なテキストプロンプトでビジョンを説明します。",
-      },
-      generate: {
-        title: "2. 生成",
-        desc: "私たちのAIがあなたの入力を処理し、数秒で美しく一貫した画像を作成します。",
-      },
-      download: {
-        title: "3. ダウンロード＆シェア",
-        desc: "高解像度画像をダウンロードするか、お気に入りのプラットフォームに直接シェアします。",
-      },
-    },
-    pricing: {
-      title: "シンプルで透明な料金",
-      subtitle: "120の無料ポイントで始めましょう。各生成は50ポイントです。",
-      free: {
-        title: "無料スターター",
-        points: "120ポイント",
-        desc: "プラットフォームを試すのに最適",
-      },
-      perGen: {
-        title: "生成あたり",
-        points: "50ポイント",
-        desc: "高品質AI生成",
-      },
-      purchaseBtn: "もっとポイントを購入",
-      secure: "Cream統合による安全な決済処理",
-    },
-    gallery: {
-      title: "コミュニティギャラリー",
-      viewMore: "もっと作品を見る",
-    },
-    footer: {
-      tagline: "一貫性と創造性でAI駆動画像生成の未来を創造しています。",
-      product: "製品",
-      support: "サポート",
-      legal: "法的事項",
-      copyright: "© 2024 ArtisanAI. 全著作権所有。",
-      features: "機能",
-      api: "API",
-      helpCenter: "ヘルプセンター",
-      contact: "お問い合わせ",
-      status: "ステータス",
-      termsOfService: "利用規約",
-      privacyPolicy: "プライバシーポリシー",
-      cookiePolicy: "Cookieポリシー",
-    },
-    faq: {
-      title: "よくある質問",
-      subtitle: "ArtisanAIに関するよくある質問の回答を見つけてください",
-      questions: {
-        whatIs: {
-          q: "ArtisanAIとは何ですか？",
-          a: "ArtisanAIは、あなたの写真から高度に一貫したポートレートと3Dフィギュアを作成することに特化した先進的なAI駆動画像生成プラットフォームです。",
-        },
-        howConsistent: {
-          q: "ArtisanAIはどのようにポートレートの一貫性を確保しますか？",
-          a: "私たちの独自のAI技術は、顔の特徴、表情、特性を分析して、異なるスタイルやシナリオ間で一貫性を維持します。",
-        },
-        whatFormats: {
-          q: "どの画像フォーマットがサポートされていますか？",
-          a: "アップロードにはJPG、PNG、WebPフォーマットをサポートしています。生成された画像は高解像度PNG形式で提供されます。",
-        },
-        howLong: {
-          q: "生成にはどのくらい時間がかかりますか？",
-          a: "ほとんどの生成は、複雑さと現在のサーバー負荷に応じて30-60秒で完了します。",
-        },
-        canCommercial: {
-          q: "生成された画像を商用利用できますか？",
-          a: "はい、あなた自身の写真とプロンプトを使用して生成された画像に対して完全な商用権利を持っています。",
-        },
-      },
-    },
-  },
-  ko: {
-    nav: {
-      home: "홈",
-      pricing: "가격",
-      faq: "자주 묻는 질문",
-    },
-    hero: {
-      title: "사진작가를 해고하세요",
-      titlePrefix: "사진작가를 해고하세요",
-      titleAnywhere: "",
-      subtitle: "가장 강력한 AI 이미지 생성 모델 - 어디서나 같은 당신으로",
-      uploadText: "사진 업로드",
-      uploadSubtext: "드래그 앤 드롭하거나 클릭하여 여러 이미지 선택",
-      placeholder:
-        "당신의 비전을 설명하세요... (예: '현대적인 사무실에서의 전문적인 헤드샷', '나무 책상 위의 3D 피규어')",
-      generateBtn: "지금 생성",
-    },
-    features: {
-      title: "창의적 비전을 해방하세요",
-      person: {
-        title: "인물 + 객체 생성",
-        desc: "소품이나 배경이 있는 인물 사진을 업로드하여 모든 스타일에서 고도로 일관된 새로운 이미지를 생성하세요.",
-        detail: "제품 촬영, 라이프스타일 사진, 창의적 구성에 완벽합니다.",
-      },
-      model3d: {
-        title: "3D 모델 생성",
-        desc: "전신 사진을 여러 시점을 가진 멋진 3D 피규어 렌더링으로 변환하세요.",
-        detail: "수집용 피규어, 게임 캐릭터, 3D 아바타를 만드세요.",
-      },
-      editing: {
-        title: "고급 사진 편집",
-        desc: "AI 기반 정밀 편집으로 헤어스타일, 배경, 표정 등을 변경하세요.",
-        detail: "몇 시간이 아닌 몇 초 만에 전문가 수준의 편집.",
-      },
-    },
-    comparison: {
-      title: "왜 ArtisanAI를 선택해야 할까요?",
-      features: {
-        consistency: "초상화 일관성",
-        figurine: "3D 피규어 생성",
-        inputs: "다중 입력 유형",
-        speed: "처리 속도",
-      },
-    },
-    howItWorks: {
-      title: "작동 방식",
-      upload: {
-        title: "1. 업로드",
-        desc: "사진을 업로드하고 상세한 텍스트 프롬프트로 비전을 설명하세요.",
-      },
-      generate: {
-        title: "2. 생성",
-        desc: "우리의 AI가 입력을 처리하고 몇 초 만에 놀라운 일관된 이미지를 생성합니다.",
-      },
-      download: {
-        title: "3. 다운로드 및 공유",
-        desc: "고해상도 이미지를 다운로드하거나 좋아하는 플랫폼에 직접 공유하세요.",
-      },
-    },
-    pricing: {
-      title: "간단하고 투명한 가격",
-      subtitle: "120개의 무료 포인트로 시작하세요. 각 생성은 50포인트입니다.",
-      free: {
-        title: "무료 스타터",
-        points: "120포인트",
-        desc: "플랫폼을 시도해보기에 완벽",
-      },
-      perGen: {
-        title: "생성당",
-        points: "50포인트",
-        desc: "고품질 AI 생성",
-      },
-      purchaseBtn: "더 많은 포인트 구매",
-      secure: "Cream 통합을 통한 안전한 결제 처리",
-    },
-    gallery: {
-      title: "커뮤니티 갤러리",
-      viewMore: "더 많은 작품 보기",
-    },
-    footer: {
-      tagline: "일관성과 창의성으로 AI 기반 이미지 생성의 미래를 만들어갑니다.",
-      product: "제품",
-      support: "지원",
-      legal: "법적 사항",
-      copyright: "© 2024 ArtisanAI. 모든 권리 보유.",
-      features: "기능",
-      api: "API",
-      helpCenter: "도움말 센터",
-      contact: "연락처",
-      status: "상태",
-      termsOfService: "서비스 약관",
-      privacyPolicy: "개인정보 보호정책",
-      cookiePolicy: "쿠키 정책",
-    },
-    faq: {
-      title: "자주 묻는 질문",
-      subtitle: "ArtisanAI에 대한 일반적인 질문의 답변을 찾아보세요",
-      questions: {
-        whatIs: {
-          q: "ArtisanAI란 무엇인가요?",
-          a: "ArtisanAI는 사진에서 고도로 일관된 초상화와 3D 피규어를 만드는 데 특화된 고급 AI 기반 이미지 생성 플랫폼입니다.",
-        },
-        howConsistent: {
-          q: "ArtisanAI는 어떻게 초상화 일관성을 보장하나요?",
-          a: "우리의 독점 AI 기술은 얼굴 특징, 표정, 특성을 분석하여 다양한 스타일과 시나리오에서 일관성을 유지합니다.",
-        },
-        whatFormats: {
-          q: "어떤 이미지 형식이 지원되나요?",
-          a: "업로드에는 JPG, PNG, WebP 형식을 지원합니다. 생성된 이미지는 고해상도 PNG 형식으로 제공됩니다.",
-        },
-        howLong: {
-          q: "생성에는 얼마나 걸리나요?",
-          a: "대부분의 생성은 복잡성과 현재 서버 부하에 따라 30-60초 내에 완료됩니다.",
-        },
-        canCommercial: {
-          q: "생성된 이미지를 상업적으로 사용할 수 있나요?",
-          a: "네, 자신의 사진과 프롬프트를 사용하여 생성된 이미지에 대한 완전한 상업적 권리를 가집니다.",
-        },
-      },
-    },
-  },
-  pt: {
-    nav: {
-      home: "Início",
-      pricing: "Preços",
-      faq: "Perguntas Frequentes",
-    },
-    hero: {
-      title: "Demita seu fotógrafo",
-      titlePrefix: "Demita seu fotógrafo",
-      titleAnywhere: "",
-      subtitle: "O modelo de geração de imagens IA mais poderoso - Mantenha o mesmo você, em qualquer lugar",
-      uploadText: "Faça upload das suas fotos",
-      uploadSubtext: "Arraste e solte ou clique para selecionar múltiplas imagens",
-      placeholder:
-        "Descreva sua visão... (ex., 'foto profissional em um escritório moderno', 'figura 3D em uma mesa de madeira')",
-      generateBtn: "Gerar Agora",
-    },
-    features: {
-      title: "Liberte Sua Visão Criativa",
-      person: {
-        title: "Geração Pessoa + Objeto",
-        desc: "Faça upload de fotos de pessoas com adereços ou fundos para gerar novas imagens altamente consistentes em qualquer estilo.",
-        detail: "Perfeito para fotos de produtos, fotos de estilo de vida e composições criativas.",
-      },
-      model3d: {
-        title: "Geração de Modelos 3D",
-        desc: "Transforme fotos de corpo inteiro em renderizações impressionantes de figuras 3D com múltiplos ângulos de visualização.",
-        detail: "Crie figuras colecionáveis, personagens de jogos e avatares 3D.",
-      },
-      editing: {
-        title: "Edição Avançada de Fotos",
-        desc: "Mude penteados, fundos, expressões e mais com edição de precisão alimentada por IA.",
-        detail: "Edições de qualidade profissional em segundos, não horas.",
-      },
-    },
-    comparison: {
-      title: "Por Que Escolher ArtisanAI?",
-      features: {
-        consistency: "Consistência de Retratos",
-        figurine: "Geração de Figuras 3D",
-        inputs: "Múltiplos Tipos de Entrada",
-        speed: "Velocidade de Processamento",
-      },
-    },
-    howItWorks: {
-      title: "Como Funciona",
-      upload: {
-        title: "1. Upload",
-        desc: "Faça upload das suas fotos e descreva sua visão com prompts de texto detalhados.",
-      },
-      generate: {
-        title: "2. Gerar",
-        desc: "Nossa IA processa suas entradas e cria imagens impressionantes e consistentes em segundos.",
-      },
-      download: {
-        title: "3. Download e Compartilhar",
-        desc: "Baixe imagens em alta resolução ou compartilhe diretamente nas suas plataformas favoritas.",
-      },
-    },
-    pricing: {
-      title: "Preços Simples e Transparentes",
-      subtitle: "Comece com 120 pontos grátis. Cada geração custa 50 pontos.",
-      free: {
-        title: "Início Gratuito",
-        points: "120 Pontos",
-        desc: "Perfeito para experimentar a plataforma",
-      },
-      perGen: {
-        title: "Por Geração",
-        points: "50 Pontos",
-        desc: "Geração IA de alta qualidade",
-      },
-      purchaseBtn: "Comprar Mais Pontos",
-      secure: "Processamento de pagamento seguro via integração Cream",
-    },
-    gallery: {
-      title: "Galeria da Comunidade",
-      viewMore: "Ver Mais Criações",
-    },
-    footer: {
-      tagline: "Criando o futuro da geração de imagens alimentada por IA com consistência e criatividade.",
-      product: "Produto",
-      support: "Suporte",
-      legal: "Legal",
-      copyright: "© 2024 ArtisanAI. Todos os direitos reservados.",
-      features: "Recursos",
-      api: "API",
-      helpCenter: "Central de Ajuda",
-      contact: "Contato",
-      status: "Status",
-      termsOfService: "Termos de Serviço",
-      privacyPolicy: "Política de Privacidade",
-      cookiePolicy: "Política de Cookies",
-    },
-    faq: {
-      title: "Perguntas Frequentes",
-      subtitle: "Encontre respostas para perguntas comuns sobre ArtisanAI",
-      questions: {
-        whatIs: {
-          q: "O que é ArtisanAI?",
-          a: "ArtisanAI é uma plataforma avançada de geração de imagens alimentada por IA que se especializa em criar retratos altamente consistentes e figuras 3D a partir das suas fotos.",
-        },
-        howConsistent: {
-          q: "Como o ArtisanAI garante a consistência dos retratos?",
-          a: "Nossa tecnologia IA proprietária analisa características faciais, expressões e características para manter consistência através de diferentes estilos e cenários.",
-        },
-        whatFormats: {
-          q: "Quais formatos de imagem são suportados?",
-          a: "Suportamos formatos JPG, PNG e WebP para uploads. Imagens geradas são fornecidas em formato PNG de alta resolução.",
-        },
-        howLong: {
-          q: "Quanto tempo leva a geração?",
-          a: "A maioria das gerações completa em 30-60 segundos, dependendo da complexidade e carga atual do servidor.",
-        },
-        canCommercial: {
-          q: "Posso usar imagens geradas comercialmente?",
-          a: "Sim, você tem direitos comerciais completos sobre imagens geradas usando suas próprias fotos e prompts.",
-        },
-      },
-    },
-  },
-  ru: {
-    nav: {
-      home: "Главная",
-      pricing: "Цены",
-      faq: "Часто задаваемые вопросы",
-    },
-    hero: {
-      title: "Увольте своего фотографа",
-      titlePrefix: "Увольте своего фотографа",
-      titleAnywhere: "",
-      subtitle: "Самая мощная модель генерации изображений ИИ - Оставайтесь собой везде",
-      uploadText: "Загрузите ваши фотографии",
-      uploadSubtext: "Перетащите или нажмите для выбора нескольких изображений",
-      placeholder:
-        "Опишите ваше видение... (например, 'профессиональный портрет в современном офисе', '3D фигурка на деревянном столе')",
-      generateBtn: "Создать сейчас",
-    },
-    features: {
-      title: "Освободите ваше творческое видение",
-      person: {
-        title: "Генерация Человек + Объект",
-        desc: "Загружайте фотографии людей с реквизитом или фонами для создания высококонсистентных новых изображений в любом стиле.",
-        detail: "Идеально для продуктовых съемок, lifestyle фотографий и творческих композиций.",
-      },
-      model3d: {
-        title: "Генерация 3D моделей",
-        desc: "Превращайте фотографии в полный рост в потрясающие 3D рендеры фигурок с множественными углами обзора.",
-        detail: "Создавайте коллекционные фигурки, игровых персонажей и 3D аватары.",
-      },
-      editing: {
-        title: "Продвинутое редактирование фото",
-        desc: "Изменяйте прически, фоны, выражения лица и многое другое с помощью точного редактирования на основе ИИ.",
-        detail: "Профессиональное качество редактирования за секунды, а не часы.",
-      },
-    },
-    comparison: {
-      title: "Почему выбрать ArtisanAI?",
-      features: {
-        consistency: "Консистентность портретов",
-        figurine: "Генерация 3D фигурок",
-        inputs: "Множественные типы ввода",
-        speed: "Скорость обработки",
-      },
-    },
-    howItWorks: {
-      title: "Как это работает",
-      upload: {
-        title: "1. Загрузка",
-        desc: "Загрузите ваши фотографии и опишите ваше видение детальными текстовыми подсказками.",
-      },
-      generate: {
-        title: "2. Генерация",
-        desc: "Наш ИИ обрабатывает ваши данные и создает потрясающие, консистентные изображения за секунды.",
-      },
-      download: {
-        title: "3. Скачивание и Поделиться",
-        desc: "Скачивайте изображения высокого разрешения или делитесь напрямую на ваших любимых платформах.",
-      },
-    },
-    pricing: {
-      title: "Простые, прозрачные цены",
-      subtitle: "Начните со 120 бесплатными очками. Каждая генерация стоит 50 очков.",
-      free: {
-        title: "Бесплатный старт",
-        points: "120 очков",
-        desc: "Идеально для знакомства с платформой",
-      },
-      perGen: {
-        title: "За генерацию",
-        points: "50 очков",
-        desc: "Высококачественная ИИ генерация",
-      },
-      purchaseBtn: "Купить больше очков",
-      secure: "Безопасная обработка платежей через интеграцию Cream",
-    },
-    gallery: {
-      title: "Галерея сообщества",
-      viewMore: "Посмотреть больше творений",
-    },
-    footer: {
-      tagline: "Создаем будущее ИИ-генерации изображений с консистентностью и креативностью.",
-      product: "Продукт",
-      support: "Поддержка",
-      legal: "Правовая информация",
-      copyright: "© 2024 ArtisanAI. Все права защищены.",
-      features: "Функции",
-      api: "API",
-      helpCenter: "Центр помощи",
-      contact: "Контакты",
-      status: "Статус",
-      termsOfService: "Условия обслуживания",
-      privacyPolicy: "Политика конфиденциальности",
-      cookiePolicy: "Политика использования файлов cookie",
-    },
-    faq: {
-      title: "Часто задаваемые вопросы",
-      subtitle: "Найдите ответы на распространенные вопросы об ArtisanAI",
-      questions: {
-        whatIs: {
-          q: "Что такое ArtisanAI?",
-          a: "ArtisanAI - это продвинутая платформа генерации изображений на основе ИИ, которая специализируется на создании высококонсистентных портретов и 3D фигурок из ваших фотографий.",
-        },
-        howConsistent: {
-          q: "Как ArtisanAI обеспечивает консистентность портретов?",
-          a: "Наша собственная ИИ технология анализирует черты лица, выражения и характеристики для поддержания консистентности в разных стилях и сценариях.",
-        },
-        whatFormats: {
-          q: "Какие форматы изображений поддерживаются?",
-          a: "Мы поддерживаем форматы JPG, PNG и WebP для загрузки. Сгенерированные изображения предоставляются в высоком разрешении PNG.",
-        },
-        howLong: {
-          q: "Сколько времени занимает генерация?",
-          a: "Большинство генераций завершается за 30-60 секунд, в зависимости от сложности и текущей нагрузки сервера.",
-        },
-        canCommercial: {
-          q: "Могу ли я использовать сгенерированные изображения коммерчески?",
-          a: "Да, у вас есть полные коммерческие права на изображения, сгенерированные с использованием ваших собственных фотографий и подсказок.",
-        },
-      },
-    },
-  },
-  ar: {
-    nav: {
-      home: "الرئيسية",
-      pricing: "الأسعار",
-      faq: "الأسئلة الشائعة",
-    },
-    hero: {
-      title: "اطرد مصورك",
-      titlePrefix: "اطرد مصورك",
-      titleAnywhere: "",
-      subtitle: "أقوى نموذج لتوليد الصور بالذكاء الاصطناعي - ابق نفسك، في أي مكان",
-      uploadText: "ارفع صورك",
-      uploadSubtext: "اسحب وأفلت أو انقر لاختيار صور متعددة",
-      placeholder: "صف رؤيتك... (مثل، 'صورة مهنية في مكتب حديث'، 'تمثال ثلاثي الأبعاد على مكتب خشبي')",
-      generateBtn: "إنتاج الآن",
-    },
-    features: {
-      title: "أطلق رؤيتك الإبداعية",
-      person: {
-        title: "إنتاج شخص + كائن",
-        desc: "ارفع صور أشخاص مع دعائم أو خلفيات لإنتاج صور جديدة عالية الاتساق بأي نمط.",
-        detail: "مثالي لصور المنتجات، صور نمط الحياة، والتركيبات الإبداعية.",
-      },
-      model3d: {
-        title: "إنتاج نماذج ثلاثية الأبعاد",
-        desc: "حول صور الجسم الكامل إلى عروض تماثيل ثلاثية الأبعاد مذهلة بزوايا عرض متعددة.",
-        detail: "إنشاء تماثيل قابلة للجمع، شخصيات ألعاب، وصور رمزية ثلاثية الأبعاد.",
-      },
-      editing: {
-        title: "تحرير صور متقدم",
-        desc: "غير تسريحات الشعر، الخلفيات، التعبيرات وأكثر بتحرير دقيق مدعوم بالذكاء الاصطناعي.",
-        detail: "تحريرات بجودة احترافية في ثوانٍ، وليس ساعات.",
-      },
-    },
-    comparison: {
-      title: "لماذا تختار ArtisanAI؟",
-      features: {
-        consistency: "اتساق الصور الشخصية",
-        figurine: "إنتاج تماثيل ثلاثية الأبعاد",
-        inputs: "أنواع إدخال متعددة",
-        speed: "سرعة المعالجة",
-      },
-    },
-    howItWorks: {
-      title: "كيف يعمل",
-      upload: {
-        title: "1. الرفع",
-        desc: "ارفع صورك وصف رؤيتك بنصوص توجيه مفصلة.",
-      },
-      generate: {
-        title: "2. الإنتاج",
-        desc: "يعالج ذكاؤنا الاصطناعي مدخلاتك وينشئ صوراً مذهلة ومتسقة في ثوانٍ.",
-      },
-      download: {
-        title: "3. التحميل والمشاركة",
-        desc: "حمل صوراً عالية الدقة أو شارك مباشرة على منصاتك المفضلة.",
-      },
-    },
-    pricing: {
-      title: "أسعار بسيطة وشفافة",
-      subtitle: "ابدأ بـ 120 نقطة مجانية. كل إنتاج يكلف 50 نقطة.",
-      free: {
-        title: "البداية المجانية",
-        points: "120 نقطة",
-        desc: "مثالي لتجربة المنصة",
-      },
-      perGen: {
-        title: "لكل إنتاج",
-        points: "50 نقطة",
-        desc: "إنتاج ذكاء اصطناعي عالي الجودة",
-      },
-      purchaseBtn: "شراء المزيد من النقاط",
-      secure: "معالجة دفع آمنة عبر تكامل Cream",
-    },
-    gallery: {
-      title: "معرض المجتمع",
-      viewMore: "عرض المزيد من الإبداعات",
-    },
-    footer: {
-      tagline: "إنشاء مستقبل إنتاج الصور المدعوم بالذكاء الاصطناعي بالاتساق والإبداع.",
-      product: "المنتج",
-      support: "الدعم",
-      legal: "قانوني",
-      copyright: "© 2024 ArtisanAI. جميع الحقوق محفوظة.",
-      features: "الميزات",
-      api: "واجهة برمجة التطبيقات",
-      helpCenter: "مركز المساعدة",
-      contact: "اتصل بنا",
-      status: "الحالة",
-      termsOfService: "شروط الخدمة",
-      privacyPolicy: "سياسة الخصوصية",
-      cookiePolicy: "سياسة ملفات تعريف الارتباط",
-    },
-    faq: {
-      title: "الأسئلة الشائعة",
-      subtitle: "اعثر على إجابات للأسئلة الشائعة حول ArtisanAI",
-      questions: {
-        whatIs: {
-          q: "ما هو ArtisanAI؟",
-          a: "ArtisanAI هو منصة متقدمة لإنتاج الصور مدعومة بالذكاء الاصطناعي متخصصة في إنشاء صور شخصية عالية الاتساق وتماثيل ثلاثية الأبعاد من صورك.",
-        },
-        howConsistent: {
-          q: "كيف يضمن ArtisanAI اتساق الصور الشخصية؟",
-          a: "تقنية الذكاء الاصطناعي الخاصة بنا تحلل ملامح الوجه والتعبيرات والخصائص للحفاظ على الاتساق عبر أنماط وسيناريوهات مختلفة.",
-        },
-        whatFormats: {
-          q: "ما هي تنسيقات الصور المدعومة؟",
-          a: "ندعم تنسيقات JPG وPNG وWebP للرفع. الصور المنتجة تُقدم بتنسيق PNG عالي الدقة.",
-        },
-        howLong: {
-          q: "كم يستغرق الإنتاج؟",
-          a: "معظم عمليات الإنتاج تكتمل في 30-60 ثانية، حسب التعقيد والحمولة الحالية للخادم.",
-        },
-        canCommercial: {
-          q: "هل يمكنني استخدام الصور المنتجة تجارياً؟",
-          a: "نعم، لديك حقوق تجارية كاملة على الصور المنتجة باستخدام صورك ونصوص التوجيه الخاصة بك.",
-        },
-      },
-    },
-  },
-}
+} as const
 
 interface LanguageContextType {
   language: Language
@@ -1650,32 +1364,21 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>("en")
 
-  // Load saved language from localStorage on mount
   useEffect(() => {
-    const savedLanguage = localStorage.getItem("language") as Language
-    if (savedLanguage && languages.find((lang) => lang.code === savedLanguage)) {
-      setLanguage(savedLanguage)
-    }
+    // 始终默认为英文，忽略localStorage中的设置
+    setLanguage("en")
   }, [])
 
-  // Save language to localStorage when it changes
   useEffect(() => {
-    localStorage.setItem("language", language)
+    if (typeof window !== "undefined") localStorage.setItem("language", language)
   }, [language])
 
-  const value = {
-    language,
-    setLanguage,
-    t: translations[language],
-  }
-
+  const value = { language, setLanguage, t: translations[language] as any }
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>
 }
 
 export function useLanguage() {
-  const context = useContext(LanguageContext)
-  if (context === undefined) {
-    throw new Error("useLanguage must be used within a LanguageProvider")
-  }
-  return context
+  const ctx = useContext(LanguageContext)
+  if (!ctx) throw new Error("useLanguage must be used within a LanguageProvider")
+  return ctx
 }

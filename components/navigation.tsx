@@ -144,7 +144,7 @@ export function Navigation() {
     { href: '/', label: t?.nav?.home || 'Home' },
     { href: '/pricing', label: t?.nav?.pricing || 'Pricing' },
     { href: '/faq', label: t?.nav?.faq || 'FAQ' },
-    { href: '/contact', label: 'Contact' },
+    { href: '/contact', label: t?.nav?.contact || 'Contact' },
   ];
 
   const isActive = (href: string) => pathname === href;
@@ -196,14 +196,6 @@ export function Navigation() {
                   {[
                     { code: 'en', name: 'English' },
                     { code: 'zh', name: '中文' },
-                    { code: 'es', name: 'Español' },
-                    { code: 'fr', name: 'Français' },
-                    { code: 'de', name: 'Deutsch' },
-                    { code: 'ja', name: '日本語' },
-                    { code: 'ko', name: '한국어' },
-                    { code: 'pt', name: 'Português' },
-                    { code: 'ru', name: 'Русский' },
-                    { code: 'ar', name: 'العربية' },
                   ].map((lang) => (
                     <DropdownMenuItem
                       key={lang.code}

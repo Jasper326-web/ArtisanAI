@@ -23,143 +23,75 @@ export default function CookiesPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="prose prose-invert max-w-none">
-              <div className="space-y-6 text-muted-foreground">
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">1. What Are Cookies</h2>
-                  <p>
-                    Cookies are small text files that are placed on your computer or mobile device when you visit a website. 
-                    They are widely used to make websites work more efficiently and to provide information to website owners.
-                  </p>
-                </section>
+              <div className="space-y-8 text-muted-foreground">
+                {/* Introduction */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.cookies?.sections?.introduction?.title || '1. What Are Cookies'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.cookies?.sections?.introduction?.content || 'Cookies are small text files that are stored on your device when you visit our website.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">2. How We Use Cookies</h2>
-                  <p>ArtisanAI uses cookies for the following purposes:</p>
-                  <ul className="list-disc list-inside ml-4 space-y-1">
-                    <li>To remember your preferences and settings</li>
-                    <li>To keep you signed in to your account</li>
-                    <li>To analyze how you use our website</li>
-                    <li>To improve our services and user experience</li>
-                    <li>To provide personalized content and features</li>
-                  </ul>
-                </section>
+                {/* Types of Cookies */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.cookies?.sections?.types_of_cookies?.title || '2. Types of Cookies We Use'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.cookies?.sections?.types_of_cookies?.content || 'We use essential cookies for website functionality, analytics cookies to understand usage patterns, and preference cookies to remember your settings.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">3. Types of Cookies We Use</h2>
-                  
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="text-lg font-medium text-foreground mb-2">Essential Cookies</h3>
-                      <p>
-                        These cookies are necessary for the website to function properly. They enable basic functions like page navigation, 
-                        access to secure areas, and remembering your login status.
-                      </p>
-                    </div>
+                {/* Essential Cookies */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.cookies?.sections?.essential_cookies?.title || '3. Essential Cookies'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.cookies?.sections?.essential_cookies?.content || 'These cookies are necessary for the website to function properly. They enable basic functions like page navigation, access to secure areas, and authentication.'}</p>
+                </div>
 
-                    <div>
-                      <h3 className="text-lg font-medium text-foreground mb-2">Performance Cookies</h3>
-                      <p>
-                        These cookies collect information about how visitors use our website, such as which pages are visited most often. 
-                        This helps us improve how our website works.
-                      </p>
-                    </div>
+                {/* Analytics Cookies */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.cookies?.sections?.analytics_cookies?.title || '4. Analytics Cookies'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.cookies?.sections?.analytics_cookies?.content || 'We use analytics cookies to understand how visitors interact with our website, helping us improve performance and user experience.'}</p>
+                </div>
 
-                    <div>
-                      <h3 className="text-lg font-medium text-foreground mb-2">Functionality Cookies</h3>
-                      <p>
-                        These cookies allow the website to remember choices you make and provide enhanced, more personal features.
-                      </p>
-                    </div>
+                {/* Preference Cookies */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.cookies?.sections?.preference_cookies?.title || '5. Preference Cookies'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.cookies?.sections?.preference_cookies?.content || 'These cookies remember your choices and preferences, such as language settings, to provide a personalized experience on future visits.'}</p>
+                </div>
 
-                    <div>
-                      <h3 className="text-lg font-medium text-foreground mb-2">Analytics Cookies</h3>
-                      <p>
-                        We use analytics cookies to understand how visitors interact with our website. This helps us improve our services 
-                        and user experience.
-                      </p>
-                    </div>
-                  </div>
-                </section>
+                {/* Third-Party Cookies */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.cookies?.sections?.third_party_cookies?.title || '6. Third-Party Cookies'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.cookies?.sections?.third_party_cookies?.content || 'Some cookies are set by third-party services we use, such as analytics providers. These help us understand user behavior and improve our services.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">4. Third-Party Cookies</h2>
-                  <p>
-                    Some cookies on our website are set by third-party services. These may include:
-                  </p>
-                  <ul className="list-disc list-inside ml-4 space-y-1">
-                    <li>Google Analytics for website analytics</li>
-                    <li>Payment processors for transaction security</li>
-                    <li>Authentication providers for user login</li>
-                    <li>Content delivery networks for faster loading</li>
-                  </ul>
-                </section>
+                {/* Cookie Management */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.cookies?.sections?.cookie_management?.title || '7. Managing Cookies'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.cookies?.sections?.cookie_management?.content || 'You can control cookies through your browser settings. You can delete existing cookies and choose to block future cookies, though this may affect website functionality.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">5. Managing Cookies</h2>
-                  <p>You can control and manage cookies in several ways:</p>
-                  
-                  <div className="space-y-3">
-                    <div>
-                      <h3 className="text-lg font-medium text-foreground mb-2">Browser Settings</h3>
-                      <p>
-                        Most web browsers allow you to control cookies through their settings. You can set your browser to refuse cookies 
-                        or delete certain cookies.
-                      </p>
-                    </div>
+                {/* Browser Settings */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.cookies?.sections?.browser_settings?.title || '8. Browser Settings'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.cookies?.sections?.browser_settings?.content || 'Most browsers allow you to refuse cookies or delete them. Please refer to your browser\'s help documentation for specific instructions on cookie management.'}</p>
+                </div>
 
-                    <div>
-                      <h3 className="text-lg font-medium text-foreground mb-2">Cookie Consent</h3>
-                      <p>
-                        When you first visit our website, you may see a cookie consent banner. You can choose which types of cookies 
-                        you want to accept.
-                      </p>
-                    </div>
-                  </div>
-                </section>
+                {/* Cookie Consent */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.cookies?.sections?.cookie_consent?.title || '9. Cookie Consent'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.cookies?.sections?.cookie_consent?.content || 'By continuing to use our website, you consent to our use of cookies as described in this policy. You can withdraw consent at any time through your browser settings.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">6. Impact of Disabling Cookies</h2>
-                  <p>
-                    If you choose to disable cookies, some features of our website may not function properly. This may include:
-                  </p>
-                  <ul className="list-disc list-inside ml-4 space-y-1">
-                    <li>Difficulty staying logged in to your account</li>
-                    <li>Loss of personalized settings and preferences</li>
-                    <li>Reduced functionality of interactive features</li>
-                    <li>Inability to save your work or progress</li>
-                  </ul>
-                </section>
+                {/* Updates */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.cookies?.sections?.updates?.title || '10. Updates to This Policy'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.cookies?.sections?.updates?.content || 'We may update this Cookie Policy from time to time. Any changes will be posted on this page with an updated revision date.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">7. Cookie Retention</h2>
-                  <p>
-                    Different cookies have different retention periods:
-                  </p>
-                  <ul className="list-disc list-inside ml-4 space-y-1">
-                    <li>Session cookies are deleted when you close your browser</li>
-                    <li>Persistent cookies remain on your device for a set period</li>
-                    <li>Some cookies may be refreshed when you visit our website again</li>
-                  </ul>
-                </section>
-
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">8. Updates to This Policy</h2>
-                  <p>
-                    We may update this Cookie Policy from time to time to reflect changes in our practices or for other operational, 
-                    legal, or regulatory reasons.
-                  </p>
-                </section>
-
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">9. Contact Us</h2>
-                  <p>
-                    If you have any questions about our use of cookies, please contact us at: 
-                    <a href="mailto:jdfz13zqy@gmail.com" className="text-primary hover:underline">jdfz13zqy@gmail.com</a>
-                  </p>
-                </section>
+                {/* Contact */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.cookies?.sections?.contact?.title || '11. Contact Us'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.cookies?.sections?.contact?.content || 'If you have questions about our use of cookies, please contact us at jdfz13zqy@gmail.com.'}</p>
+                </div>
 
                 <div className="text-sm text-muted-foreground mt-8 pt-6 border-t border-primary/20">
-                  <p>{t?.legal?.common?.last_updated || 'Last updated:'} {new Date().toLocaleDateString()}</p>
+                  <p>{t?.legal?.common?.last_updated || '最后更新:'} {t?.legal?.common?.date || 'December 2024'}</p>
                 </div>
               </div>
             </CardContent>

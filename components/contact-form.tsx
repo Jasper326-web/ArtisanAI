@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Mail, Send, CheckCircle, AlertCircle, Upload, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/contexts/language-context';
 
 interface ContactFormData {
   name: string;
@@ -18,6 +19,7 @@ interface ContactFormData {
 }
 
 export function ContactForm() {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
@@ -43,8 +45,8 @@ export function ContactForm() {
       // 检查文件大小 (最大 10MB)
       if (file.size > 10 * 1024 * 1024) {
         toast({
-          title: "File too large",
-          description: "Please select a file smaller than 10MB.",
+          title: t?.contact?.form?.file_too_large || "文件过大",
+          description: t?.contact?.form?.file_too_large_desc || "请选择小于10MB的文件。",
           variant: "destructive",
         });
         return;
@@ -54,8 +56,8 @@ export function ContactForm() {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
       if (!allowedTypes.includes(file.type)) {
         toast({
-          title: "Invalid file type",
-          description: "Please select an image file (JPEG, PNG, GIF, WebP).",
+          title: t?.contact?.form?.invalid_file_type || "无效文件类型",
+          description: t?.contact?.form?.invalid_file_type_desc || "请选择图片文件（JPEG、PNG、GIF、WebP）。",
           variant: "destructive",
         });
         return;
@@ -96,14 +98,14 @@ export function ContactForm() {
         setSubmitStatus('success');
         setFormData({ name: '', email: '', subject: '', message: '', attachment: undefined });
         toast({
-          title: "Message sent successfully!",
-          description: "Thank you for contacting us. We'll get back to you soon.",
+          title: t?.contact?.form?.message_sent_success || "消息发送成功！",
+          description: t?.contact?.form?.message_sent_success_desc || "感谢您联系我们。我们会尽快回复您。",
         });
       } else {
         setSubmitStatus('error');
         toast({
-          title: "Failed to send message",
-          description: result.error || "Please try again later.",
+          title: t?.contact?.form?.failed_to_send || "发送消息失败",
+          description: result.error || t?.contact?.form?.failed_to_send_desc || "请稍后重试。",
           variant: "destructive",
         });
       }
@@ -111,8 +113,8 @@ export function ContactForm() {
       console.error('Contact form error:', error);
       setSubmitStatus('error');
       toast({
-        title: "Network error",
-        description: "Please check your connection and try again.",
+        title: t?.contact?.form?.network_error || "网络错误",
+        description: t?.contact?.form?.network_error_desc || "请检查您的连接并重试。",
         variant: "destructive",
       });
     } finally {
@@ -125,29 +127,29 @@ export function ContactForm() {
       <CardHeader>
         <CardTitle className="text-2xl font-bold text-center text-foreground flex items-center justify-center gap-2">
           <Mail className="h-6 w-6 text-primary" />
-          Contact Us
+          {t?.contact?.form?.title || '联系我们'}
         </CardTitle>
       </CardHeader>
       <CardContent>
         {submitStatus === 'success' ? (
           <div className="text-center py-8">
             <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-foreground mb-2">Message Sent!</h3>
+            <h3 className="text-xl font-semibold text-foreground mb-2">{t?.contact?.form?.message_sent || '消息已发送！'}</h3>
             <p className="text-muted-foreground mb-4">
-              Thank you for contacting us. We'll get back to you within 24 hours.
+              {t?.contact?.form?.message_sent_desc || '感谢您联系我们。我们将在24小时内回复您。'}
             </p>
             <Button 
               onClick={() => setSubmitStatus('idle')}
               variant="outline"
             >
-              Send Another Message
+              {t?.contact?.form?.send_another || '发送另一条消息'}
             </Button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="name" className="text-foreground">Name *</Label>
+                <Label htmlFor="name" className="text-foreground">{t?.contact?.form?.name || '姓名'} *</Label>
                 <Input
                   id="name"
                   name="name"
@@ -155,12 +157,12 @@ export function ContactForm() {
                   required
                   value={formData.name}
                   onChange={handleInputChange}
-                  placeholder="Your full name"
+                  placeholder={t?.contact?.form?.name_placeholder || '您的全名'}
                   className="bg-background/50 border-primary/20 focus:border-primary/50"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-foreground">Email *</Label>
+                <Label htmlFor="email" className="text-foreground">{t?.contact?.form?.email || '邮箱'} *</Label>
                 <Input
                   id="email"
                   name="email"
@@ -168,14 +170,14 @@ export function ContactForm() {
                   required
                   value={formData.email}
                   onChange={handleInputChange}
-                  placeholder="your.email@example.com"
+                  placeholder={t?.contact?.form?.email_placeholder || 'your.email@example.com'}
                   className="bg-background/50 border-primary/20 focus:border-primary/50"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="subject" className="text-foreground">Subject *</Label>
+              <Label htmlFor="subject" className="text-foreground">{t?.contact?.form?.subject || '主题'} *</Label>
               <Input
                 id="subject"
                 name="subject"
@@ -183,13 +185,13 @@ export function ContactForm() {
                 required
                 value={formData.subject}
                 onChange={handleInputChange}
-                placeholder="What's this about?"
+                placeholder={t?.contact?.form?.subject_placeholder || '这是关于什么的？'}
                 className="bg-background/50 border-primary/20 focus:border-primary/50"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="message" className="text-foreground">Message *</Label>
+              <Label htmlFor="message" className="text-foreground">{t?.contact?.form?.message || '消息'} *</Label>
               <Textarea
                 id="message"
                 name="message"
@@ -197,13 +199,13 @@ export function ContactForm() {
                 rows={6}
                 value={formData.message}
                 onChange={handleInputChange}
-                placeholder="Tell us more about your inquiry..."
+                placeholder={t?.contact?.form?.message_placeholder || '告诉我们更多关于您的询问...'}
                 className="bg-background/50 border-primary/20 focus:border-primary/50 resize-none"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="attachment" className="text-foreground">Attachment (Optional)</Label>
+              <Label htmlFor="attachment" className="text-foreground">{t?.contact?.form?.attachment || '附件（可选）'}</Label>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Input
@@ -233,7 +235,7 @@ export function ContactForm() {
                   </div>
                 )}
                 <p className="text-xs text-muted-foreground">
-                  Supported formats: JPEG, PNG, GIF, WebP (max 10MB)
+                  {t?.contact?.form?.file_formats || '支持格式：JPEG、PNG、GIF、WebP（最大10MB）'}
                 </p>
               </div>
             </div>
@@ -242,7 +244,7 @@ export function ContactForm() {
               <div className="flex items-center gap-2 p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
                 <AlertCircle className="h-4 w-4 text-destructive" />
                 <p className="text-sm text-destructive">
-                  Failed to send message. Please try again.
+                  {t?.contact?.form?.failed_to_send_error || '发送消息失败。请重试。'}
                 </p>
               </div>
             )}
@@ -255,12 +257,12 @@ export function ContactForm() {
               {isSubmitting ? (
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Sending...
+                  {t?.contact?.form?.sending || '发送中...'}
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
                   <Send className="h-4 w-4" />
-                  Send Message
+                  {t?.contact?.form?.send_message || '发送消息'}
                 </div>
               )}
             </Button>

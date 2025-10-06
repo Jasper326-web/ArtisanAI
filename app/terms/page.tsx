@@ -23,97 +23,87 @@ export default function TermsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="prose prose-invert max-w-none">
-              <div className="space-y-6 text-muted-foreground">
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">1. Acceptance of Terms</h2>
-                  <p>
-                    By accessing and using ArtisanAI, you accept and agree to be bound by the terms and provision of this agreement.
-                    You must be at least 13 years old to use this service. If you are under 18, you must have parental consent.
-                  </p>
-                </section>
+              <div className="space-y-8 text-muted-foreground">
+                {/* Introduction */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.terms?.sections?.introduction?.title || '1. Introduction'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.terms?.sections?.introduction?.content || 'Welcome to ArtisanAI. These Terms of Service govern your use of our AI-powered image generation platform.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">2. Age Requirements</h2>
-                  <p>
-                    ArtisanAI is intended for users who are at least 13 years of age. By using our service, you represent and warrant that:
-                  </p>
-                  <ul className="list-disc list-inside ml-4 space-y-1">
-                    <li>You are at least 13 years old</li>
-                    <li>If you are under 18, you have obtained parental or guardian consent</li>
-                    <li>You have the legal capacity to enter into this agreement</li>
-                    <li>Your use of the service does not violate any applicable law</li>
-                  </ul>
-                </section>
+                {/* Acceptance of Terms */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.terms?.sections?.acceptance?.title || '2. Acceptance of Terms'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.terms?.sections?.acceptance?.content || 'By using ArtisanAI, you acknowledge that you have read, understood, and agree to be bound by these Terms.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">2. Use License</h2>
-                  <p>
-                    Permission is granted to temporarily use ArtisanAI for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
-                  </p>
-                  <ul className="list-disc list-inside ml-4 space-y-1">
-                    <li>modify or copy the materials</li>
-                    <li>use the materials for any commercial purpose or for any public display</li>
-                    <li>attempt to reverse engineer any software contained on the website</li>
-                    <li>remove any copyright or other proprietary notations from the materials</li>
-                  </ul>
-                </section>
+                {/* Description of Services */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.terms?.sections?.services?.title || '3. Description of Services'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.terms?.sections?.services?.content || 'ArtisanAI provides AI-powered image generation services, including character consistency, 3D figurine generation, and style transformation.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">3. AI Generated Content</h2>
-                  <p>
-                    ArtisanAI uses artificial intelligence to generate images. Users are responsible for ensuring their use of generated content complies with applicable laws and regulations. We do not guarantee the accuracy, appropriateness, or legality of AI-generated content.
-                  </p>
-                </section>
+                {/* User Accounts */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.terms?.sections?.user_accounts?.title || '4. User Accounts'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.terms?.sections?.user_accounts?.content || 'To access certain features, you may need to create an account. You are responsible for maintaining the confidentiality of your account credentials.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">4. User Content</h2>
-                  <p>
-                    You retain ownership of any content you upload to ArtisanAI. By uploading content, you grant us a license to use, process, and display your content for the purpose of providing our services.
-                  </p>
-                </section>
+                {/* Acceptable Use */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.terms?.sections?.acceptable_use?.title || '5. Acceptable Use'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.terms?.sections?.acceptable_use?.content || 'You agree to use our services only for lawful purposes and in accordance with these Terms.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">5. Prohibited Uses</h2>
-                  <p>You may not use ArtisanAI:</p>
-                  <ul className="list-disc list-inside ml-4 space-y-1">
-                    <li>For any unlawful purpose or to solicit others to perform unlawful acts</li>
-                    <li>To violate any international, federal, provincial, or state regulations, rules, laws, or local ordinances</li>
-                    <li>To infringe upon or violate our intellectual property rights or the intellectual property rights of others</li>
-                    <li>To harass, abuse, insult, harm, defame, slander, disparage, intimidate, or discriminate</li>
-                    <li>To submit false or misleading information</li>
-                  </ul>
-                </section>
+                {/* Intellectual Property */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.terms?.sections?.intellectual_property?.title || '6. Intellectual Property'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.terms?.sections?.intellectual_property?.content || 'The ArtisanAI platform is protected by intellectual property laws. You retain ownership of content you generate.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">6. Service Availability</h2>
-                  <p>
-                    We strive to maintain high service availability but do not guarantee uninterrupted access. We reserve the right to modify, suspend, or discontinue the service at any time.
-                  </p>
-                </section>
+                {/* Privacy */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.terms?.sections?.privacy?.title || '7. Privacy'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.terms?.sections?.privacy?.content || 'Your privacy is important to us. Please review our Privacy Policy to understand our practices.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">7. Limitation of Liability</h2>
-                  <p>
-                    In no event shall ArtisanAI or its suppliers be liable for any damages arising out of the use or inability to use the materials on ArtisanAI, even if ArtisanAI or an authorized representative has been notified orally or in writing of the possibility of such damage.
-                  </p>
-                </section>
+                {/* Payment and Billing */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.terms?.sections?.payment?.title || '8. Payment and Billing'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.terms?.sections?.payment?.content || 'Certain features of our service require payment. All fees are non-refundable unless otherwise stated.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">8. Changes to Terms</h2>
-                  <p>
-                    We reserve the right to modify these terms at any time. Changes will be effective immediately upon posting. Your continued use of the service constitutes acceptance of the modified terms.
-                  </p>
-                </section>
+                {/* Termination */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.terms?.sections?.termination?.title || '9. Termination'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.terms?.sections?.termination?.content || 'We may terminate or suspend your account at our sole discretion for conduct that violates these Terms.'}</p>
+                </div>
 
-                <section>
-                  <h2 className="text-xl font-semibold text-foreground mb-3">9. Contact Information</h2>
-                  <p>
-                    If you have any questions about these Terms of Service, please contact us at: <a href="mailto:jdfz13zqy@gmail.com" className="text-primary hover:underline">jdfz13zqy@gmail.com</a>
-                  </p>
-                </section>
+                {/* Disclaimers */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.terms?.sections?.disclaimers?.title || '10. Disclaimers'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.terms?.sections?.disclaimers?.content || 'Our services are provided "as is" without warranties of any kind.'}</p>
+                </div>
+
+                {/* Limitation of Liability */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.terms?.sections?.limitation?.title || '11. Limitation of Liability'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.terms?.sections?.limitation?.content || 'To the maximum extent permitted by law, ArtisanAI shall not be liable for any indirect damages.'}</p>
+                </div>
+
+                {/* Changes to Terms */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.terms?.sections?.changes?.title || '12. Changes to Terms'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.terms?.sections?.changes?.content || 'We reserve the right to modify these Terms at any time with reasonable notice.'}</p>
+                </div>
+
+                {/* Contact Information */}
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground">{t?.legal?.terms?.sections?.contact?.title || '13. Contact Information'}</h2>
+                  <p className="text-base leading-relaxed">{t?.legal?.terms?.sections?.contact?.content || 'If you have any questions about these Terms, please contact us at jdfz13zqy@gmail.com.'}</p>
+                </div>
 
                 <div className="text-sm text-muted-foreground mt-8 pt-6 border-t border-primary/20">
-                  <p>{t?.legal?.common?.last_updated || 'Last updated:'} {new Date().toLocaleDateString()}</p>
+                  <p>{t?.legal?.common?.last_updated || '最后更新:'} {t?.legal?.common?.date || 'December 2024'}</p>
                 </div>
               </div>
             </CardContent>

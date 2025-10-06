@@ -111,23 +111,23 @@ export default function AIImageGenerator() {
       })
 
       if (response.ok) {
-    setFeedback("")
+        setFeedback("")
         toast({
-          title: "反馈提交成功！",
-          description: "感谢您的宝贵意见，我们会认真考虑您的建议。",
+          title: t?.feedback?.success?.title || "反馈提交成功！",
+          description: t?.feedback?.success?.description || "感谢您的宝贵意见，我们会认真考虑您的建议。",
         })
       } else {
         toast({
-          title: "提交失败",
-          description: "请稍后重试，或通过其他方式联系我们。",
+          title: t?.feedback?.error?.title || "提交失败",
+          description: t?.feedback?.error?.description || "请稍后重试，或通过其他方式联系我们。",
           variant: "destructive",
         })
       }
     } catch (error) {
       console.error("Feedback submission error:", error)
       toast({
-        title: "网络错误",
-        description: "请检查网络连接后重试。",
+        title: t?.feedback?.network?.title || "网络错误",
+        description: t?.feedback?.network?.description || "请检查网络连接后重试。",
         variant: "destructive",
       })
     } finally {
@@ -274,7 +274,7 @@ export default function AIImageGenerator() {
               showBorder={false}
               className="inline-block"
             >
-              {t?.hero?.titlePrefix || 'Fire Your Photographer'}
+              {t?.hero?.title || '解雇你的摄影师'}
             </GradientText>
           </div>
           <div className="text-xl md:text-2xl mb-12 max-w-3xl mx-auto text-pretty">
@@ -284,7 +284,7 @@ export default function AIImageGenerator() {
               showBorder={false}
               className="inline-block"
             >
-              {t?.hero?.subtitle || 'The Most Powerful AI Image Generation Model - Keep the same you, anywhere'}
+              {t?.hero?.subtitle || 'AI驱动的图像生成，创造令人惊叹的一致结果'}
             </GradientText>
           </div>
 
@@ -328,7 +328,7 @@ export default function AIImageGenerator() {
             <Card className="max-w-2xl mx-auto mt-8 backdrop-blur-xl bg-card/30 border border-primary/30 shadow-2xl shadow-primary/10">
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold text-foreground mb-4 text-center">
-                  {isGenerating ? 'Generating...' : 'Generated Result'}
+                  {isGenerating ? '生成中...' : '生成结果'}
                 </h3>
                 <div className="relative">
                   {isGenerating ? (
@@ -434,7 +434,7 @@ export default function AIImageGenerator() {
                       className="w-full h-24 object-cover rounded-lg"
                     />
                     <div className="absolute bottom-2 left-2 bg-accent/90 backdrop-blur-sm rounded px-2 py-1">
-                      <span className="text-white text-xs font-medium">Sunglasses</span>
+                      <span className="text-white text-xs font-medium">{t?.home?.case1?.sunglasses || '太阳镜'}</span>
                     </div>
                   </div>
                   
@@ -445,7 +445,7 @@ export default function AIImageGenerator() {
                       className="w-full h-24 object-cover rounded-lg"
                     />
                     <div className="absolute bottom-2 left-2 bg-accent/90 backdrop-blur-sm rounded px-2 py-1">
-                      <span className="text-white text-xs font-medium">Skateboard</span>
+                      <span className="text-white text-xs font-medium">{t?.home?.case1?.skateboard || '滑板'}</span>
                     </div>
                   </div>
                 </div>
@@ -466,7 +466,7 @@ export default function AIImageGenerator() {
                     className="max-w-[437px] h-auto object-contain rounded-xl shadow-2xl"
                   />
                   <div className="absolute top-2 right-2 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                    Generated
+                    {t?.home?.common?.generated || 'Generated'}
                   </div>
                 </div>
                 <div className="mt-6 space-y-2">
@@ -479,7 +479,7 @@ export default function AIImageGenerator() {
 
           {/* Case Study 2: Female Model */}
           <div className="mb-32">
-            <h3 className="text-2xl font-bold text-foreground mb-8 text-center">Case Study 2: Outfit Change</h3>
+                <h3 className="text-2xl font-bold text-foreground mb-8 text-center">{t?.home?.case2?.title || '案例二：服装更换'}</h3>
             
             <div className="flex flex-col lg:flex-row items-center gap-8 mx-auto px-4">
               {/* Left Side - Input Materials */}
@@ -493,10 +493,10 @@ export default function AIImageGenerator() {
                       className="w-full max-h-[350px] object-cover rounded-xl"
                     />
                     <div className="absolute top-4 left-4 bg-primary/90 backdrop-blur-sm rounded-lg px-3 py-2">
-                      <span className="text-white font-semibold text-sm">Original</span>
+                      <span className="text-white font-semibold text-sm">{t?.home?.common?.original || 'Original'}</span>
                     </div>
                   </div>
-                  <p className="text-sm text-muted-foreground">Base Model</p>
+                  <p className="text-sm text-muted-foreground">{t?.home?.case2?.baseModel || '基础模型'}</p>
                 </div>
 
                 {/* Style References */}
@@ -508,10 +508,10 @@ export default function AIImageGenerator() {
                       className="w-full h-48 object-cover rounded-lg"
                     />
                     <div className="absolute bottom-2 left-2 bg-accent/90 backdrop-blur-sm rounded px-2 py-1">
-                      <span className="text-white text-xs font-medium">Green Dress</span>
+                      <span className="text-white text-xs font-medium">{t?.home?.case2?.greenDress || 'Green Dress'}</span>
                     </div>
                   </div>
-                  <p className="text-sm text-muted-foreground mt-2">Style Reference</p>
+                  <p className="text-sm text-muted-foreground mt-2">{t?.home?.case2?.styleReference || '风格参考'}</p>
                 </div>
               </div>
 
@@ -529,12 +529,12 @@ export default function AIImageGenerator() {
                     className="max-w-[437px] h-auto object-contain rounded-xl shadow-2xl"
                   />
                   <div className="absolute top-2 right-2 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                    Generated
+                    {t?.home?.common?.generated || 'Generated'}
                   </div>
                 </div>
                 <div className="mt-6 space-y-2">
-                  <p className="text-lg text-foreground font-bold">Perfect Match</p>
-                  <p className="text-sm text-muted-foreground">Same person, new outfit</p>
+                  <p className="text-lg text-foreground font-bold">{t?.home?.case2?.perfectMatch || '完美匹配'}</p>
+                  <p className="text-sm text-muted-foreground">{t?.home?.case2?.samePersonNewOutfit || '同一人，新服装'}</p>
                 </div>
               </div>
             </div>
@@ -542,30 +542,30 @@ export default function AIImageGenerator() {
 
           {/* Key Features */}
           <div className="text-center">
-            <h3 className="text-2xl font-bold text-foreground mb-8">Why Character Consistency Matters</h3>
+            <h3 className="text-2xl font-bold text-foreground mb-8">{t?.home?.whyConsistency?.title || 'Why Character Consistency Matters'}</h3>
             <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
               <div className="space-y-4">
                 <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center mx-auto shadow-lg">
                   <Users className="w-8 h-8 text-white" />
                 </div>
-                <h4 className="text-lg font-semibold text-foreground">Facial Recognition</h4>
-                <p className="text-sm text-muted-foreground">AI preserves unique facial features, bone structure, and expressions across all generations</p>
+                <h4 className="text-lg font-semibold text-foreground">{t?.home?.whyConsistency?.facialRecognition || 'Facial Recognition'}</h4>
+                <p className="text-sm text-muted-foreground">{t?.home?.whyConsistency?.facialRecognitionDesc || 'AI preserves unique facial features, bone structure, and expressions across all generations'}</p>
               </div>
               
               <div className="space-y-4">
                 <div className="w-16 h-16 bg-gradient-to-br from-accent to-primary rounded-full flex items-center justify-center mx-auto shadow-lg">
                   <Palette className="w-8 h-8 text-white" />
                 </div>
-                <h4 className="text-lg font-semibold text-foreground">Style Flexibility</h4>
-                <p className="text-sm text-muted-foreground">Change outfits, accessories, and backgrounds while maintaining the same person</p>
+                <h4 className="text-lg font-semibold text-foreground">{t?.home?.whyConsistency?.styleFlexibility || 'Style Flexibility'}</h4>
+                <p className="text-sm text-muted-foreground">{t?.home?.whyConsistency?.styleFlexibilityDesc || 'Change outfits, accessories, and backgrounds while maintaining the same person'}</p>
               </div>
               
               <div className="space-y-4">
                 <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center mx-auto shadow-lg">
                   <Zap className="w-8 h-8 text-white" />
                 </div>
-                <h4 className="text-lg font-semibold text-foreground">Professional Quality</h4>
-                <p className="text-sm text-muted-foreground">High-resolution, studio-quality images that look natural and professional</p>
+                <h4 className="text-lg font-semibold text-foreground">{t?.home?.whyConsistency?.professionalQuality || 'Professional Quality'}</h4>
+                <p className="text-sm text-muted-foreground">{t?.home?.whyConsistency?.professionalQualityDesc || 'High-resolution, studio-quality images that look natural and professional'}</p>
               </div>
             </div>
           </div>
@@ -576,10 +576,10 @@ export default function AIImageGenerator() {
       <section id="photo-editing" className="py-32 px-4 sm:px-6 lg:px-8 bg-transparent">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-4 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]">
-            Advanced AI Photo Editing
+            {t?.home?.editing?.title || 'Advanced AI Photo Editing'}
           </h2>
           <p className="text-center text-muted-foreground mb-16 max-w-3xl mx-auto text-lg">
-            删掉你的P图软件！去水印、去纹身毫无瑕疵，从基础修图到创意变换 - 体验AI照片编辑的强大力量
+            {t?.home?.editing?.subtitle || 'Delete your photo editing software! Flawless watermark and tattoo removal - Experience the power of AI photo editing'}
           </p>
           
           {/* Editing Process Flow */}
@@ -587,7 +587,7 @@ export default function AIImageGenerator() {
             {/* Step 1 & 2: Original Photo and Remove Tattoo */}
             <div className="flex flex-col lg:flex-row items-center gap-12">
               <div className="flex-1 text-center">
-                <h3 className="text-2xl font-bold text-foreground mb-8">Step 1: Original Photo</h3>
+                <h3 className="text-2xl font-bold text-foreground mb-8">{t?.home?.editing?.step1?.title || 'Step 1: Original Photo'}</h3>
                 <div className="relative inline-block">
                   <div className="relative overflow-hidden rounded-2xl border-4 border-primary/30 shadow-2xl shadow-primary/20 bg-gradient-to-br from-primary/10 to-accent/10 p-2">
                     <img 
@@ -596,12 +596,12 @@ export default function AIImageGenerator() {
                       className="w-full max-h-[400px] object-cover rounded-xl"
                     />
                     <div className="absolute top-4 left-4 bg-primary/90 backdrop-blur-sm rounded-lg px-3 py-2">
-                      <span className="text-white font-semibold text-sm">Original</span>
+                      <span className="text-white font-semibold text-sm">{t?.home?.common?.original || 'Original'}</span>
                 </div>
                 </div>
                 </div>
-                <p className="text-lg text-foreground mt-6 font-semibold">Girl with arm tattoo</p>
-                <p className="text-sm text-muted-foreground mt-2">Starting point - natural photo with existing tattoo</p>
+                <p className="text-lg text-foreground mt-6 font-semibold">{t?.home?.editing?.step1?.description || 'Girl with arm tattoo'}</p>
+                <p className="text-sm text-muted-foreground mt-2">{t?.home?.editing?.step1?.detail || 'Starting point - natural photo with existing tattoo'}</p>
               </div>
               
               <div className="flex justify-center">
@@ -609,7 +609,7 @@ export default function AIImageGenerator() {
                 </div>
               
               <div className="flex-1 text-center">
-                <h3 className="text-2xl font-bold text-foreground mb-8">Step 2: Remove Tattoo</h3>
+                <h3 className="text-2xl font-bold text-foreground mb-8">{t?.home?.editing?.step2?.title || 'Step 2: Remove Tattoo'}</h3>
                 <div className="relative inline-block">
                   <div className="relative overflow-hidden rounded-2xl border-4 border-accent/30 shadow-2xl shadow-accent/20 bg-gradient-to-br from-accent/10 to-primary/10 p-2">
                     <img 
@@ -618,23 +618,23 @@ export default function AIImageGenerator() {
                       className="w-full max-h-[400px] object-cover rounded-xl"
                     />
                     <div className="absolute top-4 right-4 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                      Generated
+                      {t?.home?.common?.generated || 'Generated'}
                 </div>
                   </div>
                 </div>
-                <p className="text-lg text-foreground mt-6 font-semibold">Tattoo Completely Removed</p>
-                <p className="text-sm text-muted-foreground mt-2">AI seamlessly removes the arm tattoo while preserving skin texture</p>
+                <p className="text-lg text-foreground mt-6 font-semibold">{t?.home?.editing?.step2?.description || 'Tattoo Completely Removed'}</p>
+                <p className="text-sm text-muted-foreground mt-2">{t?.home?.editing?.step2?.detail || 'AI seamlessly removes the arm tattoo while preserving skin texture'}</p>
               </div>
             </div>
 
             {/* Step 3: Add New Tattoo */}
             <div className="flex flex-col lg:flex-row items-center gap-12">
               <div className="flex-1 text-center">
-                <h3 className="text-2xl font-bold text-foreground mb-8">Step 3: Add New Tattoo</h3>
+                <h3 className="text-2xl font-bold text-foreground mb-8">{t?.home?.editing?.step3?.title || 'Step 3: Add New Tattoo'}</h3>
                 <div className="space-y-6">
                   {/* Reference Tattoo */}
                   <div>
-                    <h4 className="text-lg font-semibold text-foreground mb-4">Reference Tattoo Design</h4>
+                    <h4 className="text-lg font-semibold text-foreground mb-4">{t?.home?.editing?.step3?.reference?.title || 'Reference Tattoo Design'}</h4>
                     <div className="relative inline-block">
                       <div className="relative overflow-hidden rounded-xl border-2 border-accent/30 shadow-lg bg-gradient-to-br from-accent/10 to-primary/10 p-2">
                         <img 
@@ -643,30 +643,30 @@ export default function AIImageGenerator() {
                           className="w-full max-h-[200px] object-cover rounded-lg"
                         />
                         <div className="absolute top-2 left-2 bg-accent/90 backdrop-blur-sm rounded px-2 py-1">
-                          <span className="text-white text-xs font-medium">Reference</span>
+                          <span className="text-white text-xs font-medium">{t?.home?.common?.reference || 'Reference'}</span>
                 </div>
                   </div>
                   </div>
-                    <p className="text-sm text-muted-foreground mt-2">New tattoo design to be added</p>
+                    <p className="text-sm text-muted-foreground mt-2">{t?.home?.editing?.step3?.reference?.description || '要添加的新纹身设计'}</p>
                 </div>
                   
                   {/* Generated Result */}
                   <div>
-                    <h4 className="text-lg font-semibold text-foreground mb-4">Generated Result</h4>
+                    <h4 className="text-lg font-semibold text-foreground mb-4">{t?.home?.editing?.step3?.result?.title || '生成结果'}</h4>
                     <div className="relative inline-block">
                       <div className="relative overflow-hidden rounded-2xl border-4 border-accent/30 shadow-2xl shadow-accent/20 bg-gradient-to-br from-accent/10 to-primary/10 p-2">
                         <img 
-                          src="/g5.png" 
+                          src="/g6.png" 
                           alt="New Tattoo Added" 
                           className="w-full max-h-[400px] object-cover rounded-xl"
                         />
                         <div className="absolute top-4 right-4 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                          Generated
+                          {t?.home?.common?.generated || 'Generated'}
                         </div>
                       </div>
                     </div>
-                    <p className="text-lg text-foreground mt-4 font-semibold">New Tattoo Applied</p>
-                    <p className="text-sm text-muted-foreground mt-2">AI adds the new tattoo design to the same arm position</p>
+                    <p className="text-lg text-foreground mt-4 font-semibold">{t?.home?.editing?.step3?.result?.description || '新纹身已应用'}</p>
+                    <p className="text-sm text-muted-foreground mt-2">{t?.home?.editing?.step3?.result?.detail || 'AI将新纹身设计添加到同一手臂位置'}</p>
                   </div>
                 </div>
               </div>
@@ -676,7 +676,7 @@ export default function AIImageGenerator() {
               </div>
               
               <div className="flex-1 text-center">
-                <h3 className="text-2xl font-bold text-foreground mb-8">Step 4: Creative Styling</h3>
+                <h3 className="text-2xl font-bold text-foreground mb-8">{t?.home?.editing?.step4?.title || 'Step 4: Creative Styling'}</h3>
                 <div className="relative inline-block">
                   <div className="relative overflow-hidden rounded-2xl border-4 border-accent/30 shadow-2xl shadow-accent/20 bg-gradient-to-br from-accent/10 to-primary/10 p-2">
                     <img 
@@ -685,18 +685,18 @@ export default function AIImageGenerator() {
                       className="w-full max-h-[400px] object-cover rounded-xl"
                     />
                     <div className="absolute top-4 right-4 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                      Generated
+                      {t?.home?.common?.generated || 'Generated'}
                     </div>
                   </div>
                 </div>
-                <p className="text-lg text-foreground mt-6 font-semibold">Hair Color & Makeup Changed</p>
-                <p className="text-sm text-muted-foreground mt-2">AI transforms hair color and lipstick while maintaining facial features</p>
+                <p className="text-lg text-foreground mt-6 font-semibold">{t?.home?.editing?.step4?.description || 'Hair Color & Makeup Changed'}</p>
+                <p className="text-sm text-muted-foreground mt-2">{t?.home?.editing?.step4?.detail || 'AI transforms hair color and lipstick while maintaining facial features'}</p>
               </div>
             </div>
 
             {/* Step 5: Expression Editing */}
             <div className="text-center">
-              <h3 className="text-2xl font-bold text-foreground mb-8">Step 5: Expression Editing</h3>
+              <h3 className="text-2xl font-bold text-foreground mb-8">{t?.home?.editing?.step5?.title || 'Step 5: Expression Editing'}</h3>
               <div className="relative inline-block">
                 <div className="relative overflow-hidden rounded-2xl border-4 border-accent/30 shadow-2xl shadow-accent/20 bg-gradient-to-br from-accent/10 to-primary/10 p-2">
                   <img 
@@ -705,21 +705,21 @@ export default function AIImageGenerator() {
                     className="w-full max-h-[400px] object-cover rounded-xl"
                   />
                   <div className="absolute top-4 right-4 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                    Generated
+                    {t?.home?.common?.generated || 'Generated'}
                   </div>
                 </div>
               </div>
-              <p className="text-lg text-foreground mt-6 font-semibold">Natural Smile Added</p>
-              <p className="text-sm text-muted-foreground mt-2">AI adds a natural smile while preserving the person's unique facial structure</p>
+              <p className="text-lg text-foreground mt-6 font-semibold">{t?.home?.editing?.step5?.description || 'Natural Smile Added'}</p>
+              <p className="text-sm text-muted-foreground mt-2">{t?.home?.editing?.step5?.detail || "AI adds a natural smile while preserving the person's unique facial structure"}</p>
             </div>
           </div>
 
           {/* Case Study 2: Accessory Replacement */}
           <div className="mt-20">
-            <h3 className="text-2xl font-bold text-center text-foreground mb-12">Case Study 2: Accessory Replacement</h3>
+            <h3 className="text-2xl font-bold text-center text-foreground mb-12">{t?.home?.editing?.caseStudy2?.title || 'Case Study 2: Accessory Replacement'}</h3>
             <div className="flex flex-col lg:flex-row items-center gap-12">
               <div className="flex-1 text-center">
-                <h4 className="text-xl font-semibold text-foreground mb-6">Original Photo</h4>
+                <h4 className="text-xl font-semibold text-foreground mb-6">{t?.home?.editing?.caseStudy2?.original?.title || 'Original Photo'}</h4>
                 <div className="space-y-6">
                   {/* Original Photo */}
                   <div>
@@ -731,17 +731,17 @@ export default function AIImageGenerator() {
                           className="w-full max-h-[300px] object-cover rounded-xl"
                         />
                         <div className="absolute top-4 left-4 bg-primary/90 backdrop-blur-sm rounded-lg px-3 py-2">
-                          <span className="text-white font-semibold text-sm">Original</span>
+                          <span className="text-white font-semibold text-sm">{t?.home?.common?.original || 'Original'}</span>
                         </div>
                       </div>
                     </div>
-                    <p className="text-lg text-foreground mt-4 font-semibold">Woman with Original Necklace</p>
-                    <p className="text-sm text-muted-foreground mt-2">Starting point with existing accessory</p>
+                    <p className="text-lg text-foreground mt-4 font-semibold">{t?.home?.editing?.caseStudy2?.original?.description || 'Woman with Original Necklace'}</p>
+                    <p className="text-sm text-muted-foreground mt-2">{t?.home?.editing?.caseStudy2?.original?.detail || 'Starting point with existing accessory'}</p>
                   </div>
                   
                   {/* Reference Accessory */}
                   <div>
-                    <h5 className="text-lg font-semibold text-foreground mb-4">New Necklace Design</h5>
+                    <h5 className="text-lg font-semibold text-foreground mb-4">{t?.home?.editing?.caseStudy2?.reference?.title || 'New Necklace Design'}</h5>
                     <div className="relative inline-block">
                       <div className="relative overflow-hidden rounded-xl border-2 border-accent/30 shadow-lg bg-gradient-to-br from-accent/10 to-primary/10 p-2">
                         <img 
@@ -750,11 +750,11 @@ export default function AIImageGenerator() {
                           className="w-full max-h-[200px] object-cover rounded-lg"
                         />
                         <div className="absolute top-2 left-2 bg-accent/90 backdrop-blur-sm rounded px-2 py-1">
-                          <span className="text-white text-xs font-medium">Reference</span>
+                          <span className="text-white text-xs font-medium">{t?.home?.common?.reference || 'Reference'}</span>
                         </div>
                       </div>
                     </div>
-                    <p className="text-sm text-muted-foreground mt-2">New necklace design to replace the original</p>
+                    <p className="text-sm text-muted-foreground mt-2">{t?.home?.editing?.caseStudy2?.reference?.description || '替换原始项链的新项链设计'}</p>
                   </div>
                 </div>
               </div>
@@ -764,7 +764,7 @@ export default function AIImageGenerator() {
               </div>
               
               <div className="flex-1 text-center">
-                <h4 className="text-xl font-semibold text-foreground mb-6">Generated Result</h4>
+                <h4 className="text-xl font-semibold text-foreground mb-6">{t?.home?.editing?.caseStudy2?.result?.title || '生成结果'}</h4>
                 <div className="relative inline-block">
                   <div className="relative overflow-hidden rounded-2xl border-4 border-accent/30 shadow-2xl shadow-accent/20 bg-gradient-to-br from-accent/10 to-primary/10 p-2">
                     <img 
@@ -773,40 +773,40 @@ export default function AIImageGenerator() {
                       className="w-full max-h-[400px] object-cover rounded-xl"
                     />
                     <div className="absolute top-4 right-4 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                      Generated
+                      {t?.home?.common?.generated || 'Generated'}
                     </div>
                   </div>
                 </div>
-                <p className="text-lg text-foreground mt-6 font-semibold">Necklace Successfully Replaced</p>
-                <p className="text-sm text-muted-foreground mt-2">AI seamlessly replaces the original necklace with the new design while maintaining natural lighting and shadows</p>
+                <p className="text-lg text-foreground mt-6 font-semibold">{t?.home?.editing?.caseStudy2?.result?.description || 'Necklace Successfully Replaced'}</p>
+                <p className="text-sm text-muted-foreground mt-2">{t?.home?.editing?.caseStudy2?.result?.detail || 'AI seamlessly replaces the original necklace with the new design while maintaining natural lighting and shadows'}</p>
               </div>
             </div>
           </div>
 
           {/* Key Features */}
           <div className="text-center mt-16">
-            <h3 className="text-2xl font-bold text-foreground mb-8">Why Choose Our AI Photo Editor?</h3>
+            <h3 className="text-2xl font-bold text-foreground mb-8">{t?.home?.editing?.whyChoose?.title || 'Why Choose Our AI Photo Editor?'}</h3>
             <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
               <div className="space-y-3">
                 <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
                   <span className="text-2xl">🎨</span>
                 </div>
-                <h4 className="font-semibold text-foreground">Professional Quality</h4>
-                <p className="text-sm text-muted-foreground">Studio-grade editing results with natural-looking outcomes</p>
+                <h4 className="font-semibold text-foreground">{t?.home?.editing?.whyChoose?.features?.professional?.title || 'Professional Quality'}</h4>
+                <p className="text-sm text-muted-foreground">{t?.home?.editing?.whyChoose?.features?.professional?.description || 'Studio-grade editing results with natural-looking outcomes'}</p>
               </div>
               <div className="space-y-3">
                 <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
                   <span className="text-2xl">⚡</span>
                 </div>
-                <h4 className="font-semibold text-foreground">Lightning Fast</h4>
-                <p className="text-sm text-muted-foreground">Get results in seconds, not hours of manual editing</p>
+                <h4 className="font-semibold text-foreground">{t?.home?.editing?.whyChoose?.features?.fast?.title || 'Lightning Fast'}</h4>
+                <p className="text-sm text-muted-foreground">{t?.home?.editing?.whyChoose?.features?.fast?.description || 'Get results in seconds, not hours of manual editing'}</p>
               </div>
               <div className="space-y-3">
                 <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
                   <span className="text-2xl">🎯</span>
                 </div>
-                <h4 className="font-semibold text-foreground">Precise Control</h4>
-                <p className="text-sm text-muted-foreground">Fine-tune every detail with advanced AI algorithms</p>
+                <h4 className="font-semibold text-foreground">{t?.home?.editing?.whyChoose?.features?.precise?.title || 'Precise Control'}</h4>
+                <p className="text-sm text-muted-foreground">{t?.home?.editing?.whyChoose?.features?.precise?.description || 'Fine-tune every detail with advanced AI algorithms'}</p>
               </div>
             </div>
           </div>
@@ -817,20 +817,20 @@ export default function AIImageGenerator() {
       <section id="3d-generation" className="py-32 px-4 sm:px-6 lg:px-8 bg-transparent">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-4 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]">
-            AI 3D Model Generation
+            {t?.home?.model3d?.title || 'AI 3D Model Generation'}
           </h2>
           <p className="text-center text-muted-foreground mb-16 max-w-3xl mx-auto text-lg">
-            个人定制3D模型生成 - 可直接在3D软件中二次加工，从真人照片到动漫角色，打造专属3D手办
+            {t?.home?.model3d?.subtitle || '个人定制3D模型生成 - 可直接在3D软件中二次加工，从真人照片到动漫角色，打造专属3D手办'}
           </p>
           
           {/* 3D Generation Process */}
           <div className="space-y-20">
             {/* Case Study 1: Real Person to 3D Figurine */}
             <div>
-              <h3 className="text-2xl font-bold text-center text-foreground mb-12">Case Study 1: Real Person to 3D Figurine</h3>
+              <h3 className="text-2xl font-bold text-center text-foreground mb-12">{t?.home?.model3d?.caseStudy1?.title || 'Case Study 1: Real Person to 3D Figurine'}</h3>
               <div className="flex flex-col lg:flex-row items-center gap-12">
                 <div className="flex-1 text-center">
-                  <h4 className="text-xl font-semibold text-foreground mb-6">Original Photo</h4>
+                  <h4 className="text-xl font-semibold text-foreground mb-6">{t?.home?.model3d?.caseStudy1?.original?.title || 'Original Photo'}</h4>
                   <div className="relative inline-block">
                     <div className="relative overflow-hidden rounded-2xl border-4 border-primary/30 shadow-2xl shadow-primary/20 bg-gradient-to-br from-primary/10 to-accent/10 p-2">
                       <img 
@@ -839,12 +839,12 @@ export default function AIImageGenerator() {
                         className="w-full max-h-[400px] object-cover rounded-xl"
                       />
                       <div className="absolute top-4 left-4 bg-primary/90 backdrop-blur-sm rounded-lg px-3 py-2">
-                        <span className="text-white font-semibold text-sm">Original</span>
+                        <span className="text-white font-semibold text-sm">{t?.home?.common?.original || 'Original'}</span>
                       </div>
                     </div>
                   </div>
-                  <p className="text-lg text-foreground mt-6 font-semibold">Real Person Photo</p>
-                  <p className="text-sm text-muted-foreground mt-2">High-quality portrait for 3D conversion</p>
+                  <p className="text-lg text-foreground mt-6 font-semibold">{t?.home?.model3d?.caseStudy1?.original?.description || 'Real Person Photo'}</p>
+                  <p className="text-sm text-muted-foreground mt-2">{t?.home?.model3d?.caseStudy1?.original?.detail || 'High-quality portrait for 3D conversion'}</p>
                 </div>
                 
                 <div className="flex justify-center">
@@ -852,7 +852,7 @@ export default function AIImageGenerator() {
                 </div>
                 
                 <div className="flex-1 text-center">
-                  <h4 className="text-xl font-semibold text-foreground mb-6">3D Figurine Result</h4>
+                  <h4 className="text-xl font-semibold text-foreground mb-6">{t?.home?.model3d?.caseStudy1?.result?.title || '3D手办结果'}</h4>
                   <div className="relative inline-block">
                     <div className="relative overflow-hidden rounded-2xl border-4 border-accent/30 shadow-2xl shadow-accent/20 bg-gradient-to-br from-accent/10 to-primary/10 p-2">
                       <img 
@@ -861,26 +861,26 @@ export default function AIImageGenerator() {
                         className="w-full max-h-[400px] object-cover rounded-xl"
                       />
                       <div className="absolute top-4 right-4 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                        Generated
+                        {t?.home?.common?.generated || 'Generated'}
                       </div>
                     </div>
                   </div>
-                  <p className="text-lg text-foreground mt-6 font-semibold">Professional 3D Figurine</p>
-                  <p className="text-sm text-muted-foreground mt-2">AI converts real person into detailed 3D collectible figurine</p>
+                  <p className="text-lg text-foreground mt-6 font-semibold">{t?.home?.model3d?.caseStudy1?.result?.description || 'Professional 3D Figurine'}</p>
+                  <p className="text-sm text-muted-foreground mt-2">{t?.home?.model3d?.caseStudy1?.result?.detail || 'AI converts real person into detailed 3D collectible figurine'}</p>
                 </div>
               </div>
             </div>
 
             {/* Case Study 2: Anime to 3D Figurine */}
             <div>
-              <h3 className="text-2xl font-bold text-center text-foreground mb-12">Case Study 2: Anime Characters to 3D Figurines</h3>
+              <h3 className="text-2xl font-bold text-center text-foreground mb-12">{t?.home?.model3d?.caseStudy2?.title || 'Case Study 2: Anime Characters to 3D Figurines'}</h3>
               
               {/* Anime Example 1 */}
               <div className="mb-16">
-                <h4 className="text-xl font-semibold text-center text-foreground mb-8">Anime Character 1</h4>
+                <h4 className="text-xl font-semibold text-center text-foreground mb-8">{t?.home?.model3d?.caseStudy2?.example1?.title || 'Anime Character 1'}</h4>
                 <div className="flex flex-col lg:flex-row items-center gap-12">
                   <div className="flex-1 text-center">
-                    <h5 className="text-lg font-semibold text-foreground mb-6">Original Anime Art</h5>
+                    <h5 className="text-lg font-semibold text-foreground mb-6">{t?.home?.model3d?.caseStudy2?.example1?.original?.title || 'Original Anime Art'}</h5>
                     <div className="relative inline-block">
                       <div className="relative overflow-hidden rounded-2xl border-4 border-primary/30 shadow-2xl shadow-primary/20 bg-gradient-to-br from-primary/10 to-accent/10 p-2">
                         <img 
@@ -889,12 +889,12 @@ export default function AIImageGenerator() {
                           className="w-full max-h-[400px] object-cover rounded-xl"
                         />
                         <div className="absolute top-4 left-4 bg-primary/90 backdrop-blur-sm rounded-lg px-3 py-2">
-                          <span className="text-white font-semibold text-sm">Original</span>
+                          <span className="text-white font-semibold text-sm">{t?.home?.common?.original || 'Original'}</span>
                         </div>
                       </div>
                     </div>
-                    <p className="text-lg text-foreground mt-6 font-semibold">2D Anime Character</p>
-                    <p className="text-sm text-muted-foreground mt-2">Original anime artwork for 3D conversion</p>
+                    <p className="text-lg text-foreground mt-6 font-semibold">{t?.home?.model3d?.caseStudy2?.example1?.original?.title || '2D动漫角色'}</p>
+                    <p className="text-sm text-muted-foreground mt-2">{t?.home?.model3d?.caseStudy2?.example1?.original?.detail || '用于3D转换的原始动漫艺术作品'}</p>
                   </div>
                   
                   <div className="flex justify-center">
@@ -902,7 +902,7 @@ export default function AIImageGenerator() {
                   </div>
                   
                   <div className="flex-1 text-center">
-                    <h5 className="text-lg font-semibold text-foreground mb-6">3D Figurine Result</h5>
+                    <h5 className="text-lg font-semibold text-foreground mb-6">{t?.home?.model3d?.caseStudy2?.example1?.result?.title || '3D手办结果'}</h5>
                     <div className="relative inline-block">
                       <div className="relative overflow-hidden rounded-2xl border-4 border-accent/30 shadow-2xl shadow-accent/20 bg-gradient-to-br from-accent/10 to-primary/10 p-2">
                         <img 
@@ -911,22 +911,22 @@ export default function AIImageGenerator() {
                           className="w-full max-h-[400px] object-cover rounded-xl"
                         />
                         <div className="absolute top-4 right-4 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                          Generated
+                          {t?.home?.common?.generated || 'Generated'}
                         </div>
                       </div>
                     </div>
-                    <p className="text-lg text-foreground mt-6 font-semibold">3D Anime Figurine</p>
-                    <p className="text-sm text-muted-foreground mt-2">AI transforms 2D anime into detailed 3D collectible</p>
+                    <p className="text-lg text-foreground mt-6 font-semibold">{t?.home?.model3d?.caseStudy2?.example1?.result?.description || '3D Anime Figurine'}</p>
+                    <p className="text-sm text-muted-foreground mt-2">{t?.home?.model3d?.caseStudy2?.example1?.result?.detail || 'AI transforms 2D anime into detailed 3D collectible'}</p>
                   </div>
                 </div>
               </div>
 
               {/* Anime Example 2 */}
               <div>
-                <h4 className="text-xl font-semibold text-center text-foreground mb-8">Anime Character 2</h4>
+                <h4 className="text-xl font-semibold text-center text-foreground mb-8">{t?.home?.model3d?.caseStudy2?.example2?.title || 'Anime Character 2'}</h4>
                 <div className="flex flex-col lg:flex-row items-center gap-12">
                   <div className="flex-1 text-center">
-                    <h5 className="text-lg font-semibold text-foreground mb-6">Original Anime Art</h5>
+                    <h5 className="text-lg font-semibold text-foreground mb-6">{t?.home?.model3d?.caseStudy2?.example2?.original?.title || 'Original Anime Art'}</h5>
                     <div className="relative inline-block">
                       <div className="relative overflow-hidden rounded-2xl border-4 border-primary/30 shadow-2xl shadow-primary/20 bg-gradient-to-br from-primary/10 to-accent/10 p-2">
                         <img 
@@ -935,12 +935,12 @@ export default function AIImageGenerator() {
                           className="w-full max-h-[400px] object-cover rounded-xl"
                         />
                         <div className="absolute top-4 left-4 bg-primary/90 backdrop-blur-sm rounded-lg px-3 py-2">
-                          <span className="text-white font-semibold text-sm">Original</span>
+                          <span className="text-white font-semibold text-sm">{t?.home?.common?.original || 'Original'}</span>
                         </div>
                       </div>
                     </div>
-                    <p className="text-lg text-foreground mt-6 font-semibold">2D Anime Character</p>
-                    <p className="text-sm text-muted-foreground mt-2">Another anime artwork for 3D conversion</p>
+                    <p className="text-lg text-foreground mt-6 font-semibold">{t?.home?.model3d?.caseStudy2?.example2?.original?.title || '2D动漫角色'}</p>
+                    <p className="text-sm text-muted-foreground mt-2">{t?.home?.model3d?.caseStudy2?.example2?.original?.detail || '用于3D转换的另一个动漫艺术作品'}</p>
                   </div>
                   
                   <div className="flex justify-center">
@@ -948,7 +948,7 @@ export default function AIImageGenerator() {
                   </div>
                   
                   <div className="flex-1 text-center">
-                    <h5 className="text-lg font-semibold text-foreground mb-6">3D Figurine Result</h5>
+                    <h5 className="text-lg font-semibold text-foreground mb-6">{t?.home?.model3d?.caseStudy2?.example2?.result?.title || '3D Figurine Result'}</h5>
                     <div className="relative inline-block">
                       <div className="relative overflow-hidden rounded-2xl border-4 border-accent/30 shadow-2xl shadow-accent/20 bg-gradient-to-br from-accent/10 to-primary/10 p-2">
                         <img 
@@ -957,281 +957,177 @@ export default function AIImageGenerator() {
                           className="w-full max-h-[400px] object-cover rounded-xl"
                         />
                         <div className="absolute top-4 right-4 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                          Generated
+                          {t?.home?.common?.generated || 'Generated'}
                         </div>
                       </div>
                     </div>
-                    <p className="text-lg text-foreground mt-6 font-semibold">3D Anime Figurine</p>
-                    <p className="text-sm text-muted-foreground mt-2">AI creates detailed 3D figurine from 2D anime art</p>
+                    <p className="text-lg text-foreground mt-6 font-semibold">{t?.home?.model3d?.caseStudy2?.example2?.result?.description || '3D Anime Figurine'}</p>
+                    <p className="text-sm text-muted-foreground mt-2">{t?.home?.model3d?.caseStudy2?.example2?.result?.detail || 'AI creates detailed 3D figurine from 2D anime art'}</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Case Study 3: Building to 3D Model */}
-            <div>
-              <h3 className="text-2xl font-bold text-center text-foreground mb-12">Case Study 3: Building to 3D Model</h3>
-              <div className="flex flex-col lg:flex-row items-center gap-12">
-                <div className="flex-1 text-center">
-                  <h4 className="text-xl font-semibold text-foreground mb-6">Original Building Photo</h4>
-                  <div className="relative inline-block">
-                    <div className="relative overflow-hidden rounded-2xl border-4 border-primary/30 shadow-2xl shadow-primary/20 bg-gradient-to-br from-primary/10 to-accent/10 p-2">
-                      <img 
-                        src="/u1.jpg" 
-                        alt="Original Building Photo" 
-                        className="w-full max-h-[400px] object-cover rounded-xl"
-                      />
-                      <div className="absolute top-4 left-4 bg-primary/90 backdrop-blur-sm rounded-lg px-3 py-2">
-                        <span className="text-white font-semibold text-sm">Original</span>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-lg text-foreground mt-6 font-semibold">Real Building Photo</p>
-                  <p className="text-sm text-muted-foreground mt-2">High-quality architectural photo for 3D conversion</p>
-                </div>
-                
-                <div className="flex justify-center">
-                  <LottieArrow size={80} />
-                </div>
-                
-                <div className="flex-1 text-center">
-                  <h4 className="text-xl font-semibold text-foreground mb-6">3D Model Results</h4>
-                  <div className="space-y-6">
-                    {/* 3D Model View 1 */}
-                    <div>
-                      <h5 className="text-lg font-semibold text-foreground mb-4">3D Model - View 1</h5>
-                      <div className="relative inline-block">
-                        <div className="relative overflow-hidden rounded-2xl border-4 border-accent/30 shadow-2xl shadow-accent/20 bg-gradient-to-br from-accent/10 to-primary/10 p-2">
-                          <img 
-                            src="/g111.png" 
-                            alt="3D Building Model View 1" 
-                            className="w-full max-h-[300px] object-cover rounded-xl"
-                          />
-                          <div className="absolute top-4 right-4 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                            Generated
-                          </div>
-                        </div>
-                      </div>
-                      <p className="text-sm text-muted-foreground mt-2">First perspective of the 3D building model</p>
-                    </div>
-                    
-                    {/* 3D Model View 2 */}
-                    <div>
-                      <h5 className="text-lg font-semibold text-foreground mb-4">3D Model - View 2</h5>
-                      <div className="relative inline-block">
-                        <div className="relative overflow-hidden rounded-2xl border-4 border-accent/30 shadow-2xl shadow-accent/20 bg-gradient-to-br from-accent/10 to-primary/10 p-2">
-                          <img 
-                            src="/g222.png" 
-                            alt="3D Building Model View 2" 
-                            className="w-full max-h-[300px] object-cover rounded-xl"
-                          />
-                          <div className="absolute top-4 right-4 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                            Generated
-                          </div>
-                        </div>
-                      </div>
-                      <p className="text-sm text-muted-foreground mt-2">Different perspective of the same 3D building model</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Key Features */}
           <div className="text-center mt-16">
-            <h3 className="text-2xl font-bold text-foreground mb-8">Why Choose Our 3D Generation?</h3>
+            <h3 className="text-2xl font-bold text-foreground mb-8">{t?.home?.model3d?.whyChoose?.title || 'Why Choose Our 3D Generation?'}</h3>
             <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
               <div className="space-y-3">
                 <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
                   <span className="text-2xl">🎯</span>
                 </div>
-                <h4 className="font-semibold text-foreground">High Fidelity</h4>
-                <p className="text-sm text-muted-foreground">Preserve every detail from original photos and artwork</p>
+                <h4 className="font-semibold text-foreground">{t?.home?.model3d?.whyChoose?.features?.fidelity?.title || 'High Fidelity'}</h4>
+                <p className="text-sm text-muted-foreground">{t?.home?.model3d?.whyChoose?.features?.fidelity?.description || 'Preserve every detail from original photos and artwork'}</p>
               </div>
               <div className="space-y-3">
                 <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
                   <span className="text-2xl">🎨</span>
                 </div>
-                <h4 className="font-semibold text-foreground">Multiple Styles</h4>
-                <p className="text-sm text-muted-foreground">Works with real photos, anime, and any 2D artwork</p>
+                <h4 className="font-semibold text-foreground">{t?.home?.model3d?.whyChoose?.features?.styles?.title || 'Multiple Styles'}</h4>
+                <p className="text-sm text-muted-foreground">{t?.home?.model3d?.whyChoose?.features?.styles?.description || 'Works with real photos, anime, and any 2D artwork'}</p>
               </div>
               <div className="space-y-3">
                 <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
                   <span className="text-2xl">🏆</span>
                 </div>
-                <h4 className="font-semibold text-foreground">Collectible Quality</h4>
-                <p className="text-sm text-muted-foreground">Professional-grade 3D models ready for printing</p>
+                <h4 className="font-semibold text-foreground">{t?.home?.model3d?.whyChoose?.features?.quality?.title || 'Collectible Quality'}</h4>
+                <p className="text-sm text-muted-foreground">{t?.home?.model3d?.whyChoose?.features?.quality?.description || 'Professional-grade 3D models ready for printing'}</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Product Photography & Poster Design Showcase */}
-      <section id="product-photography" className="py-32 px-4 sm:px-6 lg:px-8 bg-transparent">
+
+      {/* More Play Section */}
+      <section className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-4 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]">
-            AI Product Photography & Poster Design
-          </h2>
-          <p className="text-center text-muted-foreground mb-16 max-w-3xl mx-auto text-lg">
-            解雇你的产品摄影师、海报制作师！产品+场景+人物多方位展示，一键生成专业级产品海报
-          </p>
-          
-          {/* Product Photography Process */}
-          <div className="space-y-20">
-            {/* Step 1: Product Photo */}
-            <div className="text-center">
-              <h3 className="text-2xl font-bold text-foreground mb-8">Step 1: Original Product</h3>
-              <div className="relative inline-block">
-                <div className="relative overflow-hidden rounded-2xl border-4 border-primary/30 shadow-2xl shadow-primary/20 bg-gradient-to-br from-primary/10 to-accent/10 p-2">
-                  <img 
-                    src="/l3.jpg" 
-                    alt="Original Essential Oil Product" 
-                    className="w-full max-h-[400px] object-cover rounded-xl"
-                  />
-                  <div className="absolute top-4 left-4 bg-primary/90 backdrop-blur-sm rounded-lg px-3 py-2">
-                    <span className="text-white font-semibold text-sm">Original</span>
-                  </div>
-                </div>
-              </div>
-              <p className="text-lg text-foreground mt-6 font-semibold">Essential Oil Product</p>
-              <p className="text-sm text-muted-foreground mt-2">Starting point - clean product photo for marketing</p>
-            </div>
-
-            {/* Step 2: Model Integration */}
-            <div className="flex flex-col lg:flex-row items-center gap-12">
-              <div className="flex-1 text-center">
-                <h3 className="text-2xl font-bold text-foreground mb-8">Step 2: Model Integration</h3>
-                <div className="relative inline-block">
-                  <div className="relative overflow-hidden rounded-2xl border-4 border-accent/30 shadow-2xl shadow-accent/20 bg-gradient-to-br from-accent/10 to-primary/10 p-2">
-                    <img 
-                      src="/l4.jpg" 
-                      alt="Model for Product Photography" 
-                      className="w-full max-h-[400px] object-cover rounded-xl"
-                    />
-                    <div className="absolute top-4 right-4 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                      Generated
-                    </div>
-                  </div>
-                </div>
-                <p className="text-lg text-foreground mt-6 font-semibold">Professional Model</p>
-                <p className="text-sm text-muted-foreground mt-2">AI selects and integrates professional model for product showcase</p>
-              </div>
-              
-              <div className="flex justify-center">
-                <LottieArrow size={80} />
-              </div>
-              
-              <div className="flex-1 text-center">
-                <h3 className="text-2xl font-bold text-foreground mb-8">Step 3: Product in Hand</h3>
-                <div className="relative inline-block">
-                  <div className="relative overflow-hidden rounded-2xl border-4 border-accent/30 shadow-2xl shadow-accent/20 bg-gradient-to-br from-accent/10 to-primary/10 p-2">
-                    <img 
-                      src="/l2.png" 
-                      alt="Model Holding Product" 
-                      className="w-full max-h-[400px] object-cover rounded-xl"
-                    />
-                    <div className="absolute top-4 right-4 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                      Generated
-                    </div>
-                  </div>
-                </div>
-                <p className="text-lg text-foreground mt-6 font-semibold">Natural Product Interaction</p>
-                <p className="text-sm text-muted-foreground mt-2">AI creates realistic product-in-hand scenarios with natural poses</p>
-              </div>
-            </div>
-
-            {/* Step 4: Professional Poster */}
-            <div className="text-center">
-              <h3 className="text-2xl font-bold text-foreground mb-8">Step 4: Professional Poster Design</h3>
-              <div className="relative inline-block">
-                <div className="relative overflow-hidden rounded-2xl border-4 border-accent/30 shadow-2xl shadow-accent/20 bg-gradient-to-br from-accent/10 to-primary/10 p-2">
-                  <img 
-                    src="/l1.png" 
-                    alt="Professional Product Poster" 
-                    className="w-full max-h-[500px] object-cover rounded-xl"
-                  />
-                  <div className="absolute top-4 right-4 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                    Generated
-                  </div>
-                </div>
-              </div>
-              <p className="text-lg text-foreground mt-6 font-semibold">Marketing-Ready Poster</p>
-              <p className="text-sm text-muted-foreground mt-2">AI generates complete marketing poster with product, model, and professional layout</p>
-            </div>
-
-            {/* Case Study 2: Men's Skincare Product */}
-            <div className="mt-20">
-              <h3 className="text-2xl font-bold text-center text-foreground mb-12">Case Study 2: Men's Skincare Product</h3>
-              <div className="flex flex-col lg:flex-row items-center gap-12">
-                <div className="flex-1 text-center">
-                  <h4 className="text-xl font-semibold text-foreground mb-6">Original Product</h4>
-                  <div className="relative inline-block">
-                    <div className="relative overflow-hidden rounded-2xl border-4 border-primary/30 shadow-2xl shadow-primary/20 bg-gradient-to-br from-primary/10 to-accent/10 p-2">
-                      <img 
-                        src="/y1.jpg" 
-                        alt="Men's Skincare Product" 
-                        className="w-full max-h-[400px] object-cover rounded-xl"
-                      />
-                      <div className="absolute top-4 left-4 bg-primary/90 backdrop-blur-sm rounded-lg px-3 py-2">
-                        <span className="text-white font-semibold text-sm">Original</span>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-lg text-foreground mt-6 font-semibold">Men's Skincare Product</p>
-                  <p className="text-sm text-muted-foreground mt-2">Professional men's skincare product for marketing campaign</p>
-                </div>
-                
-                <div className="flex justify-center">
-                  <LottieArrow size={80} />
-                </div>
-                
-                <div className="flex-1 text-center">
-                  <h4 className="text-xl font-semibold text-foreground mb-6">Professional Product Poster</h4>
-                  <div className="relative inline-block">
-                    <div className="relative overflow-hidden rounded-2xl border-4 border-accent/30 shadow-2xl shadow-accent/20 bg-gradient-to-br from-accent/10 to-primary/10 p-2">
-                      <img 
-                        src="/y2.png" 
-                        alt="Men's Skincare Product Poster" 
-                        className="w-full max-h-[400px] object-cover rounded-xl"
-                      />
-                      <div className="absolute top-4 right-4 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                        Generated
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-lg text-foreground mt-6 font-semibold">Marketing-Ready Poster</p>
-                  <p className="text-sm text-muted-foreground mt-2">AI creates professional product poster with modern design and branding</p>
-                </div>
-              </div>
-            </div>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-4 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]">
+              {t?.morePlay?.title || '更多创意玩法'}
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              {t?.morePlay?.subtitle || '等你探索更多玩法'}
+            </p>
+            <p className="text-lg text-muted-foreground max-w-4xl mx-auto mt-4">
+              {t?.morePlay?.description || '发现Nano-Banana的无限创意潜力，体验这些令人兴奋的任务'}
+            </p>
           </div>
 
-          {/* Key Features */}
-          <div className="text-center mt-16">
-            <h3 className="text-2xl font-bold text-foreground mb-8">Why Choose Our AI Product Photography?</h3>
-            <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-              <div className="space-y-3">
-                <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
-                  <span className="text-2xl">📸</span>
+          <div className="space-y-12">
+            {/* Action Tasks */}
+            <div className="backdrop-blur-xl bg-card/30 border border-primary/20 rounded-2xl p-8 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 hover:border-primary/40">
+              <div className="flex flex-col items-center gap-8">
+                <div className="w-full">
+                  <h3 className="text-2xl font-bold text-foreground mb-4">{t?.morePlay?.tasks?.action?.title || '动作任务'}</h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {t?.morePlay?.tasks?.action?.description || '我们随机定义一组动作指令，要求模型在保留原始身份细节和背景的同时调整主体的姿势。这能够生成丰富的衍生动作。例如，做出"是"的手势、交叉双臂，或引入帽子或墨镜等新道具来创造丰富的动作表情。'}
+                  </p>
                 </div>
-                <h4 className="font-semibold text-foreground">Professional Quality</h4>
-                <p className="text-sm text-muted-foreground">Studio-grade product photography without expensive equipment</p>
+                <div className="text-center w-full">
+                  <img 
+                    src="/11.png" 
+                    alt="Action Tasks Example"
+                    className="w-full max-h-96 object-contain rounded-lg shadow-lg"
+                  />
+                </div>
               </div>
-              <div className="space-y-3">
-                <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
-                  <span className="text-2xl">⚡</span>
+            </div>
+
+            {/* Background Tasks */}
+            <div className="backdrop-blur-xl bg-card/30 border border-primary/20 rounded-2xl p-8 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 hover:border-primary/40">
+              <div className="flex flex-col items-center gap-8">
+                <div className="w-full">
+                  <h3 className="text-2xl font-bold text-foreground mb-4">{t?.morePlay?.tasks?.background?.title || '背景任务'}</h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {t?.morePlay?.tasks?.background?.description || '我们定义了大约250个不同的场景位置，涵盖地标、自然景观以及常见的室内外环境。该任务要求将原始背景替换为新的场景，同时保留拍摄对象的个性。例如，将背景切换为室内摄影工作室、户外雪山或各种风景地标。'}
+                  </p>
                 </div>
-                <h4 className="font-semibold text-foreground">Lightning Fast</h4>
-                <p className="text-sm text-muted-foreground">Generate multiple product shots and posters in minutes</p>
+                <div className="text-center w-full">
+                  <img 
+                    src="/22.png" 
+                    alt="Background Tasks Example"
+                    className="w-full max-h-96 object-contain rounded-lg shadow-lg"
+                  />
+                </div>
               </div>
-              <div className="space-y-3">
-                <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
-                  <span className="text-2xl">🎨</span>
+            </div>
+
+            {/* Hairstyle Tasks */}
+            <div className="backdrop-blur-xl bg-card/30 border border-primary/20 rounded-2xl p-8 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 hover:border-primary/40">
+              <div className="flex flex-col items-center gap-8">
+                <div className="w-full">
+                  <h3 className="text-2xl font-bold text-foreground mb-4">{t?.morePlay?.tasks?.hairstyle?.title || '发型任务'}</h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {t?.morePlay?.tasks?.hairstyle?.description || '我们进一步探索基于肖像数据的发型和发色修改任务，利用Nano-banana编辑拍摄对象的头发细节。例如，将直刘海改为波浪卷发或发髻，以及将黑发改为金色、红色或其他颜色。'}
+                  </p>
                 </div>
-                <h4 className="font-semibold text-foreground">Creative Control</h4>
-                <p className="text-sm text-muted-foreground">Customize scenes, models, and layouts for your brand</p>
+                <div className="text-center w-full">
+                  <img 
+                    src="/33.png" 
+                    alt="Hairstyle Tasks Example"
+                    className="w-full max-h-96 object-contain rounded-lg shadow-lg"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Time Tasks */}
+            <div className="backdrop-blur-xl bg-card/30 border border-primary/20 rounded-2xl p-8 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 hover:border-primary/40">
+              <div className="flex flex-col items-center gap-8">
+                <div className="w-full">
+                  <h3 className="text-2xl font-bold text-foreground mb-4">{t?.morePlay?.tasks?.time?.title || '时间任务'}</h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {t?.morePlay?.tasks?.time?.description || '我们将肖像数据置于不同的历史或时间背景中，要求服装风格和背景细节与指定的时代相符。例如，一个人物可能被置于1905年的日常生活场景中，也可能被置于2000年的千禧年环境中。'}
+                  </p>
+                </div>
+                <div className="text-center w-full">
+                  <img 
+                    src="/44.png" 
+                    alt="Time Tasks Example"
+                    className="w-full max-h-96 object-contain rounded-lg shadow-lg"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Interaction Tasks */}
+            <div className="backdrop-blur-xl bg-card/30 border border-primary/20 rounded-2xl p-8 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 hover:border-primary/40">
+              <div className="flex flex-col items-center gap-8">
+                <div className="w-full">
+                  <h3 className="text-2xl font-bold text-foreground mb-4">{t?.morePlay?.tasks?.interaction?.title || '人机交互任务'}</h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {t?.morePlay?.tasks?.interaction?.description || '我们从基础身份集中随机选取2-4张图像，并使用GPT生成以交互为导向的指令。该任务并非仅仅将人物并排摆放，而是强调人际动作和互动。例如，两个人喝咖啡聊天，或者四人组乐队一起表演。这些指令随后与Nano-banana结合使用，合成能够捕捉丰富交互语义的图像。'}
+                  </p>
+                </div>
+                <div className="text-center w-full">
+                  <img 
+                    src="/55.png" 
+                    alt="Interaction Tasks Example"
+                    className="w-full max-h-96 object-contain rounded-lg shadow-lg"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* OOTD Tasks */}
+            <div className="backdrop-blur-xl bg-card/30 border border-primary/20 rounded-2xl p-8 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 hover:border-primary/40">
+              <div className="flex flex-col items-center gap-8">
+                <div className="w-full">
+                  <h3 className="text-2xl font-bold text-foreground mb-4">{t?.morePlay?.tasks?.ootd?.title || 'OOTD任务'}</h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {t?.morePlay?.tasks?.ootd?.description || '我们从线上资源中收集服装样衣，并随机选取2-6件服装与人像进行搭配展示。生成的样衣需要保持面部特征的一致性，同时融入姿势变化，以更好地凸显服装的细节和呈现效果。'}
+                  </p>
+                </div>
+                <div className="text-center w-full">
+                  <img 
+                    src="/66.png" 
+                    alt="OOTD Tasks Example"
+                    className="w-full max-h-96 object-contain rounded-lg shadow-lg"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -1239,61 +1135,84 @@ export default function AIImageGenerator() {
       </section>
 
       {/* Comparison Section - Enhanced with glassmorphism */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-16 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]">
             {t.comparison.title}
           </h2>
 
+          {/* Description */}
+          <div className="text-center mb-12">
+            <p className="text-lg text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+              {t?.comparison?.description || 'Artisan-ai（基于Nano-Banana） 重新定义了 AI 图像生成，在逼真度与身份一致性方面无可匹敌。它的表现超越了 GPT-4o 与 Qwen-Image，即使在更换背景、姿势或风格时，也能完美保持同一张面孔的连贯性——这是其他模型尚未达到的精准水准。'}
+            </p>
+          </div>
+
+          {/* AI Model Comparison Image */}
+          <div className="text-center mb-12">
+            <img 
+              src="/ww.png" 
+              alt="AI Model Comparison - Nano-Banana vs GPT-4o vs Qwen-Image"
+              className="max-w-4xl mx-auto rounded-lg shadow-2xl border border-primary/20"
+            />
+          </div>
+
           <div className="overflow-x-auto">
             <table className="w-full backdrop-blur-xl bg-card/80 rounded-lg border border-primary/30 shadow-2xl shadow-primary/10">
               <thead>
                 <tr className="border-b border-primary/20">
-                  <th className="text-left p-6 text-foreground font-semibold">Feature</th>
+                  <th className="text-left p-6 text-foreground font-semibold">{t?.comparison?.table?.feature || '功能'}</th>
                   <th className="text-center p-6 text-primary font-semibold drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]">
-                    ArtisanAI
+                    {t?.comparison?.table?.artisanAI || 'ArtisanAI'}
                   </th>
-                  <th className="text-center p-6 text-muted-foreground">MidJourney</th>
-                  <th className="text-center p-6 text-muted-foreground">PhotoAI</th>
-                  <th className="text-center p-6 text-muted-foreground">GPT</th>
+                  <th className="text-center p-6 text-muted-foreground">{t?.comparison?.table?.midjourney || 'MidJourney'}</th>
+                  <th className="text-center p-6 text-muted-foreground">{t?.comparison?.table?.qwenImage || 'Qwen-Image'}</th>
+                  <th className="text-center p-6 text-muted-foreground">{t?.comparison?.table?.gpt4o || 'GPT-4o'}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr className="border-b border-primary/10 hover:bg-primary/5 transition-colors duration-300">
                   <td className="p-6 text-foreground">{t.comparison.features.consistency}</td>
-                  <td className="text-center p-6">
-                    <CheckCircle className="h-5 w-5 text-accent mx-auto drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
-                  </td>
-                  <td className="text-center p-6 text-muted-foreground">Limited</td>
-                  <td className="text-center p-6 text-muted-foreground">Good</td>
-                  <td className="text-center p-6 text-muted-foreground">Basic</td>
+                  <td className="text-center p-6 text-accent font-semibold">{t?.comparison?.table?.excellent || '优秀'}</td>
+                  <td className="text-center p-6 text-muted-foreground">{t?.comparison?.table?.limited || '有限'}</td>
+                  <td className="text-center p-6 text-muted-foreground">{t?.comparison?.table?.good || '良好'}</td>
+                  <td className="text-center p-6 text-muted-foreground">{t?.comparison?.table?.basic || '基础'}</td>
                 </tr>
                 <tr className="border-b border-primary/10 hover:bg-primary/5 transition-colors duration-300">
                   <td className="p-6 text-foreground">{t.comparison.features.figurine}</td>
                   <td className="text-center p-6">
                     <CheckCircle className="h-5 w-5 text-accent mx-auto drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
                   </td>
-                  <td className="text-center p-6 text-muted-foreground">No</td>
-                  <td className="text-center p-6 text-muted-foreground">No</td>
-                  <td className="text-center p-6 text-muted-foreground">No</td>
+                  <td className="text-center p-6 text-muted-foreground">{t?.comparison?.table?.no || '无'}</td>
+                  <td className="text-center p-6 text-muted-foreground">{t?.comparison?.table?.no || '无'}</td>
+                  <td className="text-center p-6 text-muted-foreground">{t?.comparison?.table?.no || '无'}</td>
                 </tr>
                 <tr className="border-b border-primary/10 hover:bg-primary/5 transition-colors duration-300">
                   <td className="p-6 text-foreground">{t.comparison.features.inputs}</td>
                   <td className="text-center p-6">
                     <CheckCircle className="h-5 w-5 text-accent mx-auto drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
                   </td>
-                  <td className="text-center p-6 text-muted-foreground">Text Only</td>
-                  <td className="text-center p-6 text-muted-foreground">Limited</td>
-                  <td className="text-center p-6 text-muted-foreground">Text Only</td>
+                  <td className="text-center p-6 text-muted-foreground">{t?.comparison?.table?.textOnly || '仅文本'}</td>
+                  <td className="text-center p-6 text-muted-foreground">{t?.comparison?.table?.limited || '有限'}</td>
+                  <td className="text-center p-6 text-muted-foreground">{t?.comparison?.table?.textOnly || '仅文本'}</td>
                 </tr>
-                <tr className="hover:bg-primary/5 transition-colors duration-300">
-                  <td className="p-6 text-foreground">{t.comparison.features.speed}</td>
+                <tr className="border-b border-primary/10 hover:bg-primary/5 transition-colors duration-300">
+                  <td className="p-6 text-foreground">{t.comparison.features.identity || '身份保持'}</td>
                   <td className="text-center p-6">
                     <CheckCircle className="h-5 w-5 text-accent mx-auto drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
                   </td>
-                  <td className="text-center p-6 text-muted-foreground">Slow</td>
-                  <td className="text-center p-6 text-muted-foreground">Medium</td>
-                  <td className="text-center p-6 text-muted-foreground">Fast</td>
+                  <td className="text-center p-6 text-muted-foreground">{t?.comparison?.table?.poor || '差'}</td>
+                  <td className="text-center p-6 text-muted-foreground">{t?.comparison?.table?.limited || '有限'}</td>
+                  <td className="text-center p-6 text-muted-foreground">{t?.comparison?.table?.basic || '基础'}</td>
+                </tr>
+                <tr className="border-b border-primary/10 hover:bg-primary/5 transition-colors duration-300">
+                  <td className="p-6 text-foreground">{t.comparison.features.quality || '专业级质量'}</td>
+                  <td className="text-center p-6">
+                    <CheckCircle className="h-5 w-5 text-accent mx-auto drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
+                  </td>
+                  <td className="text-center p-6 text-muted-foreground">{t?.comparison?.table?.good || '良好'}</td>
+                  <td className="text-center p-6 text-muted-foreground">{t?.comparison?.table?.good || '良好'}</td>
+                  <td className="text-center p-6 text-muted-foreground">{t?.comparison?.table?.excellent || '优秀'}</td>
                 </tr>
               </tbody>
             </table>
@@ -1302,10 +1221,10 @@ export default function AIImageGenerator() {
       </section>
 
       {/* Easy to Work - Enhanced with neon effects */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-transparent">
+      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-transparent">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-16 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]">
-            Easy to Work
+            {t.comparison.features.easyToWork}
           </h2>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -1337,7 +1256,7 @@ export default function AIImageGenerator() {
       </section>
 
       {/* Pricing Section - Enhanced with glassmorphism */}
-      <section id="pricing" className="py-20 px-4 sm:px-6 lg:px-8">
+      <section id="pricing" className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-16 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]">
             {t.pricing.title}
@@ -1346,7 +1265,7 @@ export default function AIImageGenerator() {
           <Card className="backdrop-blur-xl bg-card/30 border border-primary/30 shadow-2xl shadow-primary/10 hover:shadow-primary/20 transition-all duration-500">
             <CardContent className="p-8">
               <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold text-foreground mb-4">Points System</h3>
+                <h3 className="text-2xl font-bold text-foreground mb-4">{t.pricing.pointsSystem}</h3>
                 <p className="text-muted-foreground">{t.pricing.subtitle}</p>
               </div>
 
@@ -1356,9 +1275,9 @@ export default function AIImageGenerator() {
                     <Sparkles className="h-8 w-8 text-primary mx-auto" />
                     <div className="absolute inset-0 h-8 w-8 bg-primary/20 rounded-full blur-lg animate-pulse" />
                   </div>
-                  <h4 className="font-semibold text-foreground mb-2">Free Starter</h4>
+                  <h4 className="font-semibold text-foreground mb-2">{t.pricing.freeStarter}</h4>
                   <p className="text-3xl font-bold text-foreground mb-2">120 Points</p>
-                  <p className="text-sm text-muted-foreground">Perfect for trying out the platform</p>
+                  <p className="text-sm text-muted-foreground">{t.pricing.freeStarterDesc}</p>
                 </div>
 
                 <div className="text-center p-6 rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 border border-primary/30 hover:border-primary/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(59,130,246,0.2)]">
@@ -1366,9 +1285,9 @@ export default function AIImageGenerator() {
                     <Zap className="h-8 w-8 text-accent mx-auto" />
                     <div className="absolute inset-0 h-8 w-8 bg-accent/20 rounded-full blur-lg animate-pulse" />
                   </div>
-                  <h4 className="font-semibold text-foreground mb-2">Per Generation</h4>
+                  <h4 className="font-semibold text-foreground mb-2">{t.pricing.perGeneration}</h4>
                   <p className="text-3xl font-bold text-foreground mb-2">50 Points</p>
-                  <p className="text-sm text-muted-foreground">High-quality AI generation</p>
+                  <p className="text-sm text-muted-foreground">{t.pricing.perGenerationDesc}</p>
                 </div>
               </div>
 
@@ -1377,10 +1296,10 @@ export default function AIImageGenerator() {
                   size="lg"
                   className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-primary-foreground shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] transition-all duration-300"
                 >
-                  Purchase Credits
+                  {t.pricing.purchaseCredits}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <p className="text-sm text-muted-foreground mt-4">Secure checkout powered by Creem</p>
+                <p className="text-sm text-muted-foreground mt-4">{t.pricing.secureCheckout}</p>
               </div>
             </CardContent>
           </Card>
@@ -1389,19 +1308,19 @@ export default function AIImageGenerator() {
 
 
       {/* Feedback Section - Enhanced with glassmorphism */}
-      <section id="feedback" className="py-20 px-4 sm:px-6 lg:px-8">
+      <section id="feedback" className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <Card className="backdrop-blur-xl bg-card/80 border border-primary/30 shadow-2xl shadow-primary/10">
             <CardHeader>
-              <CardTitle className="text-2xl font-bold text-center text-foreground">Share Your Feedback</CardTitle>
+              <CardTitle className="text-2xl font-bold text-center text-foreground">{t.feedback.title}</CardTitle>
               <CardDescription className="text-center">
-                Help us improve ArtisanAI with your thoughts and suggestions.
+                {t.feedback.subtitle}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleFeedbackSubmit} className="space-y-4">
                 <Textarea
-                  placeholder="Tell us what you think about ArtisanAI..."
+                  placeholder={t.feedback.placeholder}
                   value={feedback}
                   onChange={(e) => setFeedback(e.target.value)}
                   className="min-h-[120px] bg-input/50 border-primary/20 focus:border-primary/50 focus:shadow-[0_0_20px_rgba(59,130,246,0.2)] transition-all duration-300"
@@ -1414,10 +1333,10 @@ export default function AIImageGenerator() {
                   {isSubmittingFeedback ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      提交中...
+                      {t.feedback.submitting || '提交中...'}
                     </>
                   ) : (
-                    "提交反馈"
+                    t.feedback.submit
                   )}
                 </Button>
               </form>
@@ -1446,26 +1365,10 @@ export default function AIImageGenerator() {
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
                   <a
-                    href="#features"
-                    className="hover:text-primary transition-colors duration-300 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]"
-                  >
-                    {t.footer.features}
-                  </a>
-                </li>
-                <li>
-                  <a
                     href="/pricing"
                     className="hover:text-primary transition-colors duration-300 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]"
                   >
                     {t.nav.pricing}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-primary transition-colors duration-300 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]"
-                  >
-                    {t.footer.api}
                   </a>
                 </li>
               </ul>
@@ -1525,7 +1428,7 @@ export default function AIImageGenerator() {
                     href="/refund"
                     className="hover:text-primary transition-colors duration-300 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]"
                   >
-                    Refund Policy
+                    {t.footer.refundPolicy}
                   </a>
                 </li>
               </ul>
@@ -1545,7 +1448,7 @@ export default function AIImageGenerator() {
           <div className="relative max-w-4xl max-h-[90vh] p-4">
             <img
               src={generatedImage}
-              alt="Generated image preview"
+              alt="{t?.home?.common?.generated || 'Generated'} image preview"
               className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
             />
             

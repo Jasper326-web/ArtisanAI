@@ -73,7 +73,7 @@ export default function PricingPage() {
   const creditPacks: PricingPlan[] = [
     {
       id: 'small',
-      name: '小包',
+      name: 'Starter Pack',
       nameKey: 'pricing.small.name',
       price: '$4.99',
       credits: 300,
@@ -85,7 +85,7 @@ export default function PricingPage() {
     },
     {
       id: 'medium',
-      name: '中包',
+      name: 'Standard Pack',
       nameKey: 'pricing.medium.name',
       price: '$9.99',
       credits: 700,
@@ -98,7 +98,7 @@ export default function PricingPage() {
     },
     {
       id: 'large',
-      name: '大包',
+      name: 'Advanced Pack',
       nameKey: 'pricing.large.name',
       price: '$19.99',
       credits: 1600,
@@ -110,7 +110,7 @@ export default function PricingPage() {
     },
     {
       id: 'xlarge',
-      name: '超大包',
+      name: 'Professional Pack',
       nameKey: 'pricing.xlarge.name',
       price: '$49.99',
       credits: 4500,
@@ -122,7 +122,7 @@ export default function PricingPage() {
     },
     {
       id: 'mega',
-      name: '超级包',
+      name: 'Studio Pack',
       nameKey: 'pricing.mega.name',
       price: '$99.99',
       credits: 10000,
@@ -173,8 +173,8 @@ export default function PricingPage() {
     // 检查用户是否已登录
     if (!user?.id) {
       toast({
-        title: '请先登录',
-        description: '购买积分前请先登录您的账户。',
+        title: t?.pricing?.login_required || 'Please Login First',
+        description: t?.pricing?.login_required_description || 'Please login to your account before purchasing credits.',
         variant: 'destructive'
       });
       return;
