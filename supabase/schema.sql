@@ -1,9 +1,4 @@
--- Users table (minimal, can be replaced by Supabase Auth users table)
-create table if not exists public.users (
-  id uuid primary key,
-  email text unique,
-  created_at timestamp with time zone default now()
-);
+-- Users table removed - using Supabase Auth users table instead
 
 -- Credits table
 create table if not exists public.credits (
@@ -34,28 +29,12 @@ create table if not exists public.feedback (
   created_at timestamp with time zone default now()
 );
 
--- Initial credits upsert helper
-create or replace function public.ensure_user_with_credits(p_user_id uuid, p_email text)
-returns void language plpgsql as $$
-begin
-  insert into public.users(id, email) values (p_user_id, p_email)
-  on conflict (id) do nothing;
-
-  insert into public.credits(user_id, balance)
-  values (p_user_id, 120)
-  on conflict (user_id) do nothing;
-end;
-$$;
+-- Initial credits upsert helper - removed (using Supabase Auth)
 
 -- Recharge credits and return new balance
 create or replace function public.recharge_credits(p_user_id uuid, p_amount int)
 returns table(balance int) language plpgsql as $$
 begin
-  -- 确保用户存在
-  insert into public.users (id, created_at)
-  values (p_user_id, now())
-  on conflict (id) do nothing;
-  
   -- 确保用户有积分记录，新用户初始120积分
   insert into public.credits (user_id, balance, updated_at)
   values (p_user_id, 120, now())
