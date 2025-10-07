@@ -13,10 +13,10 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { useLanguage } from '@/contexts/language-context';
 import { cn } from '@/lib/utils';
+import { trackFeedback } from '@/lib/umami';
 
 interface FeedbackData {
   content: string;
-  type: 'bug' | 'feature' | 'improvement' | 'other';
   rating?: number;
   email?: string;
   name?: string;
@@ -74,7 +74,6 @@ export function FeedbackPanel() {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [feedbackData, setFeedbackData] = useState<FeedbackData>({
     content: '',
-    type: 'other',
     rating: 5
   });
   const [showUpdates, setShowUpdates] = useState(false);
@@ -100,6 +99,13 @@ export function FeedbackPanel() {
   const handleSubmit = async () => {
     if (!feedbackData.content.trim()) return;
 
+    // 追踪反馈提交
+    trackFeedback('submit', { 
+      rating: feedbackData.rating, 
+      hasEmail: !!feedbackData.email, 
+      hasName: !!feedbackData.name 
+    });
+
     setIsSubmitting(true);
     setSubmitStatus('idle');
 
@@ -124,9 +130,9 @@ export function FeedbackPanel() {
 
       if (response.ok) {
         setSubmitStatus('success');
+        trackFeedback('success', { rating: feedbackData.rating });
         setFeedbackData({
           content: '',
-          type: 'other',
           rating: 5
         });
         setTimeout(() => {
@@ -135,9 +141,11 @@ export function FeedbackPanel() {
         }, 2000);
       } else {
         setSubmitStatus('error');
+        trackFeedback('error', { status: response.status });
       }
     } catch (error) {
       setSubmitStatus('error');
+      trackFeedback('error', { error: 'network' });
     } finally {
       setIsSubmitting(false);
     }
@@ -182,8 +190,18 @@ export function FeedbackPanel() {
             "bg-background/80 backdrop-blur-sm border-2",
             isOpen && "scale-110 shadow-xl"
           )}
-          onMouseEnter={() => setIsOpen(true)}
-          onClick={() => setIsOpen(!isOpen)}
+          onMouseEnter={() => {
+            if (!isOpen) {
+              setIsOpen(true);
+              trackFeedback('open');
+            }
+          }}
+          onClick={() => {
+            if (!isOpen) {
+              trackFeedback('open');
+            }
+            setIsOpen(!isOpen);
+          }}
         >
           <MessageSquare className="w-5 h-5" />
         </Button>
@@ -281,33 +299,6 @@ export function FeedbackPanel() {
                   )}
 
                   <div className="space-y-3">
-                    <div>
-                      <Label htmlFor="feedback-type">
-                        {t?.feedback?.type || 'Type'}
-                      </Label>
-                      <Select
-                        value={feedbackData.type}
-                        onValueChange={(value: any) => setFeedbackData(prev => ({ ...prev, type: value }))}
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="bug">
-                            {t?.feedback?.types?.bug || 'Bug Report'}
-                          </SelectItem>
-                          <SelectItem value="feature">
-                            {t?.feedback?.types?.feature || 'Feature Request'}
-                          </SelectItem>
-                          <SelectItem value="improvement">
-                            {t?.feedback?.types?.improvement || 'Improvement'}
-                          </SelectItem>
-                          <SelectItem value="other">
-                            {t?.feedback?.types?.other || 'Other'}
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
 
                     <div>
                       <Label htmlFor="feedback-rating">

@@ -41,6 +41,7 @@ export default function RootLayout({
         <link rel="shortcut icon" href="/favicon-32x32.png?v=3" />
         <link rel="apple-touch-icon" href="/favicon-32x32.png?v=3" />
         <meta name="theme-color" content="#6366f1" />
+        <script defer src="https://cloud.umami.is/script.js" data-website-id="131efb81-12bc-44bb-ba93-2fcb9cd9b048"></script>
       </head>
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
         <Suspense fallback={<div>Loading...</div>}>

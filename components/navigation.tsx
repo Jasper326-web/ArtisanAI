@@ -21,6 +21,7 @@ import Logo from '@/components/logo';
 import { useLanguage } from '@/contexts/language-context';
 import { supabase } from '@/lib/supabase-client';
 import { cn } from '@/lib/utils';
+import { trackAuth } from '@/lib/umami';
 
 interface User {
   id: string;
@@ -125,6 +126,12 @@ export function Navigation() {
   }, []);
 
   const handleSignOut = async () => {
+    // 追踪登出
+    trackAuth('logout', { 
+      userId: user?.id, 
+      userEmail: user?.email 
+    });
+
     try {
       const { error } = await supabase.auth.signOut();
       if (error) {

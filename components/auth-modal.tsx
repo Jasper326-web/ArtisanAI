@@ -16,6 +16,7 @@ import {
 import { useLanguage } from '@/contexts/language-context';
 import { createClient } from '@/lib/supabase-client';
 import { useToast } from '@/hooks/use-toast';
+import { trackAuth } from '@/lib/umami';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -126,6 +127,9 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
       return;
     }
 
+    // 追踪注册尝试
+    trackAuth('register_attempt', { email: formData.email });
+
     setIsLoading(true);
 
     try {
@@ -145,6 +149,9 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
         throw error;
       }
 
+      // 追踪注册成功
+      trackAuth('register_success', { email: formData.email, userId: data.user?.id });
+
       // Show success toast - user must verify email before login
       toast({
         title: '注册成功',
@@ -157,6 +164,12 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
       setView('login');
 
     } catch (error) {
+      // 追踪注册失败
+      trackAuth('register_error', { 
+        email: formData.email, 
+        error: error instanceof Error ? error.message : 'unknown' 
+      });
+
       toast({
         title: '注册失败',
         description: getErrorMessage(error),
@@ -179,6 +192,9 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
       return;
     }
 
+    // 追踪登录尝试
+    trackAuth('login_attempt', { email: formData.email });
+
     setIsLoading(true);
 
     try {
@@ -192,6 +208,13 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
         throw error;
       }
 
+      // 追踪登录成功
+      trackAuth('login_success', { 
+        email: formData.email, 
+        userId: data.user?.id,
+        userEmail: data.user?.email 
+      });
+
       // Login successful
       toast({
         title: '登录成功',
@@ -203,6 +226,12 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
       onSuccess?.();
 
     } catch (error) {
+      // 追踪登录失败
+      trackAuth('login_error', { 
+        email: formData.email, 
+        error: error instanceof Error ? error.message : 'unknown' 
+      });
+
       toast({
         title: '登录失败',
         description: getErrorMessage(error),

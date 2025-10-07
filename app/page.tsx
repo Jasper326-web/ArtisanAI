@@ -35,6 +35,7 @@ import type { UploadedImage } from "@/lib/upload"
 import { createClient } from "@/lib/supabase-client"
 import { useToast } from "@/hooks/use-toast"
 import { CookieConsent } from '@/components/cookie-consent'
+import { trackEvent, trackPromptTemplate, trackGeneration, trackFeedback, trackNavigation, trackPageView, trackSectionView } from '@/lib/umami'
 
 export default function AIImageGenerator() {
   const [feedback, setFeedback] = useState("")
@@ -136,6 +137,9 @@ export default function AIImageGenerator() {
   }
 
   useEffect(() => {
+    // 页面访问追踪
+    trackPageView('home');
+    
     const loadSession = async () => {
       const { data: { session } } = await supabase.auth.getSession()
       setUserId(session?.user?.id ?? null)
@@ -143,7 +147,16 @@ export default function AIImageGenerator() {
     loadSession()
   }, [])
 
+  // 处理提示词模板点击
+  const handlePromptTemplate = (templateName: string, prompt: string) => {
+    setPrompt(prompt);
+    trackPromptTemplate(templateName);
+  };
+
   const handleGenerate = async () => {
+    // 追踪生成按钮点击
+    trackGeneration('start', { prompt: prompt.substring(0, 50), hasImages: images.length > 0 });
+    
     // 检查用户是否已登录
     if (!userId) {
       toast({
@@ -210,6 +223,12 @@ export default function AIImageGenerator() {
       // Display the generated image
       if (data.image) {
         setGeneratedImage(data.image)
+        // 追踪生成成功
+        trackGeneration('success', { 
+          prompt: prompt.substring(0, 50), 
+          hasImages: images.length > 0,
+          creditsUsed: 1
+        });
         // Trigger credits update in navigation with the remaining balance
         window.dispatchEvent(new CustomEvent('credits:update', {
           detail: { 
@@ -220,6 +239,14 @@ export default function AIImageGenerator() {
       }
     } catch (e: any) {
       console.error(e)
+      
+      // 追踪生成失败
+      trackGeneration('error', { 
+        prompt: prompt.substring(0, 50), 
+        hasImages: images.length > 0,
+        error: e?.message || 'unknown'
+      });
+      
       toast({
         title: "网络错误",
         description: e?.message || '未知错误，请重试',
@@ -309,7 +336,7 @@ export default function AIImageGenerator() {
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => setPrompt(t?.hero?.promptTemplates?.multiAngle?.prompt || '')}
+                      onClick={() => handlePromptTemplate('multi-angle', t?.hero?.promptTemplates?.multiAngle?.prompt || '')}
                       className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-card/80 to-card/60 border-2 !border-white text-white hover:from-primary/20 hover:to-primary/10 hover:!border-primary hover:text-primary-foreground hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/20 transition-all duration-300 rounded-xl overflow-hidden"
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -320,7 +347,7 @@ export default function AIImageGenerator() {
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => setPrompt(t?.hero?.promptTemplates?.actionChange?.prompt || '')}
+                      onClick={() => handlePromptTemplate('action-change', t?.hero?.promptTemplates?.actionChange?.prompt || '')}
                       className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-card/80 to-card/60 border-2 !border-white text-white hover:from-primary/20 hover:to-primary/10 hover:!border-primary hover:text-primary-foreground hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/20 transition-all duration-300 rounded-xl overflow-hidden"
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -331,7 +358,7 @@ export default function AIImageGenerator() {
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => setPrompt(t?.hero?.promptTemplates?.backgroundSwitch?.prompt || '')}
+                      onClick={() => handlePromptTemplate('background-switch', t?.hero?.promptTemplates?.backgroundSwitch?.prompt || '')}
                       className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-card/80 to-card/60 border-2 !border-white text-white hover:from-primary/20 hover:to-primary/10 hover:!border-primary hover:text-primary-foreground hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/20 transition-all duration-300 rounded-xl overflow-hidden"
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -342,7 +369,7 @@ export default function AIImageGenerator() {
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => setPrompt(t?.hero?.promptTemplates?.hairstyleChange?.prompt || '')}
+                      onClick={() => handlePromptTemplate('hairstyle-change', t?.hero?.promptTemplates?.hairstyleChange?.prompt || '')}
                       className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-card/80 to-card/60 border-2 !border-white text-white hover:from-primary/20 hover:to-primary/10 hover:!border-primary hover:text-primary-foreground hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/20 transition-all duration-300 rounded-xl overflow-hidden"
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -353,7 +380,7 @@ export default function AIImageGenerator() {
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => setPrompt(t?.hero?.promptTemplates?.timeTravel?.prompt || '')}
+                      onClick={() => handlePromptTemplate('time-travel', t?.hero?.promptTemplates?.timeTravel?.prompt || '')}
                       className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-card/80 to-card/60 border-2 !border-white text-white hover:from-primary/20 hover:to-primary/10 hover:!border-primary hover:text-primary-foreground hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/20 transition-all duration-300 rounded-xl overflow-hidden"
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -364,7 +391,7 @@ export default function AIImageGenerator() {
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => setPrompt(t?.hero?.promptTemplates?.interaction?.prompt || '')}
+                      onClick={() => handlePromptTemplate('interaction', t?.hero?.promptTemplates?.interaction?.prompt || '')}
                       className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-card/80 to-card/60 border-2 !border-white text-white hover:from-primary/20 hover:to-primary/10 hover:!border-primary hover:text-primary-foreground hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/20 transition-all duration-300 rounded-xl overflow-hidden"
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -375,7 +402,7 @@ export default function AIImageGenerator() {
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => setPrompt(t?.hero?.promptTemplates?.outfit?.prompt || '')}
+                      onClick={() => handlePromptTemplate('outfit', t?.hero?.promptTemplates?.outfit?.prompt || '')}
                       className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-card/80 to-card/60 border-2 !border-white text-white hover:from-primary/20 hover:to-primary/10 hover:!border-primary hover:text-primary-foreground hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/20 transition-all duration-300 rounded-xl overflow-hidden"
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -386,7 +413,7 @@ export default function AIImageGenerator() {
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => setPrompt(t?.hero?.promptTemplates?.expression?.prompt || '')}
+                      onClick={() => handlePromptTemplate('expression', t?.hero?.promptTemplates?.expression?.prompt || '')}
                       className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-card/80 to-card/60 border-2 !border-white text-white hover:from-primary/20 hover:to-primary/10 hover:!border-primary hover:text-primary-foreground hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/20 transition-all duration-300 rounded-xl overflow-hidden"
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -397,7 +424,7 @@ export default function AIImageGenerator() {
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => setPrompt(t?.hero?.promptTemplates?.product?.prompt || '')}
+                      onClick={() => handlePromptTemplate('product', t?.hero?.promptTemplates?.product?.prompt || '')}
                       className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-card/80 to-card/60 border-2 !border-white text-white hover:from-primary/20 hover:to-primary/10 hover:!border-primary hover:text-primary-foreground hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/20 transition-all duration-300 rounded-xl overflow-hidden"
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -408,7 +435,7 @@ export default function AIImageGenerator() {
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => setPrompt(t?.hero?.promptTemplates?.stylize?.prompt || '')}
+                      onClick={() => handlePromptTemplate('stylize', t?.hero?.promptTemplates?.stylize?.prompt || '')}
                       className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-card/80 to-card/60 border-2 !border-white text-white hover:from-primary/20 hover:to-primary/10 hover:!border-primary hover:text-primary-foreground hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/20 transition-all duration-300 rounded-xl overflow-hidden"
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

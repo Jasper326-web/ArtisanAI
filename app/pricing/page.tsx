@@ -9,6 +9,7 @@ import { useLanguage } from '@/contexts/language-context';
 import { useToast } from '@/hooks/use-toast';
 import LightRays from '@/components/light-rays';
 import { createClient } from '@/lib/supabase-client';
+import { trackPricing, trackPageView } from '@/lib/umami';
 
 interface PricingPlan {
   id: string;
@@ -29,6 +30,11 @@ export default function PricingPage() {
   const { toast } = useToast();
   const [loading, setLoading] = useState<string | null>(null);
   const [user, setUser] = useState<{ id: string; email?: string } | null>(null);
+
+  // 页面访问追踪
+  useEffect(() => {
+    trackPageView('pricing');
+  }, []);
 
   // 获取当前用户信息
   useEffect(() => {
@@ -161,6 +167,14 @@ export default function PricingPage() {
   };
 
   const handlePurchase = async (plan: PricingPlan) => {
+    // 追踪套餐点击
+    trackPricing('pack_click', { 
+      planId: plan.id, 
+      planName: plan.name, 
+      credits: plan.credits,
+      price: plan.price 
+    });
+
     if (!plan.available) {
       toast({
         title: t?.pricing?.coming_soon || 'Coming Soon',
@@ -169,6 +183,14 @@ export default function PricingPage() {
       });
       return;
     }
+
+    // 追踪购买开始
+    trackPricing('purchase_start', { 
+      planId: plan.id, 
+      planName: plan.name, 
+      credits: plan.credits,
+      price: plan.price 
+    });
 
     // 检查用户是否已登录
     if (!user?.id) {
@@ -203,10 +225,28 @@ export default function PricingPage() {
 
       const { checkout_url } = await response.json();
       
+      // 追踪购买成功（重定向到支付页面）
+      trackPricing('purchase_success', { 
+        planId: plan.id, 
+        planName: plan.name, 
+        credits: plan.credits,
+        price: plan.price 
+      });
+      
       // 重定向到 Creem 结账页面
       window.location.href = checkout_url;
     } catch (error) {
       console.error('Purchase error:', error);
+      
+      // 追踪购买失败
+      trackPricing('purchase_error', { 
+        planId: plan.id, 
+        planName: plan.name, 
+        credits: plan.credits,
+        price: plan.price,
+        error: error instanceof Error ? error.message : 'unknown'
+      });
+      
       toast({
         title: t?.pricing?.purchase_error || 'Purchase Error',
         description: t?.pricing?.purchase_error_description || 'Failed to create checkout session. Please try again.',
