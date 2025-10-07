@@ -46,7 +46,7 @@ begin
   where user_id = p_user_id;
 
   -- 返回新的积分余额
-  return query select balance from public.credits where user_id = p_user_id;
+  return query select c.balance from public.credits c where c.user_id = p_user_id;
 end;
 $$;
 
@@ -70,7 +70,7 @@ begin
   end if;
 
   update public.credits set balance = balance - p_amount, updated_at = now() where user_id = p_user_id;
-  return query select balance from public.credits where user_id = p_user_id;
+  return query select c.balance from public.credits c where c.user_id = p_user_id;
 end;
 $$;
 
