@@ -18,32 +18,8 @@ export async function POST(req: NextRequest) {
     console.log('Amount:', amount);
     console.log('Credits:', credits);
 
-    // 1. 确保用户存在
-    const { data: userExists, error: userCheckError } = await supabase
-      .from('users')
-      .select('id, email')
-      .eq('id', user_id)
-      .single();
-    
-    if (userCheckError) {
-      console.log('User not found, creating user record...');
-      const { error: createUserError } = await supabase
-        .from('users')
-        .insert({
-          id: user_id,
-          email: null, // 手动触发时没有邮箱信息
-          created_at: new Date().toISOString()
-        });
-      
-      if (createUserError) {
-        console.error('Failed to create user record:', createUserError);
-        return NextResponse.json({ error: 'Failed to create user' }, { status: 500 });
-      } else {
-        console.log('✅ User record created successfully');
-      }
-    } else {
-      console.log('✅ User exists:', userExists);
-    }
+    // 用户通过Supabase Auth管理，不需要验证或创建用户记录
+    console.log('Processing payment for user:', user_id);
 
     // 2. 创建订单记录
     const { data: insertedOrder, error: orderError } = await supabase
