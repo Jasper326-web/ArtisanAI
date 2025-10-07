@@ -551,7 +551,10 @@ const translations = {
       retry_verification: "Retry Verification",
       verification_help: "If you encounter any issues, please contact customer service or register a new account.",
       verification_error: "An error occurred during email verification. Please try again.",
-      verification_not_found: "Verification information not found. Please check if the email link is correct."
+      verification_not_found: "Verification information not found. Please check if the email link is correct.",
+      verification_error_message: "The email verification link is invalid or has expired. Please check if the link is correct, or resend the verification email.",
+      verification_error_help: "Possible reasons: link has expired, has been used, or is incorrectly formatted.",
+      back_to_home: "Back to Home"
     },
     legal: { 
       common: { last_updated: "Last updated", date: "December 2024" },
@@ -1304,7 +1307,10 @@ const translations = {
       retry_verification: "重新验证",
       verification_help: "如果您遇到问题，请联系客服或重新注册账户。",
       verification_error: "邮箱验证过程中出现错误，请重试。",
-      verification_not_found: "未找到验证信息，请检查邮件链接是否正确。"
+      verification_not_found: "未找到验证信息，请检查邮件链接是否正确。",
+      verification_error_message: "邮箱验证链接无效或已过期。请检查链接是否正确，或重新发送验证邮件。",
+      verification_error_help: "可能的原因：链接已过期、已被使用，或格式不正确。",
+      back_to_home: "返回首页"
     },
     legal: { 
       common: { last_updated: "最后更新", date: "2024年12月" },

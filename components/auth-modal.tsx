@@ -138,7 +138,7 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
         email: formData.email,
         password: formData.password,
         options: {
-          emailRedirectTo: `${window.location.origin}/email-verified`,
+          emailRedirectTo: `${window.location.origin}/auth/confirm?next=/`,
           data: {
             name: formData.name,
           },
