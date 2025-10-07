@@ -540,6 +540,19 @@ const translations = {
         failed_to_send_error: "Failed to send message. Please try again."
       }
     },
+    auth: {
+      verifying: "Verifying...",
+      verification_success: "Email Verified Successfully",
+      verification_failed: "Verification Failed",
+      verification_success_message: "Your email has been successfully verified. You are now logged in and will be redirected to the homepage.",
+      verification_failed_message: "Email verification failed. Please check if the link is correct.",
+      verification_complete: "Verification successful! You can now log in normally.",
+      back_to_login: "Back to Login",
+      retry_verification: "Retry Verification",
+      verification_help: "If you encounter any issues, please contact customer service or register a new account.",
+      verification_error: "An error occurred during email verification. Please try again.",
+      verification_not_found: "Verification information not found. Please check if the email link is correct."
+    },
     legal: { 
       common: { last_updated: "Last updated", date: "December 2024" },
       terms: {
@@ -1279,6 +1292,19 @@ const translations = {
         network_error_desc: "请检查您的连接并重试。",
         failed_to_send_error: "发送消息失败。请重试。"
       }
+    },
+    auth: {
+      verifying: "验证中...",
+      verification_success: "邮箱验证成功",
+      verification_failed: "验证失败",
+      verification_success_message: "您的邮箱已成功验证，正在自动登录并跳转到首页...",
+      verification_failed_message: "邮箱验证失败，请检查链接是否正确。",
+      verification_complete: "验证成功！您现在可以正常登录了。",
+      back_to_login: "返回登录页面",
+      retry_verification: "重新验证",
+      verification_help: "如果您遇到问题，请联系客服或重新注册账户。",
+      verification_error: "邮箱验证过程中出现错误，请重试。",
+      verification_not_found: "未找到验证信息，请检查邮件链接是否正确。"
     },
     legal: { 
       common: { last_updated: "最后更新", date: "2024年12月" },

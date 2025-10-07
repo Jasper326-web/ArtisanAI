@@ -7,11 +7,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { createClient } from '@/lib/supabase-client';
 import LightRays from '@/components/light-rays';
+import { useLanguage } from '@/contexts/language-context';
 
 export default function EmailVerifiedPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const supabase = createClient();
+  const { t } = useLanguage();
   const [isLoading, setIsLoading] = useState(true);
   const [isVerified, setIsVerified] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -33,27 +35,39 @@ export default function EmailVerifiedPage() {
 
           if (error) {
             console.error('Session setting error:', error);
-            setError('邮箱验证过程中出现错误，请重试');
+            setError(t?.auth?.verification_error || '邮箱验证过程中出现错误，请重试');
             return;
           }
 
           if (data.session) {
             setIsVerified(true);
+            // 自动重定向到首页，用户已登录
+            setTimeout(() => {
+              router.push('/');
+            }, 2000);
           }
         } else {
-          // No verification parameters found
-          setError('未找到验证信息，请检查邮件链接是否正确');
+          // No verification parameters found, try to get current session
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session) {
+            setIsVerified(true);
+            setTimeout(() => {
+              router.push('/');
+            }, 2000);
+          } else {
+            setError(t?.auth?.verification_not_found || '未找到验证信息，请检查邮件链接是否正确');
+          }
         }
       } catch (err) {
         console.error('Email verification error:', err);
-        setError('邮箱验证过程中出现错误，请重试');
+        setError(t?.auth?.verification_error || '邮箱验证过程中出现错误，请重试');
       } finally {
         setIsLoading(false);
       }
     };
 
     handleEmailVerification();
-  }, [searchParams, supabase]);
+  }, [searchParams, supabase, router, t]);
 
   const handleGoToLogin = () => {
     // Clear any existing session to ensure fresh login
@@ -70,7 +84,7 @@ export default function EmailVerifiedPage() {
         <div className="relative z-10 flex items-center justify-center min-h-screen">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-muted-foreground">验证中...</p>
+            <p className="text-muted-foreground">{t?.auth?.verifying || '验证中...'}</p>
           </div>
         </div>
       </div>
@@ -97,12 +111,12 @@ export default function EmailVerifiedPage() {
               )}
             </div>
             <CardTitle className="text-2xl font-bold text-foreground">
-              {isVerified ? '邮箱验证成功' : '验证失败'}
+              {isVerified ? (t?.auth?.verification_success || '邮箱验证成功') : (t?.auth?.verification_failed || '验证失败')}
             </CardTitle>
             <CardDescription>
               {isVerified 
-                ? '您的邮箱已成功验证，请返回登录页面手动登录' 
-                : error || '邮箱验证失败，请检查链接是否正确'
+                ? (t?.auth?.verification_success_message || '您的邮箱已成功验证，正在自动登录...') 
+                : error || (t?.auth?.verification_failed_message || '邮箱验证失败，请检查链接是否正确')
               }
             </CardDescription>
           </CardHeader>
@@ -113,7 +127,7 @@ export default function EmailVerifiedPage() {
                 <div className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
                   <span className="text-green-800 dark:text-green-200 text-sm">
-                    验证成功！您现在可以正常登录了。
+                    {t?.auth?.verification_complete || '验证成功！您现在可以正常登录了。'}
                   </span>
                 </div>
               </div>
@@ -135,7 +149,7 @@ export default function EmailVerifiedPage() {
                 className="w-full h-11 rounded-xl bg-primary text-primary-foreground shadow-lg hover:shadow-primary/40 transition-all active:scale-95"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                返回登录页面
+                {t?.auth?.back_to_login || '返回登录页面'}
               </Button>
 
               {!isVerified && (
@@ -144,13 +158,13 @@ export default function EmailVerifiedPage() {
                   variant="outline"
                   className="w-full"
                 >
-                  重新验证
+                  {t?.auth?.retry_verification || '重新验证'}
                 </Button>
               )}
             </div>
 
             <div className="text-center text-sm text-muted-foreground">
-              <p>如果您遇到问题，请联系客服或重新注册账户</p>
+              <p>{t?.auth?.verification_help || '如果您遇到问题，请联系客服或重新注册账户'}</p>
             </div>
           </CardContent>
         </Card>

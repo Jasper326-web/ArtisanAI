@@ -155,7 +155,7 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
       // Show success toast - user must verify email before login
       toast({
         title: '注册成功',
-        description: '账户已注册，请前往邮箱验证以完成注册。验证后请回到此处手动登录。',
+        description: '账户已注册，请前往邮箱验证以完成注册。验证后请刷新页面进行登录。',
         variant: 'default',
       });
 
