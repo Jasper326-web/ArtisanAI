@@ -233,7 +233,7 @@ export default function AIImageGenerator() {
           toast({
             title: errorTitle,
             description: (
-              <div className="flex items-center justify-between w-full">
+              <div className="flex items-center justify-between w-full gap-4">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
                     <span className="text-white text-sm">💳</span>
@@ -242,14 +242,14 @@ export default function AIImageGenerator() {
                 </div>
                 <Link 
                   href="/pricing" 
-                  className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                  className="text-sm text-blue-600 hover:text-blue-800 font-medium whitespace-nowrap"
                 >
                   {t?.errors?.insufficient_credits?.action || "购买积分"}
                 </Link>
               </div>
             ),
             variant: "default",
-            className: "bg-white border border-orange-200 shadow-lg [&>div>div>h3]:text-black [&>div>div>h3]:font-bold",
+            className: "bg-white border border-orange-200 shadow-lg [&>div>div>h3]:text-black [&>div>div>h3]:font-bold [&>button]:text-black [&>button]:hover:text-gray-600",
           })
         } else {
           // 其他错误的普通toast
