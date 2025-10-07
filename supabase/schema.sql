@@ -42,7 +42,7 @@ begin
   
   -- 更新积分：现有余额 + 充值金额
   update public.credits 
-  set balance = balance + p_amount, updated_at = now()
+  set balance = public.credits.balance + p_amount, updated_at = now()
   where user_id = p_user_id;
 
   -- 返回新的积分余额
@@ -69,7 +69,7 @@ begin
     raise exception 'INSUFFICIENT_CREDITS';
   end if;
 
-  update public.credits set balance = balance - p_amount, updated_at = now() where user_id = p_user_id;
+  update public.credits set balance = public.credits.balance - p_amount, updated_at = now() where user_id = p_user_id;
   return query select c.balance from public.credits c where c.user_id = p_user_id;
 end;
 $$;
