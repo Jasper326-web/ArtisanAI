@@ -229,31 +229,27 @@ export default function AIImageGenerator() {
         }
         
         if (showBuyCredits) {
-          // 积分不足的简化toast
+          // 积分不足的简洁toast
           toast({
             title: errorTitle,
             description: (
-              <div className="flex items-center gap-3">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 via-orange-500 to-red-500 flex items-center justify-center shadow-lg">
-                  <span className="text-white text-sm">💳</span>
+              <div className="flex items-center justify-between w-full">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
+                    <span className="text-white text-sm">💳</span>
+                  </div>
+                  <span className="font-semibold text-gray-800">积分不足</span>
                 </div>
-                <div className="text-sm text-gray-600">
-                  {t?.errors?.insufficient_credits?.action || "购买积分"}
-                </div>
+                <Link 
+                  href="/pricing" 
+                  className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                >
+                  购买积分
+                </Link>
               </div>
             ),
             variant: "default",
-            className: "border-0 bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 shadow-lg backdrop-blur-md border-l-4 border-l-orange-400",
-            action: (
-              <Link 
-                href="/pricing" 
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 hover:from-purple-600 hover:via-pink-600 hover:to-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
-              >
-                <span className="text-sm">💎</span>
-                <span>{t?.errors?.insufficient_credits?.action || "购买积分"}</span>
-                <span className="text-sm">→</span>
-              </Link>
-            ),
+            className: "bg-white border border-orange-200 shadow-lg",
           })
         } else {
           // 其他错误的普通toast
