@@ -231,7 +231,7 @@ export default function AIImageGenerator() {
         if (showBuyCredits) {
           // 积分不足的简洁toast
           toast({
-            title: errorTitle,
+            title: "",
             description: (
               <div className="flex items-center justify-between w-full gap-4">
                 <div className="flex items-center gap-3">
