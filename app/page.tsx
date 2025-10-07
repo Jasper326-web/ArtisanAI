@@ -2,6 +2,7 @@
 
 import type React from "react"
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
@@ -212,18 +213,30 @@ export default function AIImageGenerator() {
           url: res.url
         })
         
-        // 检查是否是API额度问题
+        // 检查是否是积分不足问题
+        let errorTitle = t?.errors?.generation_failed || "生成失败"
         let errorMessage = data?.error || `HTTP ${res.status}: ${res.statusText}`
-        if (res.status === 429 || (data?.error && data.error.includes('quota'))) {
-          errorMessage = "API额度已用完，请稍后再试或联系管理员"
+        let showBuyCredits = false
+        
+        if (data?.error === 'INSUFFICIENT_CREDITS' || res.status === 402) {
+          errorTitle = t?.errors?.insufficient_credits?.title || "积分不足"
+          errorMessage = t?.errors?.insufficient_credits?.description || "您的积分不足以生成图像。请购买更多积分以继续使用。"
+          showBuyCredits = true
+        } else if (res.status === 429 || (data?.error && data.error.includes('quota'))) {
+          errorMessage = t?.errors?.api_quota || "API额度已用完，请稍后再试或联系管理员"
         } else if (res.status === 500 && !data?.error) {
-          errorMessage = "服务器内部错误，可能是API服务暂时不可用"
+          errorMessage = t?.errors?.server_error || "服务器内部错误，可能是API服务暂时不可用"
         }
         
         toast({
-          title: "生成失败",
+          title: errorTitle,
           description: errorMessage,
           variant: "destructive",
+          action: showBuyCredits ? (
+            <Link href="/pricing" className="bg-primary text-primary-foreground hover:bg-primary/90 px-3 py-1 rounded-md text-sm font-medium">
+              {t?.errors?.insufficient_credits?.action || "购买积分"}
+            </Link>
+          ) : undefined,
         })
         return
       }

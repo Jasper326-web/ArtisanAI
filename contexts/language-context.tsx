@@ -820,6 +820,16 @@ const translations = {
         description: "Please check your network connection and try again."
       }
     },
+    errors: {
+      generation_failed: "Generation Failed",
+      insufficient_credits: {
+        title: "Insufficient Credits",
+        description: "You don't have enough credits to generate images. Please purchase more credits to continue.",
+        action: "Buy Credits"
+      },
+      api_quota: "API quota exhausted, please try again later or contact administrator",
+      server_error: "Server internal error, API service may be temporarily unavailable"
+    },
     faq: {
       breadcrumb: "Back to Home",
       title: "Frequently Asked Questions",
@@ -1577,6 +1587,16 @@ const translations = {
         title: "网络错误",
         description: "请检查网络连接后重试。"
       }
+    },
+    errors: {
+      generation_failed: "生成失败",
+      insufficient_credits: {
+        title: "积分不足",
+        description: "您的积分不足以生成图像。请购买更多积分以继续使用。",
+        action: "购买积分"
+      },
+      api_quota: "API额度已用完，请稍后再试或联系管理员",
+      server_error: "服务器内部错误，可能是API服务暂时不可用"
     },
     faq: {
       breadcrumb: "返回首页",
