@@ -296,6 +296,59 @@ const translations = {
       upload: "Upload Images",
       processing: "Processing Images...",
       uploadText: "Upload images and enter prompts",
+      promptTemplates: {
+        title: "✨ Explore AI Magic:",
+        multiAngle: {
+          emoji: "🌀",
+          label: "Multi-Angle",
+          prompt: "Generate front, back, left, right, top, and bottom views of the same subject on a white background. Ensure perfect identity and proportion consistency."
+        },
+        actionChange: {
+          emoji: "💃",
+          label: "Action",
+          prompt: "Keep the same person and background. Change the pose to [crossed arms / waving hand / jumping / running]. Maintain identity consistency."
+        },
+        backgroundSwitch: {
+          emoji: "🌄",
+          label: "Background",
+          prompt: "Replace the background with a [mountain / city street / photography studio / beach]. Keep lighting consistent with the new environment."
+        },
+        hairstyleChange: {
+          emoji: "💇",
+          label: "Hairstyle",
+          prompt: "Keep the same person. Change the hairstyle to [curly hair / bun / straight hair] and hair color to [blonde / red / black]."
+        },
+        timeTravel: {
+          emoji: "🕰️",
+          label: "Time Travel",
+          prompt: "Keep the same person but place them in [ancient China / 1900s Europe / 2080 futuristic city]. Match outfit and background with the chosen era."
+        },
+        interaction: {
+          emoji: "🤝",
+          label: "Interaction",
+          prompt: "Create a scene where two or more people are interacting — e.g., [drinking coffee together / performing music / taking a group photo]. Ensure realistic interaction and identity preservation."
+        },
+        outfit: {
+          emoji: "👗",
+          label: "Outfit",
+          prompt: "Keep the same model. Change outfit to [casual streetwear / office suit / elegant dress]. Highlight fabric texture and lighting."
+        },
+        expression: {
+          emoji: "😄",
+          label: "Expression",
+          prompt: "Keep the same person and angle. Generate expressions of [smile / surprise / sadness / confidence]."
+        },
+        product: {
+          emoji: "📦",
+          label: "Product",
+          prompt: "Render the uploaded product in a studio lighting setup. Generate photorealistic images from multiple angles with soft shadows."
+        },
+        stylize: {
+          emoji: "🎨",
+          label: "Style",
+          prompt: "Keep the same image composition. Apply [anime / oil painting / cyberpunk / watercolor] artistic style while preserving key identity details."
+        }
+      }
     },
       upload: {
       dropHere: "Drag and drop images here, or click to browse",
@@ -389,6 +442,62 @@ const translations = {
       perGenerationDesc: "High-quality AI generation",
       purchaseCredits: "Purchase Credits",
       secureCheckout: "Secure checkout powered by Creem",
+      credits: "Credits",
+      bonus_credits: "Bonus Credits",
+      total: "Total",
+      images: "Images",
+      purchase_now: "Buy Now",
+      most_popular: "Most Popular",
+      value: "💰 Great Value",
+      processing: "Processing...",
+      login_required: "Login Required",
+      login_required_description: "Please log in to purchase credits",
+      purchase_error: "Purchase Failed",
+      purchase_error_description: "Failed to process payment. Please try again.",
+      why_choose_us: "Why Choose ArtisanAI?",
+      feature1_title: "High Quality",
+      feature1_description: "Professional-grade AI models for stunning results",
+      feature2_title: "Fast Processing", 
+      feature2_description: "Generate images in seconds, not minutes",
+      feature3_title: "Consistent Results",
+      feature3_description: "Maintain character consistency across all generations",
+      coming_soon: "Coming Soon",
+      coming_soon_description: "More features and improvements are on the way",
+      starter: {
+        name: "Starter Pack",
+        description: "Perfect for trying out the platform",
+        feature1: "300 Credits",
+        feature2: "Basic Support",
+        feature3: "Standard Quality"
+      },
+      standard: {
+        name: "Standard Pack", 
+        description: "Most popular choice for regular users",
+        feature1: "700 Credits + 200 Bonus",
+        feature2: "Priority Support",
+        feature3: "High Quality"
+      },
+      advanced: {
+        name: "Advanced Pack",
+        description: "Great for power users and professionals",
+        feature1: "1,600 Credits + 400 Bonus", 
+        feature2: "Premium Support",
+        feature3: "Premium Quality"
+      },
+      professional: {
+        name: "Professional Pack",
+        description: "For professional content creators",
+        feature1: "4,500 Credits + 1,000 Bonus",
+        feature2: "24/7 Support", 
+        feature3: "Professional Quality"
+      },
+      studio: {
+        name: "Studio Pack",
+        description: "For studios and large teams",
+        feature1: "10,000 Credits + 2,000 Bonus",
+        feature2: "Dedicated Support",
+        feature3: "Studio Quality"
+      }
     },
     success: { title: "Payment Success", refresh: "Refresh", back_home: "Back to Home" },
     contact: { 
@@ -412,6 +521,7 @@ const translations = {
         message_placeholder: "Tell us more about your inquiry...",
         file_formats: "Supported formats: JPEG, PNG, GIF, WebP (max 10MB)",
         no_file_selected: "No file selected",
+        choose_file: "Choose file",
         send_message: "Send Message",
         sending: "Sending...",
         message_sent: "Message Sent!",
@@ -661,6 +771,8 @@ const translations = {
       tagline: "Creating the future of AI-driven image generation with consistency and creativity.",
       product: "Product",
       features: "Features",
+      howToWork: "How to Work",
+      moreCreative: "More Creative Possibilities",
       api: "API",
       support: "Support",
       contact: "Contact",
@@ -924,6 +1036,59 @@ const translations = {
       upload: "上传图片",
       processing: "正在处理图片...",
       uploadText: "上传图片并输入提示词",
+      promptTemplates: {
+        title: "✨ 探索AI魔法:",
+        multiAngle: {
+          emoji: "🌀",
+          label: "多角度展示",
+          prompt: "生成同一主体的前、后、左、右、上、下视图，白色背景，保持面部与身体比例一致。"
+        },
+        actionChange: {
+          emoji: "💃",
+          label: "动作变换",
+          prompt: "保留相同人物与背景，将姿势调整为 [交叉双臂 / 挥手 / 跑步 / 跳跃]，保持身份一致。"
+        },
+        backgroundSwitch: {
+          emoji: "🌄",
+          label: "背景切换",
+          prompt: "将背景替换为 [雪山 / 城市街头 / 摄影棚 / 海滩]，光线与新环境保持一致。"
+        },
+        hairstyleChange: {
+          emoji: "💇",
+          label: "发型变化",
+          prompt: "保留相同人物，将发型修改为 [卷发 / 发髻 / 直发]，发色调整为 [金色 / 红色 / 黑色]。"
+        },
+        timeTravel: {
+          emoji: "🕰️",
+          label: "时光穿越",
+          prompt: "保持相同人物，将其置于 [古代中国 / 20世纪初欧洲 / 2080年未来城市]，服装与背景应符合时代特征。"
+        },
+        interaction: {
+          emoji: "🤝",
+          label: "互动场景",
+          prompt: "生成两人或多人互动场景，例如 [一起喝咖啡 / 表演音乐 / 合照]，互动自然且身份保持一致。"
+        },
+        outfit: {
+          emoji: "👗",
+          label: "今日穿搭",
+          prompt: "保留相同模特，更换服装为 [休闲街头风 / 职场西装 / 优雅礼服]，突出布料质感与光影细节。"
+        },
+        expression: {
+          emoji: "😄",
+          label: "表情变化",
+          prompt: "保持相同人物与角度，生成 [微笑 / 惊讶 / 悲伤 / 自信] 等不同表情。"
+        },
+        product: {
+          emoji: "📦",
+          label: "产品展示",
+          prompt: "对上传的产品进行渲染，使用摄影棚光效，从多个角度生成真实感图像，带柔和阴影。"
+        },
+        stylize: {
+          emoji: "🎨",
+          label: "风格化",
+          prompt: "保持原图构图不变，转换为 [动漫 / 油画 / 赛博朋克 / 水彩] 风格，保留人物特征。"
+        }
+      }
     },
       upload: {
       dropHere: "拖拽图片到此处，或点击浏览",
@@ -1017,6 +1182,62 @@ const translations = {
       perGenerationDesc: "高质量AI生成",
       purchaseCredits: "购买积分",
       secureCheckout: "由Creem提供安全结账",
+      credits: "积分",
+      bonus_credits: "额外积分",
+      total: "总计",
+      images: "图片",
+      purchase_now: "立即购买",
+      most_popular: "最受欢迎",
+      value: "💰 超值优惠",
+      processing: "处理中...",
+      login_required: "需要登录",
+      login_required_description: "请登录以购买积分",
+      purchase_error: "购买失败",
+      purchase_error_description: "支付处理失败，请重试",
+      why_choose_us: "为什么选择ArtisanAI？",
+      feature1_title: "高质量",
+      feature1_description: "专业级AI模型，创造令人惊叹的结果",
+      feature2_title: "快速处理",
+      feature2_description: "几秒钟内生成图像，而不是几分钟",
+      feature3_title: "一致结果",
+      feature3_description: "在所有生成中保持角色一致性",
+      coming_soon: "即将推出",
+      coming_soon_description: "更多功能和改进即将到来",
+      starter: {
+        name: "入门包",
+        description: "完美适合试用平台",
+        feature1: "300积分",
+        feature2: "基础支持",
+        feature3: "标准质量"
+      },
+      standard: {
+        name: "标准包",
+        description: "普通用户最受欢迎的选择",
+        feature1: "700积分 + 200奖励",
+        feature2: "优先支持",
+        feature3: "高质量"
+      },
+      advanced: {
+        name: "高级包",
+        description: "适合高级用户和专业人士",
+        feature1: "1,600积分 + 400奖励",
+        feature2: "高级支持",
+        feature3: "高级质量"
+      },
+      professional: {
+        name: "专业包",
+        description: "适合专业内容创作者",
+        feature1: "4,500积分 + 1,000奖励",
+        feature2: "24/7支持",
+        feature3: "专业质量"
+      },
+      studio: {
+        name: "工作室包",
+        description: "适合工作室和大型团队",
+        feature1: "10,000积分 + 2,000奖励",
+        feature2: "专属支持",
+        feature3: "工作室质量"
+      }
     },
     success: { title: "支付成功", refresh: "刷新", back_home: "返回首页" },
     contact: { 
@@ -1040,6 +1261,7 @@ const translations = {
         message_placeholder: "告诉我们更多关于您的询问...",
         file_formats: "支持格式：JPEG、PNG、GIF、WebP（最大10MB）",
         no_file_selected: "未选择任何文件",
+        choose_file: "选择文件",
         send_message: "发送消息",
         sending: "发送中...",
         message_sent: "消息已发送！",
@@ -1288,7 +1510,9 @@ const translations = {
     footer: {
       tagline: "以一致性和创造力创造AI驱动图像生成的未来。",
       product: "产品",
-      features: "功能",
+      features: "功能特色",
+      howToWork: "使用方法",
+      moreCreative: "更多创意玩法",
       api: "API",
       support: "支持",
       contact: "联系我们",

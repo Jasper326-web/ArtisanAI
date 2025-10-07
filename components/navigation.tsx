@@ -143,7 +143,6 @@ export function Navigation() {
   const navItems = [
     { href: '/', label: t?.nav?.home || 'Home' },
     { href: '/pricing', label: t?.nav?.pricing || 'Pricing' },
-    { href: '/faq', label: t?.nav?.faq || 'FAQ' },
     { href: '/contact', label: t?.nav?.contact || 'Contact' },
   ];
 

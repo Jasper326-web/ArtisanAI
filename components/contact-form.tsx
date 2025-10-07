@@ -208,15 +208,25 @@ export function ContactForm() {
               <Label htmlFor="attachment" className="text-foreground">{t?.contact?.form?.attachment || '附件（可选）'}</Label>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <Input
-                    id="attachment"
-                    name="attachment"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    className="bg-background/50 border-primary/20 focus:border-primary/50"
-                  />
-                  <Upload className="h-4 w-4 text-muted-foreground" />
+                  <div className="relative">
+                    <Input
+                      id="attachment"
+                      name="attachment"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="bg-background/50 border-primary/20 hover:border-primary/50 flex items-center gap-2"
+                      onClick={() => document.getElementById('attachment')?.click()}
+                    >
+                      <Upload className="h-4 w-4" />
+                      {t?.contact?.form?.choose_file || '选择文件'}
+                    </Button>
+                  </div>
                 </div>
                 {formData.attachment && (
                   <div className="flex items-center gap-2 p-2 bg-primary/10 border border-primary/20 rounded-lg">

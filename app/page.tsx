@@ -289,7 +289,7 @@ export default function AIImageGenerator() {
           </div>
 
           {/* Core Input Area - Enhanced with glassmorphism and glowing borders */}
-          <Card className="max-w-2xl mx-auto backdrop-blur-xl bg-card/30 border border-primary/30 shadow-2xl shadow-primary/10 hover:shadow-primary/20 transition-all duration-500 hover:border-primary/50">
+          <Card className="max-w-2xl mx-auto backdrop-blur-xl bg-card/30 border-2 border-primary/60 shadow-2xl shadow-primary/10 hover:shadow-primary/20 transition-all duration-500 hover:border-primary/50">
             <CardContent className="p-8">
               <div className="space-y-6">
                 <ImageUpload onImagesChange={setImages} className="rounded-lg" />
@@ -300,6 +300,122 @@ export default function AIImageGenerator() {
                   onChange={(e) => setPrompt(e.target.value)}
                   className="min-h-[100px] bg-input/50 border-primary/20 focus:border-primary/50 focus:shadow-[0_0_20px_rgba(59,130,246,0.2)] transition-all duration-300"
                 />
+
+                {/* Prompt Templates */}
+                <div className="space-y-4">
+                  <p className="text-sm font-medium text-foreground">{t?.hero?.promptTemplates?.title || '✨ Explore AI Magic:'}</p>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                    {/* Multi-Angle View */}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setPrompt(t?.hero?.promptTemplates?.multiAngle?.prompt || '')}
+                      className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-card/80 to-card/60 border-2 !border-white text-white hover:from-primary/20 hover:to-primary/10 hover:!border-primary hover:text-primary-foreground hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/20 transition-all duration-300 rounded-xl overflow-hidden"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <span className="relative z-10">{t?.hero?.promptTemplates?.multiAngle?.label || 'Multi-Angle View'}</span>
+                    </Button>
+
+                    {/* Action Change */}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setPrompt(t?.hero?.promptTemplates?.actionChange?.prompt || '')}
+                      className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-card/80 to-card/60 border-2 !border-white text-white hover:from-primary/20 hover:to-primary/10 hover:!border-primary hover:text-primary-foreground hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/20 transition-all duration-300 rounded-xl overflow-hidden"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <span className="relative z-10">{t?.hero?.promptTemplates?.actionChange?.label || 'Action Change'}</span>
+                    </Button>
+
+                    {/* Background Switch */}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setPrompt(t?.hero?.promptTemplates?.backgroundSwitch?.prompt || '')}
+                      className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-card/80 to-card/60 border-2 !border-white text-white hover:from-primary/20 hover:to-primary/10 hover:!border-primary hover:text-primary-foreground hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/20 transition-all duration-300 rounded-xl overflow-hidden"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <span className="relative z-10">{t?.hero?.promptTemplates?.backgroundSwitch?.label || 'Background Switch'}</span>
+                    </Button>
+
+                    {/* Hairstyle Change */}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setPrompt(t?.hero?.promptTemplates?.hairstyleChange?.prompt || '')}
+                      className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-card/80 to-card/60 border-2 !border-white text-white hover:from-primary/20 hover:to-primary/10 hover:!border-primary hover:text-primary-foreground hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/20 transition-all duration-300 rounded-xl overflow-hidden"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <span className="relative z-10">{t?.hero?.promptTemplates?.hairstyleChange?.label || 'Hairstyle Change'}</span>
+                    </Button>
+
+                    {/* Time Travel */}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setPrompt(t?.hero?.promptTemplates?.timeTravel?.prompt || '')}
+                      className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-card/80 to-card/60 border-2 !border-white text-white hover:from-primary/20 hover:to-primary/10 hover:!border-primary hover:text-primary-foreground hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/20 transition-all duration-300 rounded-xl overflow-hidden"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <span className="relative z-10">{t?.hero?.promptTemplates?.timeTravel?.label || 'Time Travel'}</span>
+                    </Button>
+
+                    {/* Interaction Scene */}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setPrompt(t?.hero?.promptTemplates?.interaction?.prompt || '')}
+                      className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-card/80 to-card/60 border-2 !border-white text-white hover:from-primary/20 hover:to-primary/10 hover:!border-primary hover:text-primary-foreground hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/20 transition-all duration-300 rounded-xl overflow-hidden"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <span className="relative z-10">{t?.hero?.promptTemplates?.interaction?.label || 'Interaction Scene'}</span>
+                    </Button>
+
+                    {/* Today's Outfit */}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setPrompt(t?.hero?.promptTemplates?.outfit?.prompt || '')}
+                      className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-card/80 to-card/60 border-2 !border-white text-white hover:from-primary/20 hover:to-primary/10 hover:!border-primary hover:text-primary-foreground hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/20 transition-all duration-300 rounded-xl overflow-hidden"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <span className="relative z-10">{t?.hero?.promptTemplates?.outfit?.label || 'Today\'s Outfit'}</span>
+                    </Button>
+
+                    {/* Expression Change */}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setPrompt(t?.hero?.promptTemplates?.expression?.prompt || '')}
+                      className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-card/80 to-card/60 border-2 !border-white text-white hover:from-primary/20 hover:to-primary/10 hover:!border-primary hover:text-primary-foreground hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/20 transition-all duration-300 rounded-xl overflow-hidden"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <span className="relative z-10">{t?.hero?.promptTemplates?.expression?.label || 'Expression Change'}</span>
+                    </Button>
+
+                    {/* Product Display */}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setPrompt(t?.hero?.promptTemplates?.product?.prompt || '')}
+                      className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-card/80 to-card/60 border-2 !border-white text-white hover:from-primary/20 hover:to-primary/10 hover:!border-primary hover:text-primary-foreground hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/20 transition-all duration-300 rounded-xl overflow-hidden"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <span className="relative z-10">{t?.hero?.promptTemplates?.product?.label || 'Product Display'}</span>
+                    </Button>
+
+                    {/* Stylization */}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setPrompt(t?.hero?.promptTemplates?.stylize?.prompt || '')}
+                      className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-card/80 to-card/60 border-2 !border-white text-white hover:from-primary/20 hover:to-primary/10 hover:!border-primary hover:text-primary-foreground hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/20 transition-all duration-300 rounded-xl overflow-hidden"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <span className="relative z-10">{t?.hero?.promptTemplates?.stylize?.label || 'Stylization'}</span>
+                    </Button>
+                  </div>
+                </div>
 
                 <Button
                   size="lg"
@@ -325,7 +441,7 @@ export default function AIImageGenerator() {
 
           {/* Generated Image Display */}
           {(generatedImage || isGenerating) && (
-            <Card className="max-w-2xl mx-auto mt-8 backdrop-blur-xl bg-card/30 border border-primary/30 shadow-2xl shadow-primary/10">
+            <Card className="max-w-2xl mx-auto mt-8 backdrop-blur-xl bg-card/30 border-2 border-primary/60 shadow-2xl shadow-primary/10">
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold text-foreground mb-4 text-center">
                   {isGenerating ? '生成中...' : '生成结果'}
@@ -394,7 +510,7 @@ export default function AIImageGenerator() {
       </section>
 
       {/* Character Consistency Showcase */}
-        <section id="consistency" className="py-32 px-4 sm:px-6 lg:px-8 bg-transparent">
+        <section id="features" className="py-32 px-4 sm:px-6 lg:px-8 bg-transparent">
           <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-4 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]">
             {t?.home?.consistency?.title || 'Perfect Character Consistency'}
@@ -1002,7 +1118,7 @@ export default function AIImageGenerator() {
 
 
       {/* More Play Section */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8">
+      <section id="more-creative" className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-4 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]">
@@ -1158,7 +1274,7 @@ export default function AIImageGenerator() {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full backdrop-blur-xl bg-card/80 rounded-lg border border-primary/30 shadow-2xl shadow-primary/10">
+            <table className="w-full backdrop-blur-xl bg-card/80 rounded-lg border-2 border-primary/60 shadow-2xl shadow-primary/10">
               <thead>
                 <tr className="border-b border-primary/20">
                   <th className="text-left p-6 text-foreground font-semibold">{t?.comparison?.table?.feature || '功能'}</th>
@@ -1221,7 +1337,7 @@ export default function AIImageGenerator() {
       </section>
 
       {/* Easy to Work - Enhanced with neon effects */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-transparent">
+      <section id="how-to-work" className="py-12 px-4 sm:px-6 lg:px-8 bg-transparent">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-16 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]">
             {t.comparison.features.easyToWork}
@@ -1262,7 +1378,7 @@ export default function AIImageGenerator() {
             {t.pricing.title}
           </h2>
 
-          <Card className="backdrop-blur-xl bg-card/30 border border-primary/30 shadow-2xl shadow-primary/10 hover:shadow-primary/20 transition-all duration-500">
+          <Card className="backdrop-blur-xl bg-card/30 border-2 border-primary/60 shadow-2xl shadow-primary/10 hover:shadow-primary/20 transition-all duration-500">
             <CardContent className="p-8">
               <div className="text-center mb-8">
                 <h3 className="text-2xl font-bold text-foreground mb-4">{t.pricing.pointsSystem}</h3>
@@ -1280,7 +1396,7 @@ export default function AIImageGenerator() {
                   <p className="text-sm text-muted-foreground">{t.pricing.freeStarterDesc}</p>
                 </div>
 
-                <div className="text-center p-6 rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 border border-primary/30 hover:border-primary/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(59,130,246,0.2)]">
+                <div className="text-center p-6 rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 border-2 border-primary/60 hover:border-primary/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(59,130,246,0.2)]">
                   <div className="relative inline-block mb-4">
                     <Zap className="h-8 w-8 text-accent mx-auto" />
                     <div className="absolute inset-0 h-8 w-8 bg-accent/20 rounded-full blur-lg animate-pulse" />
@@ -1310,7 +1426,7 @@ export default function AIImageGenerator() {
       {/* Feedback Section - Enhanced with glassmorphism */}
       <section id="feedback" className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <Card className="backdrop-blur-xl bg-card/80 border border-primary/30 shadow-2xl shadow-primary/10">
+          <Card className="backdrop-blur-xl bg-card/80 border-2 border-primary/60 shadow-2xl shadow-primary/10">
             <CardHeader>
               <CardTitle className="text-2xl font-bold text-center text-foreground">{t.feedback.title}</CardTitle>
               <CardDescription className="text-center">
@@ -1371,12 +1487,44 @@ export default function AIImageGenerator() {
                     {t.nav.pricing}
                   </a>
                 </li>
+                <li>
+                  <a
+                    href="#features"
+                    className="hover:text-primary transition-colors duration-300 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]"
+                  >
+                    {t.footer.features}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#how-to-work"
+                    className="hover:text-primary transition-colors duration-300 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]"
+                  >
+                    {t.footer.howToWork}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#more-creative"
+                    className="hover:text-primary transition-colors duration-300 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]"
+                  >
+                    {t.footer.moreCreative}
+                  </a>
+                </li>
               </ul>
             </div>
 
             <div>
               <h4 className="font-semibold text-foreground mb-4">{t.footer.support}</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>
+                  <a
+                    href="/faq"
+                    className="hover:text-primary transition-colors duration-300 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]"
+                  >
+                    {t.nav.faq}
+                  </a>
+                </li>
                 <li>
                   <a
                     href="/contact"

@@ -335,24 +335,85 @@ export default function PricingPage() {
           })}
         </div>
 
-        {/* Additional Info */}
-        <div className="mt-16 text-center">
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 max-w-4xl mx-auto">
-            <h3 className="text-2xl font-bold text-white mb-4">
-              {t?.pricing?.why_choose_us || 'Why Choose ArtisanAI?'}
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-300">
-              <div>
-                <h4 className="font-semibold text-white mb-2">{t?.pricing?.feature1_title || 'High Quality'}</h4>
-                <p className="text-sm">{t?.pricing?.feature1_description || 'Professional-grade AI models for stunning results'}</p>
+        {/* Why Choose ArtisanAI - Enhanced */}
+        <div className="mt-20 text-center">
+          <div className="relative max-w-6xl mx-auto">
+            {/* Background with gradient and glow */}
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-purple-500/20 to-accent/20 rounded-3xl blur-xl"></div>
+            <div className="relative bg-gradient-to-br from-card/80 to-card/60 backdrop-blur-xl border border-primary/30 rounded-3xl p-8 md:p-12 shadow-2xl shadow-primary/10">
+              {/* Title with enhanced styling */}
+              <div className="mb-12">
+                <h3 className="text-3xl md:text-4xl font-bold text-foreground mb-4 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]">
+                  {t?.pricing?.why_choose_us || 'Why Choose ArtisanAI?'}
+                </h3>
+                <div className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full"></div>
               </div>
-              <div>
-                <h4 className="font-semibold text-white mb-2">{t?.pricing?.feature2_title || 'Fast Processing'}</h4>
-                <p className="text-sm">{t?.pricing?.feature2_description || 'Generate images in seconds, not minutes'}</p>
+              
+              {/* Features Grid with enhanced cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {/* Feature 1 */}
+                <div className="group relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative p-6 rounded-2xl border border-primary/20 hover:border-primary/40 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20">
+                    <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <h4 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors duration-300">
+                      {t?.pricing?.feature1_title || 'High Quality'}
+                    </h4>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {t?.pricing?.feature1_description || 'Professional-grade AI models for stunning results'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Feature 2 */}
+                <div className="group relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative p-6 rounded-2xl border border-primary/20 hover:border-primary/40 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20">
+                    <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                    <h4 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors duration-300">
+                      {t?.pricing?.feature2_title || 'Fast Processing'}
+                    </h4>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {t?.pricing?.feature2_description || 'Generate images in seconds, not minutes'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Feature 3 */}
+                <div className="group relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative p-6 rounded-2xl border border-primary/20 hover:border-primary/40 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20">
+                    <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                    </div>
+                    <h4 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors duration-300">
+                      {t?.pricing?.feature3_title || 'Consistent Results'}
+                    </h4>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {t?.pricing?.feature3_description || 'Maintain character consistency across all generations'}
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div>
-                <h4 className="font-semibold text-white mb-2">{t?.pricing?.feature3_title || 'Consistent Results'}</h4>
-                <p className="text-sm">{t?.pricing?.feature3_description || 'Maintain character consistency across all generations'}</p>
+
+              {/* Bottom CTA */}
+              <div className="mt-12 pt-8 border-t border-primary/20">
+                <p className="text-muted-foreground text-lg mb-6">
+                  {t?.pricing?.coming_soon || 'Coming Soon'}
+                </p>
+                <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
+                  {t?.pricing?.coming_soon_description || 'More features and improvements are on the way'}
+                </p>
               </div>
             </div>
           </div>
