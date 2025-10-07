@@ -228,16 +228,45 @@ export default function AIImageGenerator() {
           errorMessage = t?.errors?.server_error || "服务器内部错误，可能是API服务暂时不可用"
         }
         
-        toast({
-          title: errorTitle,
-          description: errorMessage,
-          variant: "destructive",
-          action: showBuyCredits ? (
-            <Link href="/pricing" className="bg-primary text-primary-foreground hover:bg-primary/90 px-3 py-1 rounded-md text-sm font-medium">
-              {t?.errors?.insufficient_credits?.action || "购买积分"}
-            </Link>
-          ) : undefined,
-        })
+        if (showBuyCredits) {
+          // 积分不足的专用美观toast
+          toast({
+            title: errorTitle,
+            description: (
+              <div className="flex items-center gap-4 p-2">
+                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 via-orange-500 to-red-500 flex items-center justify-center shadow-lg">
+                  <span className="text-white text-xl">💳</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+                    <span className="text-red-500">⚠️</span>
+                    {errorTitle}
+                  </div>
+                  <div className="text-sm text-gray-700 leading-relaxed pr-2">{errorMessage}</div>
+                </div>
+              </div>
+            ),
+            variant: "default",
+            className: "border-0 bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 shadow-2xl backdrop-blur-md border-l-4 border-l-orange-400",
+            action: (
+              <Link 
+                href="/pricing" 
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 hover:from-purple-600 hover:via-pink-600 hover:to-red-600 text-white px-6 py-3 rounded-xl text-sm font-bold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110 hover:-translate-y-1"
+              >
+                <span className="text-lg">💎</span>
+                <span>{t?.errors?.insufficient_credits?.action || "购买积分"}</span>
+                <span className="text-lg animate-pulse">→</span>
+              </Link>
+            ),
+          })
+        } else {
+          // 其他错误的普通toast
+          toast({
+            title: errorTitle,
+            description: errorMessage,
+            variant: "destructive",
+          })
+        }
         return
       }
       console.log('Generate success:', data)
