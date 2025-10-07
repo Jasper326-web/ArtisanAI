@@ -145,6 +145,15 @@ export default function AIImageGenerator() {
       setUserId(session?.user?.id ?? null)
     }
     loadSession()
+
+    // 监听认证状态变化，确保实时同步
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUserId(session?.user?.id ?? null)
+      }
+    )
+
+    return () => subscription.unsubscribe()
   }, [])
 
   // 处理提示词模板点击
