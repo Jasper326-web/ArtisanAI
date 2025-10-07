@@ -90,9 +90,12 @@ export async function POST(req: NextRequest) {
         }, { status: 500 });
       }
 
+      // 确保返回有效的余额数值
+      const remainingBalance = decRes?.balance ?? (current - COST_PER_GENERATION);
+      
       return NextResponse.json({ 
         image: imageResult.imageUrl, 
-        remaining: decRes?.balance ?? null,
+        remaining: remainingBalance,
         model: 'gemini-2.5-flash-image-preview',
         provider: aiClient.getCurrentProvider(),
         tokens_used: 50 // Estimated token usage for image generation

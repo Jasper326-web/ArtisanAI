@@ -239,12 +239,19 @@ export default function AIImageGenerator() {
           creditsUsed: 1
         });
         // Trigger credits update in navigation with the remaining balance
-        window.dispatchEvent(new CustomEvent('credits:update', {
-          detail: { 
-            balance: data.remaining,
-            remaining: data.remaining 
-          }
-        }))
+        // 验证余额数据有效性
+        const remainingBalance = data.remaining;
+        if (typeof remainingBalance === 'number' && remainingBalance >= 0) {
+          console.log('🔄 触发积分更新事件，余额:', remainingBalance);
+          window.dispatchEvent(new CustomEvent('credits:update', {
+            detail: { 
+              balance: remainingBalance,
+              remaining: remainingBalance 
+            }
+          }));
+        } else {
+          console.warn('⚠️ 积分数据无效，跳过事件触发:', remainingBalance);
+        }
       }
     } catch (e: any) {
       console.error(e)

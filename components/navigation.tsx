@@ -118,12 +118,25 @@ export function Navigation() {
   // Listen to global credits updates (e.g., generate/recharge responses)
   useEffect(() => {
     const onCreditsUpdate = (e: any) => {
-      const next = Number(e?.detail?.balance ?? e?.detail?.remaining);
-      if (!Number.isNaN(next)) setUserCredits(next);
+      const balance = e?.detail?.balance ?? e?.detail?.remaining;
+      const next = Number(balance);
+      
+      console.log('🔄 收到积分更新事件:', { balance, next, isValid: !Number.isNaN(next) && next >= 0 });
+      
+      if (!Number.isNaN(next) && next >= 0) {
+        setUserCredits(next);
+        console.log('✅ 积分已更新为:', next);
+      } else {
+        console.warn('⚠️ 积分数据无效，尝试重新获取:', balance);
+        // 如果事件数据无效，尝试重新获取积分
+        if (user?.id) {
+          fetchUserCredits(user.id);
+        }
+      }
     };
     window.addEventListener('credits:update', onCreditsUpdate as any);
     return () => window.removeEventListener('credits:update', onCreditsUpdate as any);
-  }, []);
+  }, [user?.id, fetchUserCredits]);
 
   const handleSignOut = async () => {
     // 追踪登出
