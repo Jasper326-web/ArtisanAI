@@ -36,8 +36,6 @@ export async function POST(req: NextRequest) {
       }
     }
     
-    console.log('✅ Webhook signature verified successfully');
-
     const data = JSON.parse(body);
     const { eventType, object } = data;
 
@@ -128,13 +126,8 @@ async function handleCheckoutCompleted(data: any) {
       console.error('Error checking existing order:', existingOrderError);
     }
 
-    // 健壮的request_id提取逻辑 - 兼容多种可能的payload结构
-    let userId = request_id || 
-                 metadata?.request_id || 
-                 metadata?.user_id || 
-                 order?.request_id || 
-                 order?.metadata?.request_id || 
-                 order?.metadata?.user_id;
+    // 简化用户ID提取逻辑 - 直接使用request_id
+    let userId = request_id;
     
     console.log('User ID extraction result:', {
       primary_request_id: request_id,
@@ -228,50 +221,23 @@ async function handleCheckoutCompleted(data: any) {
           externalId: externalId 
         });
         
-        // 先检查是否已有该订单的积分记录
-        const { data: existingCredits, error: creditsCheckError } = await supabase
-          .from('credits')
-          .select('id, balance')
-          .eq('order_id', externalId)
-          .single();
+        // 使用recharge_credits函数更新积分
+        const { data: result, error: rechargeError } = await supabase.rpc('recharge_credits', {
+          p_user_id: userId,
+          p_amount: credits
+        });
         
-        if (existingCredits) {
-          console.log('✅ Credits already exist for order:', { 
-            orderId: externalId, 
-            existingBalance: existingCredits.balance 
+        if (rechargeError) {
+          console.error('❌ Recharge credits error:', rechargeError);
+          console.error('Error details:', {
+            code: rechargeError.code,
+            message: rechargeError.message,
+            details: rechargeError.details,
+            hint: rechargeError.hint
           });
         } else {
-          // 使用修复后的recharge_credits函数更新积分
-          const { data: result, error: rechargeError } = await supabase.rpc('recharge_credits', {
-            p_user_id: userId,
-            p_amount: credits
-          });
-          
-          if (rechargeError) {
-            console.error('❌ Recharge credits error:', rechargeError);
-            console.error('Error details:', {
-              code: rechargeError.code,
-              message: rechargeError.message,
-              details: rechargeError.details,
-              hint: rechargeError.hint
-            });
-          } else {
-            console.log('✅ Credits recharged successfully:', result);
-            console.log('New balance:', result?.[0]?.new_balance);
-            
-            // 更新credits表的order_id字段
-            const { error: updateOrderIdError } = await supabase
-              .from('credits')
-              .update({ order_id: externalId })
-              .eq('user_id', userId)
-              .is('order_id', null);
-            
-            if (updateOrderIdError) {
-              console.error('❌ Failed to update credits order_id:', updateOrderIdError);
-            } else {
-              console.log('✅ Credits order_id updated successfully');
-            }
-          }
+          console.log('✅ Credits recharged successfully:', result);
+          console.log('New balance:', result?.[0]?.balance);
         }
       }
     } else {
