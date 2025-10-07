@@ -238,18 +238,18 @@ export default function AIImageGenerator() {
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
                     <span className="text-white text-sm">💳</span>
                   </div>
-                  <span className="font-semibold text-gray-800">积分不足</span>
+                  <span className="font-semibold text-gray-800">{t?.errors?.insufficient_credits?.title || "积分不足"}</span>
                 </div>
                 <Link 
                   href="/pricing" 
                   className="text-sm text-blue-600 hover:text-blue-800 font-medium"
                 >
-                  购买积分
+                  {t?.errors?.insufficient_credits?.action || "购买积分"}
                 </Link>
               </div>
             ),
             variant: "default",
-            className: "bg-white border border-orange-200 shadow-lg",
+            className: "bg-white border border-orange-200 shadow-lg [&>div>div>h3]:text-black [&>div>div>h3]:font-bold",
           })
         } else {
           // 其他错误的普通toast
