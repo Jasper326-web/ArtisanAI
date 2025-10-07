@@ -1314,7 +1314,7 @@ const translations = {
       verification_error_help: "可能的原因：链接已过期、已被使用，或格式不正确。",
       back_to_home: "返回首页",
       register_success: "注册成功",
-      register_success_message: "账户注册成功。请检查您的邮箱以验证账户。如果看到长链接，请点击"申请恢复"或复制链接到浏览器。"
+      register_success_message: "账户注册成功。请检查您的邮箱以验证账户。"
     },
     legal: { 
       common: { last_updated: "最后更新", date: "2024年12月" },
