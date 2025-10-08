@@ -6,7 +6,9 @@ const API_KEYS = [
   'AIzaSyA5IHgEV-ZIbxW1UnZY0qQ8AuWi6O5tns0',
   'AIzaSyBNxPQvdOeVWyB7V-BD0YKRvLHYXsB_sSI', 
   'AIzaSyD9UQzUGEyGkLS1-SSPPTDiPrDtNjkJBkY',
-  'AIzaSyBPPeLRP-QaKWPmQyXJgcP1vxJjiyV62Bw'
+  'AIzaSyBPPeLRP-QaKWPmQyXJgcP1vxJjiyV62Bw',
+  'AIzaSyDrb9uTXStlHiKd1NDh7X575k5tzawATcw',
+  'AIzaSyA2HKAm-HXLzNuaoKsOggd_tMmmifU7ZhY'
 ];
 
 // 初始化 API Key 管理器
