@@ -68,7 +68,7 @@ export function AuthExample() {
     return (
       <div className="flex items-center justify-center p-4">
         <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
-        <span className="ml-2 text-muted-foreground">加载中...</span>
+        <span className="ml-2 text-muted-foreground">{t?.auth?.loading || 'Loading...'}</span>
       </div>
     );
   }
@@ -79,14 +79,14 @@ export function AuthExample() {
         // 已登录状态
         <div className="flex items-center gap-4">
           <div className="text-sm">
-            <span className="text-muted-foreground">欢迎，</span>
+            <span className="text-muted-foreground">{t?.auth?.welcome || 'Welcome,'}</span>
             <span className="font-medium">{user.email}</span>
           </div>
           <button
             onClick={handleSignOut}
             className="px-4 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
           >
-            退出登录
+            {t?.auth?.sign_out || 'Sign Out'}
           </button>
         </div>
       ) : (
@@ -96,13 +96,13 @@ export function AuthExample() {
             onClick={() => setShowAuth(true)}
             className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
           >
-            登录
+            {t?.auth?.signIn?.button || 'Sign In'}
           </button>
           <button
             onClick={() => setShowAuth(true)}
             className="px-4 py-2 text-sm border border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors"
           >
-            注册
+            {t?.auth?.signUp?.button || 'Sign Up'}
           </button>
         </div>
       )}

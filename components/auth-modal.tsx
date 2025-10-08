@@ -451,15 +451,15 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
             {isLoading ? (
               <>
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                {view === 'login' && (t?.auth?.signIn?.loading || '登录中...')}
-                {view === 'register' && (t?.auth?.signUp?.loading || '注册中...')}
-                {view === 'reset' && '发送中...'}
+                {view === 'login' && (t?.auth?.signIn?.loading || 'Signing in...')}
+                {view === 'register' && (t?.auth?.signUp?.loading || 'Signing up...')}
+                {view === 'reset' && (t?.auth?.reset?.loading || 'Sending...')}
               </>
             ) : (
               <>
-                {view === 'login' && (t?.auth?.signIn?.button || '登录')}
-                {view === 'register' && (t?.auth?.signUp?.button || '注册')}
-                {view === 'reset' && '发送重置邮件'}
+                {view === 'login' && (t?.auth?.signIn?.button || 'Sign In')}
+                {view === 'register' && (t?.auth?.signUp?.button || 'Sign Up')}
+                {view === 'reset' && (t?.auth?.reset?.button || 'Send Reset Email')}
               </>
             )}
           </Button>
@@ -472,7 +472,7 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
               variant="outline"
               className="w-full"
             >
-              重新发送验证邮件
+              {t?.auth?.resend_verification || 'Resend Verification Email'}
             </Button>
           )}
 

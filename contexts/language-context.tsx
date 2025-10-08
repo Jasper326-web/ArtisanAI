@@ -563,7 +563,23 @@ const translations = {
       verification_error_help: "Possible reasons: link has expired, has been used, or is incorrectly formatted.",
       back_to_home: "Back to Home",
       register_success: "Registration Successful",
-      register_success_message: "Account registered successfully. Please check your email to verify your account. If you see a long security link, please click 'Apply for recovery' or copy the link to your browser."
+      register_success_message: "Account registered successfully. Please check your email to verify your account. If you see a long security link, please click 'Apply for recovery' or copy the link to your browser.",
+      signIn: {
+        button: "Sign In",
+        loading: "Signing in..."
+      },
+      signUp: {
+        button: "Sign Up",
+        loading: "Signing up..."
+      },
+      reset: {
+        button: "Send Reset Email",
+        loading: "Sending..."
+      },
+      resend_verification: "Resend Verification Email",
+      welcome: "Welcome,",
+      sign_out: "Sign Out",
+      loading: "Loading..."
     },
     legal: { 
       common: { last_updated: "Last updated", date: "December 2024" },
@@ -1338,7 +1354,23 @@ const translations = {
       verification_error_help: "可能的原因：链接已过期、已被使用，或格式不正确。",
       back_to_home: "返回首页",
       register_success: "注册成功",
-      register_success_message: "账户注册成功。请检查您的邮箱以验证账户。"
+      register_success_message: "账户注册成功。请检查您的邮箱以验证账户。",
+      signIn: {
+        button: "登录",
+        loading: "登录中..."
+      },
+      signUp: {
+        button: "注册",
+        loading: "注册中..."
+      },
+      reset: {
+        button: "发送重置邮件",
+        loading: "发送中..."
+      },
+      resend_verification: "重新发送验证邮件",
+      welcome: "欢迎，",
+      sign_out: "退出登录",
+      loading: "加载中..."
     },
     legal: { 
       common: { last_updated: "最后更新", date: "2024年12月" },
