@@ -96,14 +96,14 @@ export default function AIImageGenerator() {
       window.URL.revokeObjectURL(url)
       
       toast({
-        title: "下载成功！",
-        description: "图片已保存到您的设备",
+        title: t?.hero?.download?.success || "Download Successful!",
+        description: t?.hero?.download?.successDesc || "Image has been saved to your device",
       })
     } catch (error) {
       console.error('Download failed:', error)
       toast({
-        title: "下载失败",
-        description: "请重试或右键保存图片",
+        title: t?.hero?.download?.failed || "Download Failed",
+        description: t?.hero?.download?.failedDesc || "Please try again or right-click to save the image",
         variant: "destructive",
       })
     }
@@ -586,7 +586,7 @@ export default function AIImageGenerator() {
                           size="sm"
                           className="group relative bg-white/98 hover:bg-green-50 text-gray-800 border-2 border-green-400 hover:border-green-500 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 backdrop-blur-sm"
                           onClick={handleDownloadImage}
-                          title="下载图片"
+                          title={t?.hero?.preview?.downloadImage || "Download Image"}
                         >
                           <div className="absolute inset-0 bg-gradient-to-r from-green-500/0 via-green-500/10 to-green-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md"></div>
                           <Download className="h-4 w-4 text-green-600 group-hover:text-green-700 transition-colors duration-300 relative z-10" />
@@ -1720,11 +1720,11 @@ export default function AIImageGenerator() {
                   size="sm"
                   className="group bg-white/95 hover:bg-green-50 text-gray-800 border-2 border-gray-300 hover:border-green-400 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 backdrop-blur-sm"
                   onClick={handleDownloadImage}
-                  title="下载图片"
+                  title={t?.hero?.preview?.downloadImage || "Download Image"}
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-green-500/0 via-green-500/10 to-green-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md"></div>
                   <Download className="h-4 w-4 mr-2 text-gray-700 group-hover:text-green-600 transition-colors duration-300 relative z-10" />
-                  <span className="text-sm font-medium relative z-10">下载</span>
+                  <span className="text-sm font-medium relative z-10">{t?.hero?.preview?.download || "Download"}</span>
                 </Button>
                 <Button
                   variant="outline"
@@ -1740,7 +1740,7 @@ export default function AIImageGenerator() {
               
               {/* 图片信息提示 */}
               <div className="absolute bottom-4 left-4 bg-black/60 text-white text-sm px-3 py-2 rounded-lg backdrop-blur-sm">
-                <p className="text-xs opacity-80">点击图片外部区域或按ESC键关闭</p>
+                <p className="text-xs opacity-80">{t?.hero?.preview?.closeHint || "Click outside the image or press ESC to close"}</p>
               </div>
             </div>
           </div>

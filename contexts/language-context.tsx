@@ -303,6 +303,17 @@ const translations = {
         waiting: "This usually takes 30-60 seconds, please be patient",
         downloadNote: "Images won't be saved, please download promptly"
       },
+      preview: {
+        closeHint: "Click outside the image or press ESC to close",
+        download: "Download",
+        downloadImage: "Download Image"
+      },
+      download: {
+        success: "Download Successful!",
+        successDesc: "Image has been saved to your device",
+        failed: "Download Failed",
+        failedDesc: "Please try again or right-click to save the image"
+      },
       promptTemplates: {
         title: "✨ Explore AI Magic:",
         multiAngle: {
@@ -1093,6 +1104,17 @@ const translations = {
         creating: "AI正在创作您的专属图像...",
         waiting: "这通常需要30-60秒，请耐心等待",
         downloadNote: "图片不会保存，请及时下载"
+      },
+      preview: {
+        closeHint: "点击图片外部区域或按ESC键关闭",
+        download: "下载",
+        downloadImage: "下载图片"
+      },
+      download: {
+        success: "下载成功！",
+        successDesc: "图片已保存到您的设备",
+        failed: "下载失败",
+        failedDesc: "请重试或右键保存图片"
       },
       promptTemplates: {
         title: "✨ 探索AI魔法:",
