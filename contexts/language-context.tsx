@@ -296,6 +296,13 @@ const translations = {
       upload: "Upload Images",
       processing: "Processing Images...",
       uploadText: "Upload images and enter prompts",
+      generating: {
+        title: "Generating...",
+        result: "Generated Result",
+        creating: "AI is creating your exclusive image...",
+        waiting: "This usually takes 30-60 seconds, please be patient",
+        downloadNote: "Images won't be saved, please download promptly"
+      },
       promptTemplates: {
         title: "✨ Explore AI Magic:",
         multiAngle: {
@@ -1064,6 +1071,13 @@ const translations = {
       upload: "上传图片",
       processing: "正在处理图片...",
       uploadText: "上传图片并输入提示词",
+      generating: {
+        title: "生成中...",
+        result: "生成结果",
+        creating: "AI正在创作您的专属图像...",
+        waiting: "这通常需要30-60秒，请耐心等待",
+        downloadNote: "图片不会保存，请及时下载"
+      },
       promptTemplates: {
         title: "✨ 探索AI魔法:",
         multiAngle: {

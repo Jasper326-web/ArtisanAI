@@ -521,15 +521,15 @@ export default function AIImageGenerator() {
             <Card className="max-w-2xl mx-auto mt-8 backdrop-blur-xl bg-card/30 border-2 border-primary/60 shadow-2xl shadow-primary/10">
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold text-foreground mb-4 text-center">
-                  {isGenerating ? '生成中...' : '生成结果'}
+                  {isGenerating ? (t?.hero?.generating?.title || 'Generating...') : (t?.hero?.generating?.result || 'Generated Result')}
                 </h3>
                 <div className="relative">
                   {isGenerating ? (
                     <div className="w-full h-64 flex items-center justify-center bg-muted/20 rounded-lg border border-primary/20">
                       <div className="text-center">
                         <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                        <p className="text-muted-foreground mb-2">AI正在创作您的专属图像...</p>
-                        <p className="text-xs text-muted-foreground/70">这通常需要30-60秒，请耐心等待</p>
+                        <p className="text-muted-foreground mb-2">{t?.hero?.generating?.creating || 'AI is creating your exclusive image...'}</p>
+                        <p className="text-xs text-muted-foreground/70">{t?.hero?.generating?.waiting || 'This usually takes 30-60 seconds, please be patient'}</p>
                       </div>
                     </div>
                   ) : (
@@ -543,7 +543,7 @@ export default function AIImageGenerator() {
                       
                       {/* 图片不保存提示 */}
                       <div className="absolute top-2 left-2 bg-yellow-500/90 text-white text-xs px-2 py-1 rounded-md">
-                        ⚠️ 图片不会保存，请及时下载
+                        ⚠️ {t?.hero?.generating?.downloadNote || 'Images won\'t be saved, please download promptly'}
                       </div>
                       
                       {/* 操作按钮组 */}
@@ -551,29 +551,29 @@ export default function AIImageGenerator() {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="bg-white/90 hover:bg-white text-gray-800"
+                          className="bg-white/95 hover:bg-white text-gray-900 border-2 border-gray-400 hover:border-primary shadow-lg hover:shadow-xl transition-all duration-200"
                           onClick={() => setIsPreviewOpen(true)}
                           title="预览大图"
                         >
-                          <Eye className="h-4 w-4" />
+                          <Eye className="h-4 w-4 text-gray-700" />
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          className="bg-white/90 hover:bg-white text-gray-800"
+                          className="bg-white/95 hover:bg-white text-gray-900 border-2 border-gray-400 hover:border-primary shadow-lg hover:shadow-xl transition-all duration-200"
                           onClick={handleDownloadImage}
                           title="下载图片"
                         >
-                          <Download className="h-4 w-4" />
+                          <Download className="h-4 w-4 text-gray-700" />
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          className="bg-white/90 hover:bg-white text-gray-800"
+                          className="bg-white/95 hover:bg-white text-gray-900 border-2 border-gray-400 hover:border-red-500 shadow-lg hover:shadow-xl transition-all duration-200"
                           onClick={() => setGeneratedImage(null)}
                           title="关闭"
                         >
-                          <X className="h-4 w-4" />
+                          <X className="h-4 w-4 text-gray-700" />
                         </Button>
                       </div>
                     </>
