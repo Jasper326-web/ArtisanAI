@@ -35,34 +35,74 @@ interface UpdateNote {
 const mockUpdates: UpdateNote[] = [
   {
     id: '1',
-    version: 'v1.2.0',
-    title: 'Multi-language Support',
-    content: 'Added support for 10 languages including Chinese, Spanish, French, German, Japanese, Korean, Portuguese, Russian, and Arabic.',
-    date: '2024-01-15',
-    type: 'feature'
+    version: 'v1.5.0',
+    title: 'Image Generation UI Enhancement',
+    content: 'Redesigned image generation buttons with modern UI, enhanced preview modal for full image viewing, improved hover effects and animations. Added ESC key support and better user experience.',
+    date: '2025-01-08',
+    type: 'improvement'
   },
   {
     id: '2',
-    version: 'v1.1.5',
-    title: 'Image Upload Improvements',
-    content: 'Enhanced drag-and-drop functionality with better error handling and progress indicators.',
-    date: '2024-01-10',
+    version: 'v1.4.0',
+    title: 'Google Login UI Enhancement',
+    content: 'Redesigned Google login button with modern UI, smooth animations, and improved user experience. Added hover effects, loading states, and brand-consistent styling.',
+    date: '2025-01-07',
     type: 'improvement'
   },
   {
     id: '3',
-    version: 'v1.1.0',
-    title: 'Character Consistency',
-    content: 'Improved AI model for better character consistency across different styles and poses.',
-    date: '2024-01-05',
-    type: 'feature'
+    version: 'v1.3.5',
+    title: 'Generation UI Improvements',
+    content: 'Fixed hardcoded Chinese text in image generation box. Added proper English translations and enhanced icon button visibility with better styling and hover effects.',
+    date: '2025-01-07',
+    type: 'fix'
   },
   {
     id: '4',
+    version: 'v1.3.0',
+    title: 'Database Schema Optimization',
+    content: 'Optimized database schema by removing redundant users table, fixed column ambiguity issues in RPC functions, and improved credit management system reliability.',
+    date: '2025-01-06',
+    type: 'improvement'
+  },
+  {
+    id: '5',
+    version: 'v1.2.5',
+    title: 'Payment System Fixes',
+    content: 'Resolved Creem webhook configuration issues, fixed credit synchronization problems, and improved payment flow reliability. Added manual webhook testing capabilities.',
+    date: '2025-01-05',
+    type: 'fix'
+  },
+  {
+    id: '6',
+    version: 'v1.2.0',
+    title: 'Multi-language Support',
+    content: 'Added comprehensive support for English and Chinese languages with proper translation keys, fixed hardcoded text issues across all pages.',
+    date: '2025-01-04',
+    type: 'feature'
+  },
+  {
+    id: '7',
+    version: 'v1.1.5',
+    title: 'Image Upload Improvements',
+    content: 'Enhanced drag-and-drop functionality with better error handling, progress indicators, and improved file validation.',
+    date: '2025-01-03',
+    type: 'improvement'
+  },
+  {
+    id: '8',
+    version: 'v1.1.0',
+    title: 'Character Consistency',
+    content: 'Improved AI model for better character consistency across different styles and poses using Nano-Banana technology.',
+    date: '2025-01-02',
+    type: 'feature'
+  },
+  {
+    id: '9',
     version: 'v1.0.8',
     title: 'Bug Fixes',
-    content: 'Fixed credit deduction issues and improved error messages for better user experience.',
-    date: '2024-01-01',
+    content: 'Fixed credit deduction issues, improved error messages, and enhanced user experience with better feedback systems.',
+    date: '2025-01-01',
     type: 'fix'
   }
 ];

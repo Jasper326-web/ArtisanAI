@@ -59,6 +59,26 @@ export default function AIImageGenerator() {
     setIsPreviewOpen(true)
   }
 
+  // ESC键关闭预览
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isPreviewOpen) {
+        setIsPreviewOpen(false)
+      }
+    }
+
+    if (isPreviewOpen) {
+      document.addEventListener('keydown', handleKeyDown)
+      // 防止背景滚动
+      document.body.style.overflow = 'hidden'
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = 'unset'
+    }
+  }, [isPreviewOpen])
+
   // 下载图片功能
   const handleDownloadImage = async () => {
     if (!generatedImage) return
@@ -547,33 +567,41 @@ export default function AIImageGenerator() {
                       </div>
                       
                       {/* 操作按钮组 */}
-                      <div className="absolute top-2 right-2 flex gap-2">
+                      <div className="absolute top-3 right-3 flex gap-2">
+                        {/* 预览按钮 */}
                         <Button
                           variant="outline"
                           size="sm"
-                          className="bg-white/95 hover:bg-white text-gray-900 border-2 border-gray-400 hover:border-primary shadow-lg hover:shadow-xl transition-all duration-200"
+                          className="group relative bg-white/98 hover:bg-blue-50 text-gray-800 border-2 border-gray-300 hover:border-blue-400 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 backdrop-blur-sm"
                           onClick={() => setIsPreviewOpen(true)}
                           title="预览大图"
                         >
-                          <Eye className="h-4 w-4 text-gray-700" />
+                          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md"></div>
+                          <Eye className="h-4 w-4 text-gray-700 group-hover:text-blue-600 transition-colors duration-300 relative z-10" />
                         </Button>
+                        
+                        {/* 下载按钮 */}
                         <Button
                           variant="outline"
                           size="sm"
-                          className="bg-white/95 hover:bg-white text-gray-900 border-2 border-gray-400 hover:border-primary shadow-lg hover:shadow-xl transition-all duration-200"
+                          className="group relative bg-white/98 hover:bg-green-50 text-gray-800 border-2 border-gray-300 hover:border-green-400 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 backdrop-blur-sm"
                           onClick={handleDownloadImage}
                           title="下载图片"
                         >
-                          <Download className="h-4 w-4 text-gray-700" />
+                          <div className="absolute inset-0 bg-gradient-to-r from-green-500/0 via-green-500/10 to-green-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md"></div>
+                          <Download className="h-4 w-4 text-gray-700 group-hover:text-green-600 transition-colors duration-300 relative z-10" />
                         </Button>
+                        
+                        {/* 关闭按钮 */}
                         <Button
                           variant="outline"
                           size="sm"
-                          className="bg-white/95 hover:bg-white text-gray-900 border-2 border-gray-400 hover:border-red-500 shadow-lg hover:shadow-xl transition-all duration-200"
+                          className="group relative bg-white/98 hover:bg-red-50 text-gray-800 border-2 border-gray-300 hover:border-red-400 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 backdrop-blur-sm"
                           onClick={() => setGeneratedImage(null)}
                           title="关闭"
                         >
-                          <X className="h-4 w-4 text-gray-700" />
+                          <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 via-red-500/10 to-red-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md"></div>
+                          <X className="h-4 w-4 text-gray-700 group-hover:text-red-600 transition-colors duration-300 relative z-10" />
                         </Button>
                       </div>
                     </>
@@ -1669,35 +1697,51 @@ export default function AIImageGenerator() {
 
       {/* 图片预览模态框 */}
       {isPreviewOpen && generatedImage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-          <div className="relative max-w-4xl max-h-[90vh] p-4">
-            <img
-              src={generatedImage}
-              alt="{t?.home?.common?.generated || 'Generated'} image preview"
-              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
-            />
-            
-            {/* 预览操作按钮 */}
-            <div className="absolute top-4 right-4 flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="bg-white/90 hover:bg-white text-gray-800"
-                onClick={handleDownloadImage}
-                title="下载图片"
-              >
-                <Download className="h-4 w-4 mr-2" />
-                下载
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="bg-white/90 hover:bg-white text-gray-800"
-                onClick={() => setIsPreviewOpen(false)}
-                title="关闭预览"
-              >
-                <X className="h-4 w-4" />
-              </Button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md">
+          <div className="relative w-full h-full flex items-center justify-center p-4">
+            {/* 图片容器 - 确保整张图片可见 */}
+            <div className="relative max-w-[95vw] max-h-[95vh] flex items-center justify-center">
+              <img
+                src={generatedImage}
+                alt="{t?.home?.common?.generated || 'Generated'} image preview"
+                className="max-w-full max-h-full object-contain rounded-xl shadow-2xl border border-white/20"
+                style={{ 
+                  maxWidth: '100%', 
+                  maxHeight: '100%',
+                  width: 'auto',
+                  height: 'auto'
+                }}
+              />
+              
+              {/* 预览操作按钮 - 固定在右上角 */}
+              <div className="absolute top-4 right-4 flex gap-2 z-10">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="group bg-white/95 hover:bg-green-50 text-gray-800 border-2 border-gray-300 hover:border-green-400 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 backdrop-blur-sm"
+                  onClick={handleDownloadImage}
+                  title="下载图片"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-500/0 via-green-500/10 to-green-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md"></div>
+                  <Download className="h-4 w-4 mr-2 text-gray-700 group-hover:text-green-600 transition-colors duration-300 relative z-10" />
+                  <span className="text-sm font-medium relative z-10">下载</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="group bg-white/95 hover:bg-red-50 text-gray-800 border-2 border-gray-300 hover:border-red-400 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 backdrop-blur-sm"
+                  onClick={() => setIsPreviewOpen(false)}
+                  title="关闭预览"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 via-red-500/10 to-red-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md"></div>
+                  <X className="h-4 w-4 text-gray-700 group-hover:text-red-600 transition-colors duration-300 relative z-10" />
+                </Button>
+              </div>
+              
+              {/* 图片信息提示 */}
+              <div className="absolute bottom-4 left-4 bg-black/60 text-white text-sm px-3 py-2 rounded-lg backdrop-blur-sm">
+                <p className="text-xs opacity-80">点击图片外部区域或按ESC键关闭</p>
+              </div>
             </div>
           </div>
           
@@ -1706,6 +1750,7 @@ export default function AIImageGenerator() {
             className="absolute inset-0 -z-10" 
             onClick={() => setIsPreviewOpen(false)}
           />
+          
         </div>
       )}
       
