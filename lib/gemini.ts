@@ -46,8 +46,8 @@ export class GeminiClient {
         this.client = new GoogleGenAI({ apiKey });
         
         // 使用正式版模型，添加image-only输出配置
-        // 在prompt中添加宽高比要求
-        const enhancedPrompt = `${prompt}\n\nPlease generate the image with aspect ratio: ${aspectRatio}`;
+        // 简化prompt增强，避免过于复杂的指令
+        const enhancedPrompt = aspectRatio !== "16:9" ? `${prompt} (${aspectRatio} ratio)` : prompt;
         
         const response = await this.client.models.generateContent({
           model: "gemini-2.5-flash-image",
@@ -144,8 +144,8 @@ export class GeminiClient {
     try {
       console.log("Editing single image with prompt:", prompt);
       
-      // 在prompt中添加宽高比要求
-      const enhancedPrompt = `${prompt}\n\nPlease generate the image with aspect ratio: ${aspectRatio}`;
+      // 简化prompt增强，避免过于复杂的指令
+      const enhancedPrompt = aspectRatio !== "16:9" ? `${prompt} (${aspectRatio} ratio)` : prompt;
       
       const response = await this.client.models.generateContent({
         model: "gemini-2.5-flash-image",
@@ -160,9 +160,10 @@ export class GeminiClient {
             { text: enhancedPrompt },
           ],
         },
-        config: {
-          responseModalities: ["IMAGE"] // 只输出图像，避免文本回复
-        },
+        // 移除过于严格的responseModalities配置，让模型自然选择输出类型
+        // config: {
+        //   responseModalities: ["IMAGE"]
+        // },
       });
 
       console.log("Gemini single image edit response received");
@@ -214,8 +215,8 @@ export class GeminiClient {
     try {
       console.log(`Generating image with ${images.length} reference images`);
       
-      // 在prompt中添加宽高比要求
-      const enhancedPrompt = `${prompt}\n\nPlease generate the image with aspect ratio: ${aspectRatio}`;
+      // 简化prompt增强，避免过于复杂的指令
+      const enhancedPrompt = aspectRatio !== "16:9" ? `${prompt} (${aspectRatio} ratio)` : prompt;
       
       // 根据官方文档，最多支持15张图片（16个part - 1个文本part）
       const MAX_IMAGES = 15;
@@ -248,9 +249,10 @@ export class GeminiClient {
         contents: {
           parts: [...imageParts, textPart],
         },
-        config: {
-          responseModalities: ["IMAGE"] // 只输出图像，避免文本回复
-        },
+        // 移除过于严格的responseModalities配置，让模型自然选择输出类型
+        // config: {
+        //   responseModalities: ["IMAGE"]
+        // },
       });
       
       console.log("Gemini multi-image generation response received");
