@@ -1,10 +1,21 @@
 import { GoogleGenAI, Modality } from "@google/genai";
-import { getAPIKeyManager } from "./api-key-manager";
+import { getAPIKeyManager, initializeAPIKeyManager } from "./api-key-manager";
+import { API_KEYS } from "./init-api-keys";
 
 export interface GeminiImageResponse {
   success: boolean;
   imageUrl?: string;
   error?: string;
+}
+
+// 确保API Key管理器已初始化的辅助函数
+function ensureAPIKeyManagerInitialized(): void {
+  try {
+    getAPIKeyManager();
+  } catch (error) {
+    console.log('🔄 API Key管理器未初始化，正在初始化...');
+    initializeAPIKeyManager(API_KEYS);
+  }
 }
 
 export interface GeminiEditResponse {
@@ -23,6 +34,7 @@ export class GeminiClient {
       this.client = new GoogleGenAI({ apiKey: envApiKey });
     } else {
       try {
+        ensureAPIKeyManagerInitialized();
         const apiKeyManager = getAPIKeyManager();
         const apiKey = apiKeyManager.getCurrentKey();
         this.client = new GoogleGenAI({ apiKey });
@@ -41,6 +53,7 @@ export class GeminiClient {
         console.log(`🔄 尝试生成图像 (第 ${attempt}/${maxRetries} 次)`);
         
         // 每次尝试都重新创建客户端以使用新的 API Key
+        ensureAPIKeyManagerInitialized();
         const apiKeyManager = getAPIKeyManager();
         const apiKey = apiKeyManager.getCurrentKey();
         this.client = new GoogleGenAI({ apiKey });
@@ -89,6 +102,7 @@ export class GeminiClient {
           error.message.includes('PERMISSION_DENIED')
         )) {
           console.log("🔄 检测到配额或认证错误，切换到下一个 API Key");
+          ensureAPIKeyManagerInitialized();
           const apiKeyManager = getAPIKeyManager();
           apiKeyManager.markCurrentKeyFailed();
           

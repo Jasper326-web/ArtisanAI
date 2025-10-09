@@ -1,10 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenAI } from '@google/generative-ai';
-import { getAPIKeyManager } from '@/lib/api-key-manager';
+import { getAPIKeyManager, initializeAPIKeyManager } from '@/lib/api-key-manager';
+import { API_KEYS } from '@/lib/init-api-keys';
 
 export async function GET(req: NextRequest) {
   try {
     console.log('🔍 开始API Key诊断...');
+    
+    // 确保API Key管理器已初始化
+    try {
+      getAPIKeyManager();
+    } catch (error) {
+      console.log('🔄 API Key管理器未初始化，正在初始化...');
+      initializeAPIKeyManager(API_KEYS);
+    }
     
     const apiKeyManager = getAPIKeyManager();
     const status = apiKeyManager.getStatus();
