@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ 
         image: imageResult.imageUrl, 
         remaining: remainingBalance,
-        model: 'gemini-2.5-flash-image-preview',
+        model: 'gemini-2.5-flash-image',
         provider: aiClient.getCurrentProvider(),
         tokens_used: 50 // Estimated token usage for image generation
       });

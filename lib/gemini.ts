@@ -32,7 +32,7 @@ export class GeminiClient {
     }
   }
 
-  async generateImage(prompt: string): Promise<GeminiImageResponse> {
+  async generateImage(prompt: string, aspectRatio: string = "1:1"): Promise<GeminiImageResponse> {
     const maxRetries = 3;
     let lastError: Error | null = null;
 
@@ -45,10 +45,16 @@ export class GeminiClient {
         const apiKey = apiKeyManager.getCurrentKey();
         this.client = new GoogleGenAI({ apiKey });
         
-        // 使用官方推荐的简化请求格式
+        // 使用正式版模型，添加image-only输出配置
         const response = await this.client.models.generateContent({
-          model: "gemini-2.5-flash-image-preview",
+          model: "gemini-2.5-flash-image",
           contents: { parts: [{ text: prompt }] },
+          config: {
+            responseModalities: ["IMAGE"],
+            imageConfig: {
+              aspectRatio: aspectRatio // 支持自定义宽高比
+            }
+          }
         });
 
         console.log("Gemini response received");
@@ -139,7 +145,7 @@ export class GeminiClient {
       console.log("Editing single image with prompt:", prompt);
       
       const response = await this.client.models.generateContent({
-        model: "gemini-2.5-flash-image-preview",
+        model: "gemini-2.5-flash-image",
         contents: {
           parts: [
             {
@@ -152,7 +158,10 @@ export class GeminiClient {
           ],
         },
         config: {
-          responseModalities: [Modality.IMAGE, Modality.TEXT],
+          responseModalities: ["IMAGE"], // 只输出图像，避免文本回复
+          imageConfig: {
+            aspectRatio: "1:1" // 默认方形
+          }
         },
       });
 
@@ -230,14 +239,17 @@ export class GeminiClient {
       // 构建文本part
       const textPart = { text: prompt };
 
-      // 使用官方推荐的方法：直接调用gemini-2.5-flash-image-preview
+      // 使用正式版模型，添加image-only输出配置
       const response = await this.client.models.generateContent({
-        model: 'gemini-2.5-flash-image-preview',
+        model: 'gemini-2.5-flash-image',
         contents: {
           parts: [...imageParts, textPart],
         },
         config: {
-          responseModalities: [Modality.IMAGE, Modality.TEXT],
+          responseModalities: ["IMAGE"], // 只输出图像，避免文本回复
+          imageConfig: {
+            aspectRatio: "1:1" // 默认方形
+          }
         },
       });
       
@@ -289,8 +301,11 @@ export class GeminiClient {
   async generateText(prompt: string): Promise<string> {
     try {
       const response = await this.client.models.generateContent({
-        model: "gemini-2.5-flash-image-preview",
+        model: "gemini-2.5-flash-image",
         contents: prompt,
+        config: {
+          responseModalities: ["TEXT"] // 文本生成使用TEXT模式
+        }
       });
 
       if (!response.candidates || response.candidates.length === 0) {
