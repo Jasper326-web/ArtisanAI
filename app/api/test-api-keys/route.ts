@@ -31,9 +31,14 @@ export async function GET(req: NextRequest) {
         
         console.log(`🧪 测试API Key ${i + 1}...`);
         
-        // 发送一个简单的测试请求
-        const model = client.getGenerativeModel({ model: "gemini-2.5-flash-image" });
-        const response = await model.generateContent("Generate a simple red square");
+        // 发送一个图像生成测试请求
+        const model = client.getGenerativeModel({ 
+          model: "gemini-2.5-flash-image",
+          generationConfig: {
+            responseModalities: ["IMAGE"]
+          }
+        });
+        const response = await model.generateContent("Generate a simple red square image");
         
         if (response.response) {
           const candidate = response.response.candidates?.[0];

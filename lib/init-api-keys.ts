@@ -1,10 +1,9 @@
 // 初始化 API Key 管理器
 import { initializeAPIKeyManager } from './api-key-manager';
 
-// 你的 API Keys
+// 你的 API Keys (已删除有频率限制的Key)
 const API_KEYS = [
   'AIzaSyA5IHgEV-ZIbxW1UnZY0qQ8AuWi6O5tns0',
-  'AIzaSyBNxPQvdOeVWyB7V-BD0YKRvLHYXsB_sSI', 
   'AIzaSyD9UQzUGEyGkLS1-SSPPTDiPrDtNjkJBkY',
   'AIzaSyBPPeLRP-QaKWPmQyXJgcP1vxJjiyV62Bw',
   'AIzaSyDrb9uTXStlHiKd1NDh7X575k5tzawATcw',
