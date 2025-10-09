@@ -35,6 +35,14 @@ interface UpdateNote {
 const mockUpdates: UpdateNote[] = [
   {
     id: '1',
+    version: 'v1.7.0',
+    title: 'Aspect Ratio Selection & Model Stability',
+    content: 'Added output aspect ratio selection with 10 different ratios (21:9, 16:9, 4:3, 3:2, 1:1, 9:16, 3:4, 2:3, 5:4, 4:5). Upgraded to official Gemini 2.5 Flash Image model for enhanced stability and image-only output. Improved prompt engineering for better aspect ratio control.',
+    date: '2025-10-09',
+    type: 'feature'
+  },
+  {
+    id: '2',
     version: 'v1.6.0',
     title: 'UI/UX Enhancements & Bug Fixes',
     content: 'Enhanced image generation button colors for better visibility, beautified keyword tags with colorful borders, fixed hardcoded Chinese text in generate button, and improved overall user interface consistency.',
@@ -42,7 +50,7 @@ const mockUpdates: UpdateNote[] = [
     type: 'improvement'
   },
   {
-    id: '2',
+    id: '3',
     version: 'v1.5.0',
     title: 'Image Generation UI Enhancement',
     content: 'Redesigned image generation buttons with modern UI, enhanced preview modal for full image viewing, improved hover effects and animations. Added ESC key support and better user experience.',
@@ -50,7 +58,7 @@ const mockUpdates: UpdateNote[] = [
     type: 'improvement'
   },
   {
-    id: '3',
+    id: '4',
     version: 'v1.4.0',
     title: 'Google Login UI Enhancement',
     content: 'Redesigned Google login button with modern UI, smooth animations, and improved user experience. Added hover effects, loading states, and brand-consistent styling.',
@@ -58,7 +66,7 @@ const mockUpdates: UpdateNote[] = [
     type: 'improvement'
   },
   {
-    id: '4',
+    id: '6',
     version: 'v1.3.5',
     title: 'Generation UI Improvements',
     content: 'Fixed hardcoded Chinese text in image generation box. Added proper English translations and enhanced icon button visibility with better styling and hover effects.',
@@ -66,7 +74,7 @@ const mockUpdates: UpdateNote[] = [
     type: 'fix'
   },
   {
-    id: '5',
+    id: '6',
     version: 'v1.3.0',
     title: 'Database Schema Optimization',
     content: 'Optimized database schema by removing redundant users table, fixed column ambiguity issues in RPC functions, and improved credit management system reliability.',
