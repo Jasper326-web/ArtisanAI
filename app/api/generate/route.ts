@@ -15,13 +15,14 @@ export async function POST(req: NextRequest) {
   try {
     console.log('Generate API called');
     const body = await req.json();
-    const { user_id, prompt, images, model } = body || {};
+    const { user_id, prompt, images, model, aspect_ratio } = body || {};
     
     console.log('Request body:', {
       user_id: user_id ? 'present' : 'missing',
       prompt: prompt ? `"${prompt.substring(0, 50)}..."` : 'missing',
       images: images ? `${images.length} images` : 'none',
-      model: model || 'undefined'
+      model: model || 'undefined',
+      aspect_ratio: aspect_ratio || '16:9 (default)'
     });
 
     if (!user_id || !prompt) {
@@ -57,6 +58,10 @@ export async function POST(req: NextRequest) {
     try {
       let imageResult;
       
+      // 设置默认宽高比
+      const finalAspectRatio = aspect_ratio || "16:9";
+      console.log(`📐 使用宽高比: ${finalAspectRatio}`);
+      
       // 如果有上传的图像，使用图像编辑功能；否则使用纯文本生成
       if (images && images.length > 0) {
         console.log(`🎨 使用图像编辑功能，上传了 ${images.length} 张图像`);
@@ -67,15 +72,15 @@ export async function POST(req: NextRequest) {
           const base64Data = firstImage.split(',')[1];
           const mimeType = firstImage.split(',')[0].split(':')[1].split(';')[0];
           
-          imageResult = await aiClient.editImage(prompt, base64Data, mimeType);
+          imageResult = await aiClient.editImage(prompt, base64Data, mimeType, finalAspectRatio);
         } else {
           // 多张图片融合编辑
           console.log(`🔄 处理多张图片融合，共 ${images.length} 张`);
-          imageResult = await aiClient.editMultipleImages(prompt, images);
+          imageResult = await aiClient.editMultipleImages(prompt, images, finalAspectRatio);
         }
       } else {
         console.log("🎨 使用纯文本图像生成功能");
-        imageResult = await aiClient.generateImage(prompt);
+        imageResult = await aiClient.generateImage(prompt, finalAspectRatio);
       }
 
       if (!imageResult.success) {

@@ -296,6 +296,7 @@ const translations = {
       upload: "Upload Images",
       processing: "Processing Images...",
       uploadText: "Upload images and enter prompts",
+      outputRatio: "Output Ratio",
       generating: {
         title: "Generating...",
         result: "Generated Result",
@@ -1098,6 +1099,7 @@ const translations = {
       upload: "上传图片",
       processing: "正在处理图片...",
       uploadText: "上传图片并输入提示词",
+      outputRatio: "输出比例",
       generating: {
         title: "生成中...",
         result: "生成结果",

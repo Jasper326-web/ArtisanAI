@@ -46,14 +46,14 @@ export class GeminiClient {
         this.client = new GoogleGenAI({ apiKey });
         
         // 使用正式版模型，添加image-only输出配置
+        // 在prompt中添加宽高比要求
+        const enhancedPrompt = `${prompt}\n\nPlease generate the image with aspect ratio: ${aspectRatio}`;
+        
         const response = await this.client.models.generateContent({
           model: "gemini-2.5-flash-image",
-          contents: { parts: [{ text: prompt }] },
+          contents: { parts: [{ text: enhancedPrompt }] },
           config: {
-            responseModalities: ["IMAGE"],
-            imageConfig: {
-              aspectRatio: aspectRatio // 支持自定义宽高比
-            }
+            responseModalities: ["IMAGE"]
           }
         });
 
@@ -140,9 +140,12 @@ export class GeminiClient {
     return { success: false, error: errorMessage };
   }
 
-  async editImage(prompt: string, imageData: string, mimeType: string = "image/png"): Promise<GeminiEditResponse> {
+  async editImage(prompt: string, imageData: string, mimeType: string = "image/png", aspectRatio: string = "16:9"): Promise<GeminiEditResponse> {
     try {
       console.log("Editing single image with prompt:", prompt);
+      
+      // 在prompt中添加宽高比要求
+      const enhancedPrompt = `${prompt}\n\nPlease generate the image with aspect ratio: ${aspectRatio}`;
       
       const response = await this.client.models.generateContent({
         model: "gemini-2.5-flash-image",
@@ -154,14 +157,11 @@ export class GeminiClient {
                 data: imageData,
               },
             },
-            { text: prompt },
+            { text: enhancedPrompt },
           ],
         },
         config: {
-          responseModalities: ["IMAGE"], // 只输出图像，避免文本回复
-          imageConfig: {
-            aspectRatio: "1:1" // 默认方形
-          }
+          responseModalities: ["IMAGE"] // 只输出图像，避免文本回复
         },
       });
 
@@ -210,9 +210,12 @@ export class GeminiClient {
     }
   }
 
-  async editMultipleImages(prompt: string, images: string[]): Promise<GeminiEditResponse> {
+  async editMultipleImages(prompt: string, images: string[], aspectRatio: string = "16:9"): Promise<GeminiEditResponse> {
     try {
       console.log(`Generating image with ${images.length} reference images`);
+      
+      // 在prompt中添加宽高比要求
+      const enhancedPrompt = `${prompt}\n\nPlease generate the image with aspect ratio: ${aspectRatio}`;
       
       // 根据官方文档，最多支持15张图片（16个part - 1个文本part）
       const MAX_IMAGES = 15;
@@ -237,7 +240,7 @@ export class GeminiClient {
       });
 
       // 构建文本part
-      const textPart = { text: prompt };
+      const textPart = { text: enhancedPrompt };
 
       // 使用正式版模型，添加image-only输出配置
       const response = await this.client.models.generateContent({
@@ -246,10 +249,7 @@ export class GeminiClient {
           parts: [...imageParts, textPart],
         },
         config: {
-          responseModalities: ["IMAGE"], // 只输出图像，避免文本回复
-          imageConfig: {
-            aspectRatio: "1:1" // 默认方形
-          }
+          responseModalities: ["IMAGE"] // 只输出图像，避免文本回复
         },
       });
       

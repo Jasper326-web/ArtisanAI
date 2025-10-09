@@ -26,7 +26,7 @@ export class AIClient {
     console.log('🔧 Force AI Studio mode enabled for image generation (nano model)');
   }
 
-  async generateImage(prompt: string): Promise<AIImageResponse> {
+  async generateImage(prompt: string, aspectRatio: string = "16:9"): Promise<AIImageResponse> {
     if (this.useVertexAI) {
       const result = await vertexAIClient.generateImage(prompt);
       return {
@@ -35,7 +35,7 @@ export class AIClient {
         error: result.error
       };
     } else {
-      const result = await geminiClient.generateImage(prompt);
+      const result = await geminiClient.generateImage(prompt, aspectRatio);
       return {
         success: result.success,
         imageUrl: result.imageUrl,
@@ -44,7 +44,7 @@ export class AIClient {
     }
   }
 
-  async editImage(prompt: string, imageData: string, mimeType: string = "image/png"): Promise<AIEditResponse> {
+  async editImage(prompt: string, imageData: string, mimeType: string = "image/png", aspectRatio: string = "16:9"): Promise<AIEditResponse> {
     if (this.useVertexAI) {
       const result = await vertexAIClient.editImage(prompt, imageData, mimeType);
       return {
@@ -53,7 +53,7 @@ export class AIClient {
         error: result.error
       };
     } else {
-      const result = await geminiClient.editImage(prompt, imageData, mimeType);
+      const result = await geminiClient.editImage(prompt, imageData, mimeType, aspectRatio);
       return {
         success: result.success,
         imageUrl: result.imageUrl,
@@ -62,7 +62,7 @@ export class AIClient {
     }
   }
 
-  async editMultipleImages(prompt: string, images: string[]): Promise<AIEditResponse> {
+  async editMultipleImages(prompt: string, images: string[], aspectRatio: string = "16:9"): Promise<AIEditResponse> {
     if (this.useVertexAI) {
       // Vertex AI 暂不支持多图编辑
       return {
@@ -70,7 +70,7 @@ export class AIClient {
         error: "Vertex AI does not support multiple image editing yet"
       };
     } else {
-      const result = await geminiClient.editMultipleImages(prompt, images);
+      const result = await geminiClient.editMultipleImages(prompt, images, aspectRatio);
       return {
         success: result.success,
         imageUrl: result.imageUrl,

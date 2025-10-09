@@ -48,6 +48,7 @@ export default function AIImageGenerator() {
   const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false)
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState<{src: string, alt: string, title?: string} | null>(null)
+  const [selectedAspectRatio, setSelectedAspectRatio] = useState("16:9")
   const supabase = createClient()
 
   const { t } = useLanguage()
@@ -222,6 +223,7 @@ export default function AIImageGenerator() {
           prompt,
           images: images.map(i => i.url),
           model: undefined,
+          aspect_ratio: selectedAspectRatio
         })
       })
       const data = await res.json()
@@ -389,6 +391,29 @@ export default function AIImageGenerator() {
           <Card className="max-w-2xl mx-auto backdrop-blur-xl bg-card/30 border-2 border-primary/60 shadow-2xl shadow-primary/10 hover:shadow-primary/20 transition-all duration-500 hover:border-primary/50">
             <CardContent className="p-8">
               <div className="space-y-6">
+                {/* Output Ratio Selection */}
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium text-foreground">
+                    {t?.hero?.outputRatio || 'Output Ratio'}
+                  </label>
+                  <select
+                    value={selectedAspectRatio}
+                    onChange={(e) => setSelectedAspectRatio(e.target.value)}
+                    className="px-3 py-2 text-sm bg-input/50 border border-primary/20 rounded-lg focus:border-primary/50 focus:outline-none transition-all duration-300"
+                  >
+                    <option value="21:9">Landscape — 21:9</option>
+                    <option value="16:9">Landscape — 16:9</option>
+                    <option value="4:3">Landscape — 4:3</option>
+                    <option value="3:2">Landscape — 3:2</option>
+                    <option value="1:1">Square — 1:1</option>
+                    <option value="9:16">Portrait — 9:16</option>
+                    <option value="3:4">Portrait — 3:4</option>
+                    <option value="2:3">Portrait — 2:3</option>
+                    <option value="5:4">Flexible — 5:4</option>
+                    <option value="4:5">Flexible — 4:5</option>
+                  </select>
+                </div>
+
                 <ImageUpload onImagesChange={setImages} className="rounded-lg" />
 
                 <Textarea
