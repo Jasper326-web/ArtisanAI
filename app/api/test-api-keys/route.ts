@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenAI } from '@google/generative-ai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { getAPIKeyManager, initializeAPIKeyManager } from '@/lib/api-key-manager';
 import { API_KEYS } from '@/lib/init-api-keys';
 
@@ -27,19 +27,17 @@ export async function GET(req: NextRequest) {
       try {
         // 临时切换到指定Key进行测试
         const testKey = apiKeyManager['apiKeys'][i];
-        const client = new GoogleGenAI({ apiKey: testKey });
+        const client = new GoogleGenerativeAI(testKey);
         
         console.log(`🧪 测试API Key ${i + 1}...`);
         
         // 发送一个简单的测试请求
-        const response = await client.models.generateContent({
-          model: "gemini-2.5-flash-image",
-          contents: { parts: [{ text: "Generate a simple red square" }] },
-        });
+        const model = client.getGenerativeModel({ model: "gemini-2.5-flash-image" });
+        const response = await model.generateContent("Generate a simple red square");
         
-        if (response.candidates && response.candidates.length > 0) {
-          const candidate = response.candidates[0];
-          if (candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
+        if (response.response) {
+          const candidate = response.response.candidates?.[0];
+          if (candidate && candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
             testResults.push({
               keyIndex: i + 1,
               status: 'success',
