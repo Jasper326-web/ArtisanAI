@@ -46,8 +46,23 @@ export class GeminiClient {
         this.client = new GoogleGenAI({ apiKey });
         
         // 使用正式版模型，添加image-only输出配置
-        // 简化prompt增强，避免过于复杂的指令
-        const enhancedPrompt = aspectRatio !== "16:9" ? `${prompt} (${aspectRatio} ratio)` : prompt;
+        // 精确的宽高比指令
+        const aspectRatioInstructions = {
+          "21:9": "Create an ultra-wide image with 21:9 aspect ratio (very wide, cinematic format)",
+          "16:9": "Create a standard widescreen image with 16:9 aspect ratio",
+          "4:3": "Create a classic image with 4:3 aspect ratio (traditional photo format)",
+          "3:2": "Create an image with 3:2 aspect ratio (35mm film format)",
+          "1:1": "Create a square image with 1:1 aspect ratio (perfect square)",
+          "9:16": "Create a vertical image with 9:16 aspect ratio (portrait, mobile format)",
+          "3:4": "Create a vertical image with 3:4 aspect ratio (portrait format)",
+          "2:3": "Create a vertical image with 2:3 aspect ratio (portrait format)",
+          "5:4": "Create an image with 5:4 aspect ratio (slightly wider than square)",
+          "4:5": "Create a vertical image with 4:5 aspect ratio (portrait format)"
+        };
+        
+        const enhancedPrompt = aspectRatio !== "16:9" 
+          ? `${prompt}. ${aspectRatioInstructions[aspectRatio as keyof typeof aspectRatioInstructions] || `${prompt} (${aspectRatio} ratio)`}`
+          : prompt;
         
         const response = await this.client.models.generateContent({
           model: "gemini-2.5-flash-image",
@@ -144,8 +159,23 @@ export class GeminiClient {
     try {
       console.log("Editing single image with prompt:", prompt);
       
-      // 简化prompt增强，避免过于复杂的指令
-      const enhancedPrompt = aspectRatio !== "16:9" ? `${prompt} (${aspectRatio} ratio)` : prompt;
+      // 精确的宽高比指令
+      const aspectRatioInstructions = {
+        "21:9": "Create an ultra-wide image with 21:9 aspect ratio (very wide, cinematic format)",
+        "16:9": "Create a standard widescreen image with 16:9 aspect ratio",
+        "4:3": "Create a classic image with 4:3 aspect ratio (traditional photo format)",
+        "3:2": "Create an image with 3:2 aspect ratio (35mm film format)",
+        "1:1": "Create a square image with 1:1 aspect ratio (perfect square)",
+        "9:16": "Create a vertical image with 9:16 aspect ratio (portrait, mobile format)",
+        "3:4": "Create a vertical image with 3:4 aspect ratio (portrait format)",
+        "2:3": "Create a vertical image with 2:3 aspect ratio (portrait format)",
+        "5:4": "Create an image with 5:4 aspect ratio (slightly wider than square)",
+        "4:5": "Create a vertical image with 4:5 aspect ratio (portrait format)"
+      };
+      
+      const enhancedPrompt = aspectRatio !== "16:9" 
+        ? `${prompt}. ${aspectRatioInstructions[aspectRatio as keyof typeof aspectRatioInstructions] || `${prompt} (${aspectRatio} ratio)`}`
+        : prompt;
       
       const response = await this.client.models.generateContent({
         model: "gemini-2.5-flash-image",
@@ -215,8 +245,23 @@ export class GeminiClient {
     try {
       console.log(`Generating image with ${images.length} reference images`);
       
-      // 简化prompt增强，避免过于复杂的指令
-      const enhancedPrompt = aspectRatio !== "16:9" ? `${prompt} (${aspectRatio} ratio)` : prompt;
+      // 精确的宽高比指令
+      const aspectRatioInstructions = {
+        "21:9": "Create an ultra-wide image with 21:9 aspect ratio (very wide, cinematic format)",
+        "16:9": "Create a standard widescreen image with 16:9 aspect ratio",
+        "4:3": "Create a classic image with 4:3 aspect ratio (traditional photo format)",
+        "3:2": "Create an image with 3:2 aspect ratio (35mm film format)",
+        "1:1": "Create a square image with 1:1 aspect ratio (perfect square)",
+        "9:16": "Create a vertical image with 9:16 aspect ratio (portrait, mobile format)",
+        "3:4": "Create a vertical image with 3:4 aspect ratio (portrait format)",
+        "2:3": "Create a vertical image with 2:3 aspect ratio (portrait format)",
+        "5:4": "Create an image with 5:4 aspect ratio (slightly wider than square)",
+        "4:5": "Create a vertical image with 4:5 aspect ratio (portrait format)"
+      };
+      
+      const enhancedPrompt = aspectRatio !== "16:9" 
+        ? `${prompt}. ${aspectRatioInstructions[aspectRatio as keyof typeof aspectRatioInstructions] || `${prompt} (${aspectRatio} ratio)`}`
+        : prompt;
       
       // 根据官方文档，最多支持15张图片（16个part - 1个文本part）
       const MAX_IMAGES = 15;
