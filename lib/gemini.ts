@@ -45,12 +45,16 @@ export class GeminiClient {
   }
 
   async generateImage(prompt: string, aspectRatio: string = "1:1"): Promise<GeminiImageResponse> {
+    console.log("🚀 [Nano Banana] 开始纯文本图像生成");
+    console.log(`📝 [Nano Banana] 提示词: "${prompt.substring(0, 100)}..."`);
+    console.log(`📐 [Nano Banana] 宽高比: ${aspectRatio}`);
+    
     const maxRetries = 3;
     let lastError: Error | null = null;
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        console.log(`🔄 尝试生成图像 (第 ${attempt}/${maxRetries} 次)`);
+        console.log(`🔄 [Nano Banana] 尝试生成图像 (第 ${attempt}/${maxRetries} 次)`);
         
         // 每次尝试都重新创建客户端以使用新的 API Key
         ensureAPIKeyManagerInitialized();
@@ -77,6 +81,9 @@ export class GeminiClient {
           ? `${prompt}. ${aspectRatioInstructions[aspectRatio as keyof typeof aspectRatioInstructions] || `${prompt} (${aspectRatio} ratio)`}`
           : prompt;
         
+        console.log("🎨 [Nano Banana] 调用 generateContent API...");
+        console.log(`🔧 [Nano Banana] 模型: gemini-2.5-flash-image`);
+        
         const response = await this.client.models.generateContent({
           model: "gemini-2.5-flash-image",
           contents: {
@@ -87,7 +94,7 @@ export class GeminiClient {
           }
         });
 
-        console.log("Gemini response received");
+        console.log("📥 [Nano Banana] API 响应接收成功");
 
         // 使用官方推荐的响应处理方式
         return this.handleApiResponse(response, 'image generation');
@@ -173,7 +180,10 @@ export class GeminiClient {
 
   async editImage(prompt: string, imageData: string, mimeType: string = "image/png", aspectRatio: string = "16:9"): Promise<GeminiEditResponse> {
     try {
-      console.log("Editing single image with prompt:", prompt);
+      console.log("🚀 [Nano Banana] 开始单张图片编辑");
+      console.log(`📝 [Nano Banana] 提示词: "${prompt.substring(0, 100)}..."`);
+      console.log(`📐 [Nano Banana] 宽高比: ${aspectRatio}`);
+      console.log(`🖼️ [Nano Banana] 图片类型: ${mimeType}`);
       
       // 精确的宽高比指令
       const aspectRatioInstructions = {
@@ -193,6 +203,9 @@ export class GeminiClient {
         ? `${prompt}. ${aspectRatioInstructions[aspectRatio as keyof typeof aspectRatioInstructions] || `${prompt} (${aspectRatio} ratio)`}`
         : prompt;
       
+      console.log("🎨 [Nano Banana] 调用 generateContent API (图片编辑)...");
+      console.log(`🔧 [Nano Banana] 模型: gemini-2.5-flash-image`);
+      
       const response = await this.client.models.generateContent({
         model: "gemini-2.5-flash-image",
         contents: {
@@ -211,7 +224,7 @@ export class GeminiClient {
         },
       });
 
-      console.log("Gemini single image edit response received");
+      console.log("📥 [Nano Banana] 单张图片编辑 API 响应接收成功");
 
       if (!response.candidates || response.candidates.length === 0) {
         throw new Error("No candidates returned from Gemini");

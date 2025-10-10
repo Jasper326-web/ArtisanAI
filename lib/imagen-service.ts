@@ -9,18 +9,30 @@ import { getAPIKeyManager } from './api-key-manager';
  */
 export async function generateImageWithImagen(prompt: string, aspectRatio: string = "16:9"): Promise<{ primary: string; all: string[] }> {
   try {
+    console.log("🚀 [Imagen-4.0] 开始生成图像");
+    console.log(`📝 [Imagen-4.0] 提示词: "${prompt.substring(0, 100)}..."`);
+    console.log(`📐 [Imagen-4.0] 宽高比: ${aspectRatio}`);
+    
     // 获取可用的 API Key
     const apiKeyManager = getAPIKeyManager();
     const apiKey = apiKeyManager.getCurrentKey();
     
     if (!apiKey) {
+      console.log("❌ [Imagen-4.0] 没有可用的 API Key");
       throw new Error('No available API keys');
     }
+    
+    console.log("🔑 [Imagen-4.0] API Key 获取成功");
 
     // 初始化 Google GenAI 客户端
     const ai = new GoogleGenAI({ apiKey });
+    console.log("🔧 [Imagen-4.0] Google GenAI 客户端初始化完成");
 
     // 调用 Imagen-4.0 生成图像 (生成 4 张供用户选择)
+    console.log("🎨 [Imagen-4.0] 调用 generateImages API...");
+    console.log(`🔧 [Imagen-4.0] 模型: imagen-4.0-generate-001`);
+    console.log(`🔧 [Imagen-4.0] 生成数量: 4 张图像`);
+    
     const response = await ai.models.generateImages({
       model: 'imagen-4.0-generate-001',
       prompt: prompt,
@@ -31,15 +43,22 @@ export async function generateImageWithImagen(prompt: string, aspectRatio: strin
       },
     });
 
+    console.log("📥 [Imagen-4.0] API 响应接收成功");
+
     // 检查响应
     if (!response.generatedImages || response.generatedImages.length === 0) {
+      console.log("❌ [Imagen-4.0] 没有生成任何图像");
       throw new Error('No images generated');
     }
+
+    console.log(`✅ [Imagen-4.0] 成功生成 ${response.generatedImages.length} 张图像`);
 
     // 返回所有生成的图像
     const images = response.generatedImages.map(img => 
       `data:image/jpeg;base64,${img.image.imageBytes}`
     );
+    
+    console.log("🔄 [Imagen-4.0] 图像数据转换完成");
     
     // 返回第一张图像作为主要显示，其他图像在数组中
     return {
@@ -48,7 +67,7 @@ export async function generateImageWithImagen(prompt: string, aspectRatio: strin
     };
 
   } catch (error) {
-    console.error('Error generating image with Imagen-4.0:', error);
+    console.error('❌ [Imagen-4.0] 生成失败:', error);
     
     // 标记当前 API Key 为不可用（如果是 API 错误）
     if (error instanceof Error && (
@@ -57,6 +76,7 @@ export async function generateImageWithImagen(prompt: string, aspectRatio: strin
       error.message.includes('403') ||
       error.message.includes('429')
     )) {
+      console.log("⚠️ [Imagen-4.0] API Key 配额问题，标记为失败");
       const apiKeyManager = getAPIKeyManager();
       apiKeyManager.markCurrentKeyFailed();
     }

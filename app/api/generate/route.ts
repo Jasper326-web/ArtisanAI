@@ -30,6 +30,15 @@ export async function POST(req: NextRequest) {
     });
     
     console.log(`🔍 模型判断: model=${model}, model === 'imagen-4.0': ${model === 'imagen-4.0'}`);
+    
+    // 确定使用的模型和服务
+    const isImagenMode = model === 'imagen-4.0';
+    const actualModel = isImagenMode ? 'imagen-4.0-generate-001' : 'gemini-2.5-flash-image';
+    const serviceProvider = isImagenMode ? 'Google AI Studio (Imagen-4.0)' : 'Google AI Studio (Nano Banana)';
+    
+    console.log(`🎯 确定使用模型: ${actualModel}`);
+    console.log(`🏢 服务提供商: ${serviceProvider}`);
+    console.log(`📊 模式类型: ${isImagenMode ? '生图模式 (Generate)' : '编辑模式 (Edit)'}`);
 
     if (!user_id || !prompt) {
       return NextResponse.json({ error: 'Missing user_id or prompt' }, { status: 400 });
@@ -75,21 +84,28 @@ export async function POST(req: NextRequest) {
       
       if (model === 'imagen-4.0') {
         // 使用 Imagen-4.0 生成图像
-        console.log("🎨 使用 Imagen-4.0 生成图像");
+        console.log("🎨 开始调用 Imagen-4.0 生成图像");
+        console.log(`📝 提示词: "${prompt.substring(0, 100)}..."`);
+        console.log(`📐 宽高比: ${finalAspectRatio}`);
+        
         if (images && images.length > 0) {
+          console.log("❌ Imagen-4.0 不支持图像输入，拒绝请求");
           return NextResponse.json({ 
             error: 'Imagen-4.0 不支持图像输入，请使用编辑模式' 
           }, { status: 400 });
         }
         
         try {
+          console.log("🚀 调用 generateImageWithImagen 函数...");
           const imageData = await generateImageWithImagen(prompt, finalAspectRatio);
+          console.log(`✅ Imagen-4.0 生成成功，返回 ${imageData.all.length} 张图像`);
           imageResult = { 
             success: true, 
             image: imageData.primary,
             images: imageData.all // 返回所有图像供前端选择
           };
         } catch (error) {
+          console.log(`❌ Imagen-4.0 生成失败: ${error instanceof Error ? error.message : '未知错误'}`);
           imageResult = { 
             success: false, 
             error: error instanceof Error ? error.message : 'Imagen-4.0 生成失败' 
@@ -97,25 +113,33 @@ export async function POST(req: NextRequest) {
         }
       } else {
         // 使用 Nano Banana (现有逻辑)
+        console.log("🎨 开始调用 Nano Banana (Gemini 2.5 Flash Image)");
+        console.log(`📝 提示词: "${prompt.substring(0, 100)}..."`);
+        console.log(`📐 宽高比: ${finalAspectRatio}`);
+        
         // 如果有上传的图像，使用图像编辑功能；否则使用纯文本生成
         if (images && images.length > 0) {
-          console.log(`🎨 使用 Nano Banana 图像编辑功能，上传了 ${images.length} 张图像`);
+          console.log(`🖼️ 使用 Nano Banana 图像编辑功能，上传了 ${images.length} 张图像`);
           
           if (images.length === 1) {
             // 单张图片编辑
+            console.log("🔧 执行单张图片编辑...");
             const firstImage = images[0];
             const base64Data = firstImage.split(',')[1];
             const mimeType = firstImage.split(',')[0].split(':')[1].split(';')[0];
             
             imageResult = await aiClient.editImage(prompt, base64Data, mimeType, finalAspectRatio);
+            console.log(`✅ Nano Banana 单张图片编辑完成: ${imageResult.success ? '成功' : '失败'}`);
           } else {
             // 多张图片融合编辑
-            console.log(`🔄 处理多张图片融合，共 ${images.length} 张`);
+            console.log(`🔄 执行多张图片融合编辑，共 ${images.length} 张`);
             imageResult = await aiClient.editMultipleImages(prompt, images, finalAspectRatio);
+            console.log(`✅ Nano Banana 多张图片融合完成: ${imageResult.success ? '成功' : '失败'}`);
           }
         } else {
           console.log("🎨 使用 Nano Banana 纯文本图像生成功能");
           imageResult = await aiClient.generateImage(prompt, finalAspectRatio);
+          console.log(`✅ Nano Banana 纯文本生成完成: ${imageResult.success ? '成功' : '失败'}`);
         }
       }
 
