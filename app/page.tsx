@@ -29,7 +29,6 @@ import CircularGallery from "@/components/circular-gallery"
 import { FeedbackPanel } from "@/components/feedback-panel"
 import LightRays from "@/components/light-rays"
 import GradientText from "@/components/gradient-text"
-import ShinyText from "@/components/shiny-text"
 import SplashCursor from "@/components/splash-cursor.jsx"
 import { ImageUpload } from "@/components/image-upload"
 import type { UploadedImage } from "@/lib/upload"
@@ -37,6 +36,7 @@ import { createClient } from "@/lib/supabase-client"
 import { useToast } from "@/hooks/use-toast"
 import { CookieConsent } from '@/components/cookie-consent'
 import { trackEvent, trackPromptTemplate, trackGeneration, trackFeedback, trackNavigation, trackPageView, trackSectionView } from '@/lib/umami'
+import { generateImageWithImagen } from '@/lib/imagen-service'
 
 export default function AIImageGenerator() {
   const [feedback, setFeedback] = useState("")
@@ -49,6 +49,7 @@ export default function AIImageGenerator() {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState<{src: string, alt: string, title?: string} | null>(null)
   const [selectedAspectRatio, setSelectedAspectRatio] = useState("16:9")
+  const [mode, setMode] = useState<'generate' | 'edit'>('generate')
   const supabase = createClient()
 
   const { t } = useLanguage()
@@ -215,14 +216,18 @@ export default function AIImageGenerator() {
 
     try {
       setIsGenerating(true)
+      
+      let imageUrl: string;
+      
+      // 统一使用 /api/generate 接口，通过 model 参数区分
       const res = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           user_id: userId,
           prompt,
-          images: images.map(i => i.url),
-          model: undefined,
+          images: mode === 'edit' ? images.map(i => i.url) : [], // 生图模式不需要图片
+          model: mode === 'generate' ? 'imagen-4.0' : undefined, // 区分模型
           aspect_ratio: selectedAspectRatio
         })
       })
@@ -285,16 +290,28 @@ export default function AIImageGenerator() {
       }
       console.log('Generate success:', data)
       
-      // Display the generated image
+      // Display the generated image(s)
       if (data.image) {
         setGeneratedImage(data.image)
+        
+        // 如果是生图模式且有多个图像，存储所有图像
+        if (mode === 'generate' && data.images && data.images.length > 1) {
+          // 可以在这里添加多图选择逻辑
+          console.log('🎨 生成了多张图像:', data.images.length);
+        }
+        
         // 追踪生成成功
         trackGeneration('success', { 
           prompt: prompt.substring(0, 50), 
           hasImages: images.length > 0,
-          creditsUsed: 1
+          mode: mode === 'generate' ? 'imagen-4.0' : 'nano-banana',
+          creditsUsed: mode === 'generate' ? 50 : 30,
+          imageCount: data.images ? data.images.length : 1
         });
-        // Trigger credits update in navigation with the remaining balance
+      }
+      
+      // Trigger credits update in navigation with the remaining balance
+      if (data.remaining !== undefined) {
         // 验证余额数据有效性
         const remainingBalance = data.remaining;
         if (typeof remainingBalance === 'number' && remainingBalance >= 0) {
@@ -373,24 +390,176 @@ export default function AIImageGenerator() {
               showBorder={false}
               className="inline-block"
             >
-              {t?.hero?.title || '解雇你的摄影师'}
+              {t?.hero?.subtitle1 ? (
+                t.hero.subtitle1.includes('generator & editor') ? (
+                  <>
+                    {t.hero.subtitle1.split('generator & editor')[0]}
+                    <span style={{
+                      background: 'linear-gradient(45deg, #ffff00, #ff7f50, #ff4500, #ff7f50, #ffff00)',
+                      backgroundSize: '300% 300%',
+                      backgroundClip: 'text',
+                      WebkitBackgroundClip: 'text',
+                      color: 'transparent',
+                      animation: 'gradient 6s ease infinite'
+                    }}>generator & editor</span>
+                    {t.hero.subtitle1.split('generator & editor')[1]}
+                  </>
+                ) : (
+                  t.hero.subtitle1
+                )
+              ) : (
+                <>
+                  One-stop AI image 
+                  <span style={{
+                    background: 'linear-gradient(45deg, #ffff00, #ff7f50, #ff4500, #ff7f50, #ffff00)',
+                    backgroundSize: '300% 300%',
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    color: 'transparent',
+                    animation: 'gradient 6s ease infinite'
+                  }}>generator & editor</span>
+                </>
+              )}
             </GradientText>
           </div>
-          <div className="text-xl md:text-2xl mb-12 max-w-3xl mx-auto text-pretty">
-            <GradientText
-              colors={["#FF7F50", "#FF3B30", "#FFD93D", "#FF7F50", "#FF3B30"]}
-              animationSpeed={12}
-              showBorder={false}
-              className="inline-block"
-            >
-              {t?.hero?.subtitle || 'AI驱动的图像生成，创造令人惊叹的一致结果'}
-            </GradientText>
+          <div className="text-lg md:text-xl mb-12 max-w-4xl mx-auto text-pretty">
+            <div className="text-center">
+              {t?.hero?.subtitle1 ? (
+                <>
+                  <span className="text-2xl md:text-3xl font-bold" style={{
+                    background: 'linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080)',
+                    backgroundSize: '300% 300%',
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    color: 'transparent',
+                    animation: 'gradient 6s ease infinite'
+                  }}>{t?.hero?.title || 'AI Editing, Redefined.'}</span><br />
+                  <span className="text-2xl md:text-3xl font-bold" style={{
+                    background: 'linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080)',
+                    backgroundSize: '300% 300%',
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    color: 'transparent',
+                    animation: 'gradient 6s ease infinite'
+                  }}>{t.hero.subtitle2.replace(/\./g, ' - ').replace(/ - $/, '')}</span><br />
+                  <span className="text-2xl md:text-3xl font-bold" style={{
+                    background: 'linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080)',
+                    backgroundSize: '300% 300%',
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    color: 'transparent',
+                    animation: 'gradient 6s ease infinite'
+                  }}>{t.hero.subtitle3.replace(/\.$/, '')}</span>
+                </>
+              ) : (
+                <>
+                  <span className="text-2xl md:text-3xl font-bold" style={{
+                    background: 'linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080)',
+                    backgroundSize: '300% 300%',
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    color: 'transparent',
+                    animation: 'gradient 6s ease infinite'
+                  }}>AI Editing, Redefined.</span><br />
+                  <span className="text-2xl md:text-3xl font-bold" style={{
+                    background: 'linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080)',
+                    backgroundSize: '300% 300%',
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    color: 'transparent',
+                    animation: 'gradient 6s ease infinite'
+                  }}>Create - Edit - Transform</span><br />
+                  <span className="text-2xl md:text-3xl font-bold" style={{
+                    background: 'linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080)',
+                    backgroundSize: '300% 300%',
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    color: 'transparent',
+                    animation: 'gradient 6s ease infinite'
+                  }}>nothing is impossible</span>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Feature Tags - 玻璃拟态效果 + 边框 */}
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
+            <div className="px-4 py-2 rounded-full text-white text-xs font-medium border border-white/30 hover:border-white/50 transition-all duration-300 hover:scale-105" 
+                 style={{
+                   background: 'rgba(34, 197, 94, 0.4)',
+                   boxShadow: '0 4px 16px rgba(34, 197, 94, 0.2)'
+                 }}>
+              {t?.hero?.tags?.nanoBanana || 'Support by Nano Banana'}
+            </div>
+            <div className="px-4 py-2 rounded-full text-white text-xs font-medium border border-white/30 hover:border-white/50 transition-all duration-300 hover:scale-105" 
+                 style={{
+                   background: 'rgba(59, 130, 246, 0.4)',
+                   boxShadow: '0 4px 16px rgba(59, 130, 246, 0.2)'
+                 }}>
+              {t?.hero?.tags?.consistency || 'Ultra Character Consistency'}
+            </div>
+            <div className="px-4 py-2 rounded-full text-white text-xs font-medium border border-white/30 hover:border-white/50 transition-all duration-300 hover:scale-105" 
+                 style={{
+                   background: 'rgba(245, 158, 11, 0.4)',
+                   boxShadow: '0 4px 16px rgba(245, 158, 11, 0.2)'
+                 }}>
+              {t?.hero?.tags?.freeCredits || 'High Free Credits'}
+            </div>
+          </div>
+
+          {/* Mode Selection - Simplified Menu Bar */}
+          <div className="max-w-2xl mx-auto mb-4">
+            <div className="text-center mb-3">
+              <p className="text-sm font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
+                {t?.hero?.mode?.selectHint || '请先选择模式'}
+              </p>
+            </div>
+            <div className="flex bg-card/10 backdrop-blur-sm rounded-lg border border-primary/20 overflow-hidden">
+              <button
+                onClick={() => setMode('generate')}
+                className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-all duration-200 ${
+                  mode === 'generate'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-card/20'
+                }`}
+              >
+                <span>{t?.hero?.mode?.generate || '生图模式'}</span>
+                <span className="text-yellow-400 font-bold">⚡️50</span>
+              </button>
+              <div className="w-px bg-border/50"></div>
+              <button
+                onClick={() => setMode('edit')}
+                className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-all duration-200 ${
+                  mode === 'edit'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-card/20'
+                }`}
+              >
+                <span>{t?.hero?.mode?.edit || '编辑模式'}</span>
+                <span className="text-yellow-400 font-bold">⚡️30</span>
+              </button>
+            </div>
           </div>
 
           {/* Core Input Area - Enhanced with glassmorphism and glowing borders */}
           <Card className="max-w-2xl mx-auto backdrop-blur-xl bg-card/30 border-2 border-primary/60 shadow-2xl shadow-primary/10 hover:shadow-primary/20 transition-all duration-500 hover:border-primary/50">
             <CardContent className="p-8">
               <div className="space-y-6">
+                {/* Model Display */}
+                <div className="flex items-center justify-start -mt-6 mb-1">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-yellow-500/30 to-yellow-400/20 rounded-lg border-2 border-yellow-400/50 shadow-[0_0_15px_rgba(255,193,7,0.4)] shadow-yellow-500/30">
+                    <span className="text-xs font-medium text-yellow-200">
+                      {t?.hero?.mode?.poweredBy || 'powered by'}
+                    </span>
+                    <span className="text-sm font-bold text-yellow-100 drop-shadow-[0_0_8px_rgba(255,193,7,0.6)]">
+                      {mode === 'generate' 
+                        ? (t?.hero?.mode?.generateModel || 'Imagen-4.0')
+                        : (t?.hero?.mode?.editModel || 'Nano Banana')
+                      }
+                    </span>
+                  </div>
+                </div>
+
                 {/* Output Ratio Selection */}
                 <div className="flex items-center justify-between">
                   <label className="text-sm font-medium text-foreground">
@@ -414,10 +583,16 @@ export default function AIImageGenerator() {
                   </select>
                 </div>
 
-                <ImageUpload onImagesChange={setImages} className="rounded-lg" />
+                {mode === 'edit' && (
+                  <ImageUpload onImagesChange={setImages} className="rounded-lg" />
+                )}
 
                 <Textarea
-                  placeholder={t.hero.placeholder}
+                  placeholder={
+                    mode === 'generate' 
+                      ? (t?.hero?.mode?.generateDesc || '从文本生成全新图像，支持多种宽高比')
+                      : (t?.hero?.placeholder || '描述您的愿景...')
+                  }
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
                   className="min-h-[100px] bg-input/50 border-primary/20 focus:border-primary/50 focus:shadow-[0_0_20px_rgba(59,130,246,0.2)] transition-all duration-300"
@@ -552,8 +727,11 @@ export default function AIImageGenerator() {
                     </>
                   ) : (
                     <>
-                  <Sparkles className="mr-2 h-5 w-5" />
-                  {t.hero.generateBtn}
+                      <Sparkles className="mr-2 h-5 w-5" />
+                      {t.hero.generateBtn}
+                      <span className="ml-2 text-yellow-300 font-bold">
+                        ⚡️{mode === 'generate' ? '50' : '30'}
+                      </span>
                     </>
                   )}
                 </Button>

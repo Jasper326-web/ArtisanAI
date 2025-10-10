@@ -3,7 +3,7 @@
 -- Credits table
 create table if not exists public.credits (
   user_id uuid primary key references auth.users(id) on delete cascade,
-  balance integer not null default 120,
+  balance integer not null default 220,
   updated_at timestamp with time zone default now()
 );
 
@@ -35,9 +35,9 @@ create table if not exists public.feedback (
 create or replace function public.recharge_credits(p_user_id uuid, p_amount int)
 returns table(balance int) language plpgsql as $$
 begin
-  -- 确保用户有积分记录，新用户初始120积分
+  -- 确保用户有积分记录，新用户初始220积分
   insert into public.credits (user_id, balance, updated_at)
-  values (p_user_id, 120, now())
+  values (p_user_id, 220, now())
   on conflict (user_id) do nothing;
   
   -- 更新积分：现有余额 + 充值金额
