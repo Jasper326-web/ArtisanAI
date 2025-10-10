@@ -9,7 +9,7 @@ initAPIKeys();
 
 // Google Gemini 2.5 Flash Image Preview integration.
 // Consumes different credits based on mode:
-// - Generate mode (Imagen-4.0): 50 credits for 4 images
+// - Generate mode (Imagen-4.0): 50 credits for 3 images
 // - Edit mode (Nano Banana): 30 credits for 1 image
 
 const COST_GENERATE = 50; // Imagen-4.0 生图模式

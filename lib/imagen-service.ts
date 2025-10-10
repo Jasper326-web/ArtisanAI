@@ -28,16 +28,16 @@ export async function generateImageWithImagen(prompt: string, aspectRatio: strin
     const ai = new GoogleGenAI({ apiKey });
     console.log("🔧 [Imagen-4.0] Google GenAI 客户端初始化完成");
 
-    // 调用 Imagen-4.0 生成图像 (生成 4 张供用户选择)
+    // 调用 Imagen-4.0 生成图像 (生成 3 张供用户选择)
     console.log("🎨 [Imagen-4.0] 调用 generateImages API...");
     console.log(`🔧 [Imagen-4.0] 模型: imagen-4.0-generate-001`);
-    console.log(`🔧 [Imagen-4.0] 生成数量: 4 张图像`);
+    console.log(`🔧 [Imagen-4.0] 生成数量: 3 张图像`);
     
     const response = await ai.models.generateImages({
       model: 'imagen-4.0-generate-001',
       prompt: prompt,
       config: {
-        numberOfImages: 4, // 生成 4 张图像
+        numberOfImages: 3, // 生成 3 张图像
         outputMimeType: 'image/jpeg',
         aspectRatio: aspectRatio,
       },

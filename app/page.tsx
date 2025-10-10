@@ -809,7 +809,7 @@ export default function AIImageGenerator() {
                           <p className="text-sm font-medium text-foreground text-center">
                             选择你喜欢的图片 ({generateResults.length} 张可选)
                           </p>
-                          <div className="grid grid-cols-2 gap-2">
+                          <div className="grid grid-cols-3 gap-2">
                             {generateResults.map((image, index) => (
                               <div
                                 key={index}
@@ -823,11 +823,11 @@ export default function AIImageGenerator() {
                                 <img
                                   src={image}
                                   alt={`Generated image ${index + 1}`}
-                                  className="w-full h-32 object-cover"
+                                  className="w-full h-24 object-cover"
                                 />
                                 {selectedGenerateImage === image && (
                                   <div className="absolute inset-0 bg-blue-500/20 flex items-center justify-center">
-                                    <CheckCircle className="w-6 h-6 text-blue-500" />
+                                    <CheckCircle className="w-5 h-5 text-blue-500" />
                                   </div>
                                 )}
                                 <div className="absolute bottom-1 left-1 bg-black/70 text-white text-xs px-1 py-0.5 rounded">
