@@ -99,11 +99,21 @@ export async function POST(req: NextRequest) {
           console.log("🚀 调用 generateImageWithImagen 函数...");
           const imageData = await generateImageWithImagen(prompt, finalAspectRatio);
           console.log(`✅ Imagen-4.0 生成成功，返回 ${imageData.all.length} 张图像`);
+          console.log(`🔍 imageData 结构:`, { 
+            hasPrimary: !!imageData.primary, 
+            allLength: imageData.all.length,
+            primaryLength: imageData.primary?.length || 0
+          });
           imageResult = { 
             success: true, 
             image: imageData.primary,
             images: imageData.all // 返回所有图像供前端选择
           };
+          console.log(`🔍 imageResult 结构:`, { 
+            hasImage: !!imageResult.image, 
+            hasImages: !!imageResult.images,
+            imagesLength: imageResult.images?.length || 0
+          });
         } catch (error) {
           console.log(`❌ Imagen-4.0 生成失败: ${error instanceof Error ? error.message : '未知错误'}`);
           imageResult = { 

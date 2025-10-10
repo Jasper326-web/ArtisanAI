@@ -326,6 +326,11 @@ export default function AIImageGenerator() {
       if (data.image) {
         if (mode === 'generate') {
           // 生图模式：存储所有图片，默认选中第一张
+          console.log('🔍 生图模式处理:', { 
+            hasImages: !!data.images, 
+            imagesLength: data.images?.length,
+            hasImage: !!data.image
+          });
           if (data.images && data.images.length > 0) {
             setGenerateResults(data.images)
             setSelectedGenerateImage(data.images[0]) // 默认选中第一张
@@ -334,7 +339,7 @@ export default function AIImageGenerator() {
             // 如果没有多图数据，只设置单张
             setGenerateResults([data.image])
             setSelectedGenerateImage(data.image)
-            console.log('🎨 生图模式：生成了单张图像');
+            console.log('🎨 生图模式：生成了单张图像（没有images数组）');
           }
         } else if (mode === 'edit') {
           // 编辑模式：设置单张编辑结果
