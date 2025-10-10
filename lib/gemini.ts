@@ -79,9 +79,11 @@ export class GeminiClient {
         
         const response = await this.client.models.generateContent({
           model: "gemini-2.5-flash-image",
-          contents: { parts: [{ text: enhancedPrompt }] },
+          contents: {
+            parts: [{ text: enhancedPrompt }]
+          },
           config: {
-            responseModalities: ["IMAGE"]
+            responseModalities: [Modality.IMAGE]
           }
         });
 
@@ -204,10 +206,9 @@ export class GeminiClient {
             { text: enhancedPrompt },
           ],
         },
-        // 移除过于严格的responseModalities配置，让模型自然选择输出类型
-        // config: {
-        //   responseModalities: ["IMAGE"]
-        // },
+        config: {
+          responseModalities: [Modality.IMAGE]
+        },
       });
 
       console.log("Gemini single image edit response received");
@@ -308,10 +309,9 @@ export class GeminiClient {
         contents: {
           parts: [...imageParts, textPart],
         },
-        // 移除过于严格的responseModalities配置，让模型自然选择输出类型
-        // config: {
-        //   responseModalities: ["IMAGE"]
-        // },
+        config: {
+          responseModalities: [Modality.IMAGE]
+        },
       });
       
       console.log("Gemini multi-image generation response received");
@@ -363,9 +363,11 @@ export class GeminiClient {
     try {
       const response = await this.client.models.generateContent({
         model: "gemini-2.5-flash-image",
-        contents: prompt,
+        contents: {
+          parts: [{ text: prompt }]
+        },
         config: {
-          responseModalities: ["TEXT"] // 文本生成使用TEXT模式
+          responseModalities: [Modality.TEXT] // 文本生成使用TEXT模式
         }
       });
 
