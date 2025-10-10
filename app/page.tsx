@@ -28,6 +28,7 @@ import { LottieArrow } from "@/components/lottie-arrow"
 import CircularGallery from "@/components/circular-gallery"
 import { FeedbackPanel } from "@/components/feedback-panel"
 import LightRays from "@/components/light-rays"
+import { fetchJsonWithRetry, getNetworkErrorMessage, NetworkMonitor } from "@/lib/network-utils"
 import GradientText from "@/components/gradient-text"
 import SplashCursor from "@/components/splash-cursor.jsx"
 import { ImageUpload } from "@/components/image-upload"
@@ -74,6 +75,30 @@ export default function AIImageGenerator() {
 
   const { t } = useLanguage()
   const { toast } = useToast()
+  
+  // 网络状态监控
+  useEffect(() => {
+    const networkMonitor = NetworkMonitor.getInstance()
+    const removeListener = networkMonitor.addListener((isOnline) => {
+      if (!isOnline) {
+        toast({
+          title: "网络连接断开",
+          description: "请检查网络连接后重试",
+          variant: "destructive",
+        })
+      } else {
+        toast({
+          title: "网络连接已恢复",
+          description: "您可以继续使用服务",
+          variant: "default",
+        })
+      }
+    })
+    
+    return () => {
+      removeListener()
+    }
+  }, [toast])
   
   // 调试：监控editResult变化
   useEffect(() => {
@@ -244,8 +269,8 @@ export default function AIImageGenerator() {
       
       let imageUrl: string;
       
-      // 统一使用 /api/generate 接口，通过 model 参数区分
-      const res = await fetch('/api/generate', {
+      // 使用带重试的网络请求
+      const data = await fetchJsonWithRetry('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -255,31 +280,31 @@ export default function AIImageGenerator() {
           model: mode === 'generate' ? 'imagen-4.0' : undefined, // 区分模型
           aspect_ratio: selectedAspectRatio
         })
-      })
-      const data = await res.json()
-      if (!res.ok) {
-        console.error('Generate failed:', {
-          status: res.status,
-          statusText: res.statusText,
-          data: data,
-          url: res.url
-        })
-        
-        // 检查是否是积分不足问题
-        let errorTitle = t?.errors?.generation_failed || "生成失败"
-        let errorMessage = data?.error || `HTTP ${res.status}: ${res.statusText}`
-        let showBuyCredits = false
-        
-        if (data?.error === 'INSUFFICIENT_CREDITS' || res.status === 402) {
-          errorTitle = t?.errors?.insufficient_credits?.title || "积分不足"
-          errorMessage = t?.errors?.insufficient_credits?.description || "您的积分不足以生成图像。请购买更多积分以继续使用。"
-          showBuyCredits = true
-        } else if (res.status === 429 || (data?.error && data.error.includes('quota'))) {
-          errorMessage = t?.errors?.api_quota || "API额度已用完，请稍后再试或联系管理员"
-        } else if (res.status === 500 && !data?.error) {
-          errorMessage = t?.errors?.server_error || "服务器内部错误，可能是API服务暂时不可用"
+      }, {
+        maxRetries: 3,
+        baseDelay: 1000,
+        retryCondition: (error) => {
+          // 网络错误可以重试，但积分不足等业务错误不重试
+          return error?.isRetryable && !error?.message?.includes('INSUFFICIENT_CREDITS')
         }
-        
+      })
+      
+      // 检查是否是积分不足问题
+      let errorTitle = t?.errors?.generation_failed || "生成失败"
+      let errorMessage = data?.error || "生成失败"
+      let showBuyCredits = false
+      
+      if (data?.error === 'INSUFFICIENT_CREDITS') {
+        errorTitle = t?.errors?.insufficient_credits?.title || "积分不足"
+        errorMessage = t?.errors?.insufficient_credits?.description || "您的积分不足以生成图像。请购买更多积分以继续使用。"
+        showBuyCredits = true
+      } else if (data?.error && data.error.includes('quota')) {
+        errorMessage = t?.errors?.api_quota || "API额度已用完，请稍后再试或联系管理员"
+      } else if (data?.error && data.error.includes('server')) {
+        errorMessage = t?.errors?.server_error || "服务器内部错误，可能是API服务暂时不可用"
+      }
+      
+      if (data?.error) {
         if (showBuyCredits) {
           // 积分不足的简洁toast
           toast({
@@ -375,7 +400,7 @@ export default function AIImageGenerator() {
         }
       }
     } catch (e: any) {
-      console.error(e)
+      console.error('Generate error:', e)
       
       // 追踪生成失败
       trackGeneration('error', { 
@@ -384,9 +409,12 @@ export default function AIImageGenerator() {
         error: e?.message || 'unknown'
       });
       
+      // 使用网络错误消息映射
+      const errorMessage = getNetworkErrorMessage(e)
+      
       toast({
-        title: "网络错误",
-        description: e?.message || '未知错误，请重试',
+        title: "生成失败",
+        description: errorMessage,
         variant: "destructive",
       })
     } finally {

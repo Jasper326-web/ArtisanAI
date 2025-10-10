@@ -1140,7 +1140,7 @@ const translations = {
       subtitle2: "创造。编辑。转换。",
       subtitle3: "一切皆有可能",
       tags: {
-        nanoBanana: "由 Imagen-4.0 提供支持",
+        nanoBanana: "由 Nano Banana 提供支持",
         consistency: "超高人物一致性",
         freeCredits: "高免费额度"
       },
