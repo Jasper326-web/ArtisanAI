@@ -1128,7 +1128,7 @@ const translations = {
       subtitle2: "创造。编辑。转换。",
       subtitle3: "一切皆有可能",
       tags: {
-        nanoBanana: "由 Nano Banana 提供支持",
+        nanoBanana: "由 Imagen-4.0 提供支持",
         consistency: "超高人物一致性",
         freeCredits: "高免费额度"
       },
@@ -1151,7 +1151,7 @@ const translations = {
         generate: "生图模式",
         edit: "编辑模式",
         generateModel: "Imagen-4.0",
-        editModel: "Nano Banana",
+        editModel: "Imagen-4.0",
         generateDesc: "从文本生成全新图像，支持多种宽高比",
         editDesc: "重绘、去水印、P图修图，保持人物一致性",
         selectHint: "请先选择模式",
