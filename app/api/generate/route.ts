@@ -158,14 +158,21 @@ export async function POST(req: NextRequest) {
       // 确保返回有效的余额数值
       const remainingBalance = decRes?.balance ?? (current - costPerGeneration);
       
-      return NextResponse.json({ 
-        image: imageResult.image, 
-        images: imageResult.images, // 多图数据 (仅生图模式)
+      // 根据模式决定返回的数据结构
+      const responseData: any = {
+        image: imageResult.image,
         remaining: remainingBalance,
         model: model === 'imagen-4.0' ? 'imagen-4.0' : 'gemini-2.5-flash-image',
         provider: aiClient.getCurrentProvider(),
-        tokens_used: model === 'imagen-4.0' ? 200 : 50 // 生图模式消耗更多 tokens
-      });
+        tokens_used: model === 'imagen-4.0' ? 200 : 50
+      };
+      
+      // 只有生图模式才返回 images 数组
+      if (model === 'imagen-4.0' && imageResult.images) {
+        responseData.images = imageResult.images;
+      }
+      
+      return NextResponse.json(responseData);
     } catch (geminiError: any) {
       console.error('Gemini API Error:', geminiError);
       

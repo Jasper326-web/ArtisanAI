@@ -74,6 +74,11 @@ export default function AIImageGenerator() {
 
   const { t } = useLanguage()
   const { toast } = useToast()
+  
+  // 调试：监控editResult变化
+  useEffect(() => {
+    console.log('🔍 editResult 状态变化:', editResult ? '有图片' : '无图片');
+  }, [editResult]);
 
   // 图片预览功能
   const handleImagePreview = (src: string, alt: string, title?: string) => {
@@ -309,6 +314,12 @@ export default function AIImageGenerator() {
         return
       }
       console.log('Generate success:', data)
+      console.log('🔍 当前模式:', mode)
+      console.log('🔍 返回数据:', { 
+        hasImage: !!data.image, 
+        hasImages: !!data.images, 
+        imagesLength: data.images?.length 
+      })
       
       // Display the generated image(s)
       if (data.image) {
@@ -322,11 +333,13 @@ export default function AIImageGenerator() {
             // 如果没有多图数据，只设置单张
             setGenerateResults([data.image])
             setSelectedGenerateImage(data.image)
+            console.log('🎨 生图模式：生成了单张图像');
           }
-        } else {
+        } else if (mode === 'edit') {
           // 编辑模式：设置单张编辑结果
           setEditResult(data.image)
-          console.log('🎨 编辑模式：编辑完成');
+          console.log('🎨 编辑模式：编辑完成，图片已设置');
+          console.log('🔍 设置 editResult 为:', data.image ? '有图片' : '无图片');
         }
         
         // 追踪生成成功
