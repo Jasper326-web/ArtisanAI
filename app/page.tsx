@@ -46,7 +46,10 @@ export default function AIImageGenerator() {
   const [images, setImages] = useState<UploadedImage[]>([])
   const [isGenerating, setIsGenerating] = useState(false)
   const [userId, setUserId] = useState<string | null>(null)
-  const [generateResult, setGenerateResult] = useState<string | null>(null)
+  // 生图模式：多张图片 + 选中的图片
+  const [generateResults, setGenerateResults] = useState<string[]>([])
+  const [selectedGenerateImage, setSelectedGenerateImage] = useState<string | null>(null)
+  // 编辑模式：单张编辑结果
   const [editResult, setEditResult] = useState<string | null>(null)
   const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false)
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
@@ -57,7 +60,8 @@ export default function AIImageGenerator() {
   // 根据当前模式获取对应的prompt和结果
   const currentPrompt = mode === 'generate' ? generatePrompt : editPrompt
   const setCurrentPrompt = mode === 'generate' ? setGeneratePrompt : setEditPrompt
-  const currentResult = mode === 'generate' ? generateResult : editResult
+  // 生图模式显示选中的图片，编辑模式显示编辑结果
+  const currentResult = mode === 'generate' ? selectedGenerateImage : editResult
   
   // 模式切换时清空编辑模式的图片
   const handleModeChange = (newMode: 'generate' | 'edit') => {
@@ -308,17 +312,21 @@ export default function AIImageGenerator() {
       
       // Display the generated image(s)
       if (data.image) {
-        // 根据模式设置对应的结果
         if (mode === 'generate') {
-          setGenerateResult(data.image)
+          // 生图模式：存储所有图片，默认选中第一张
+          if (data.images && data.images.length > 0) {
+            setGenerateResults(data.images)
+            setSelectedGenerateImage(data.images[0]) // 默认选中第一张
+            console.log('🎨 生图模式：生成了', data.images.length, '张图像');
+          } else {
+            // 如果没有多图数据，只设置单张
+            setGenerateResults([data.image])
+            setSelectedGenerateImage(data.image)
+          }
         } else {
+          // 编辑模式：设置单张编辑结果
           setEditResult(data.image)
-        }
-        
-        // 如果是生图模式且有多个图像，存储所有图像
-        if (mode === 'generate' && data.images && data.images.length > 1) {
-          // 可以在这里添加多图选择逻辑
-          console.log('🎨 生成了多张图像:', data.images.length);
+          console.log('🎨 编辑模式：编辑完成');
         }
         
         // 追踪生成成功
@@ -761,7 +769,8 @@ export default function AIImageGenerator() {
           </Card>
 
           {/* Generated Image Display */}
-          {(currentResult || isGenerating) && (
+          {((mode === 'generate' && (generateResults.length > 0 || isGenerating)) || 
+            (mode === 'edit' && (editResult || isGenerating))) && (
             <Card className="max-w-2xl mx-auto mt-8 backdrop-blur-xl bg-card/30 border-2 border-primary/60 shadow-2xl shadow-primary/10">
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold text-foreground mb-4 text-center">
@@ -776,22 +785,85 @@ export default function AIImageGenerator() {
                         <p className="text-xs text-muted-foreground/70">{t?.hero?.generating?.waiting || 'This usually takes 30-60 seconds, please be patient'}</p>
                       </div>
                     </div>
+                  ) : mode === 'generate' && generateResults.length > 0 ? (
+                    // 生图模式：多图选择界面
+                    <div className="space-y-4">
+                      {/* 选中的大图 */}
+                      {selectedGenerateImage && (
+                        <div className="relative">
+                          <img
+                            src={selectedGenerateImage}
+                            alt="Selected generated image"
+                            className="w-full h-auto rounded-lg border border-primary/20 cursor-pointer hover:opacity-90 transition-opacity"
+                            onClick={() => setIsPreviewOpen(true)}
+                          />
+                          <div className="absolute top-2 left-2 bg-blue-500/90 text-white text-xs px-2 py-1 rounded-md">
+                            🎯 已选择
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* 多图选择网格 */}
+                      {generateResults.length > 1 && (
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium text-foreground text-center">
+                            选择你喜欢的图片 ({generateResults.length} 张可选)
+                          </p>
+                          <div className="grid grid-cols-2 gap-2">
+                            {generateResults.map((image, index) => (
+                              <div
+                                key={index}
+                                className={`relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                                  selectedGenerateImage === image
+                                    ? 'border-blue-500 shadow-lg shadow-blue-500/30'
+                                    : 'border-primary/20 hover:border-primary/50'
+                                }`}
+                                onClick={() => setSelectedGenerateImage(image)}
+                              >
+                                <img
+                                  src={image}
+                                  alt={`Generated image ${index + 1}`}
+                                  className="w-full h-32 object-cover"
+                                />
+                                {selectedGenerateImage === image && (
+                                  <div className="absolute inset-0 bg-blue-500/20 flex items-center justify-center">
+                                    <CheckCircle className="w-6 h-6 text-blue-500" />
+                                  </div>
+                                )}
+                                <div className="absolute bottom-1 left-1 bg-black/70 text-white text-xs px-1 py-0.5 rounded">
+                                  {index + 1}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : mode === 'edit' && editResult ? (
+                    // 编辑模式：单张编辑结果
+                    <img
+                      src={editResult}
+                      alt="Edited image"
+                      className="w-full h-auto rounded-lg border border-primary/20 cursor-pointer hover:opacity-90 transition-opacity"
+                      onClick={() => setIsPreviewOpen(true)}
+                    />
                   ) : (
-                    <>
-                      <img
-                        src={currentResult!}
-                        alt="Generated image"
-                        className="w-full h-auto rounded-lg border border-primary/20 cursor-pointer hover:opacity-90 transition-opacity"
-                        onClick={() => setIsPreviewOpen(true)}
-                      />
-                      
-                      {/* 图片不保存提示 */}
-                      <div className="absolute top-2 left-2 bg-yellow-500/90 text-white text-xs px-2 py-1 rounded-md">
-                        ⚠️ {t?.hero?.generating?.downloadNote || 'Images won\'t be saved, please download promptly'}
-                      </div>
-                      
-                      {/* 操作按钮组 */}
-                      <div className="absolute top-3 right-3 flex gap-2">
+                    // 默认情况
+                    <div className="flex items-center justify-center min-h-[200px] text-muted-foreground">
+                      <p>No image to display</p>
+                    </div>
+                  )}
+                  
+                  {/* 图片不保存提示 - 只在有图片时显示 */}
+                  {((mode === 'generate' && selectedGenerateImage) || (mode === 'edit' && editResult)) && (
+                    <div className="absolute top-2 left-2 bg-yellow-500/90 text-white text-xs px-2 py-1 rounded-md">
+                      ⚠️ {t?.hero?.generating?.downloadNote || 'Images won\'t be saved, please download promptly'}
+                    </div>
+                  )}
+                  
+                  {/* 操作按钮组 - 只在有图片时显示 */}
+                  {((mode === 'generate' && selectedGenerateImage) || (mode === 'edit' && editResult)) && (
+                    <div className="absolute top-3 right-3 flex gap-2">
                         {/* 预览按钮 */}
                         <Button
                           variant="outline"
@@ -823,7 +895,8 @@ export default function AIImageGenerator() {
                           className="group relative bg-white/98 hover:bg-red-50 text-gray-800 border-2 border-red-400 hover:border-red-500 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 backdrop-blur-sm"
                           onClick={() => {
                             if (mode === 'generate') {
-                              setGenerateResult(null)
+                              setGenerateResults([])
+                              setSelectedGenerateImage(null)
                             } else {
                               setEditResult(null)
                             }
@@ -834,7 +907,6 @@ export default function AIImageGenerator() {
                           <X className="h-4 w-4 text-red-600 group-hover:text-red-700 transition-colors duration-300 relative z-10" />
                         </Button>
                       </div>
-                    </>
                   )}
                 </div>
               </CardContent>
