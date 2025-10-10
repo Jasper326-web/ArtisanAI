@@ -28,6 +28,8 @@ export async function POST(req: NextRequest) {
       model: model || 'undefined',
       aspect_ratio: aspect_ratio || '16:9 (default)'
     });
+    
+    console.log(`🔍 模型判断: model=${model}, model === 'imagen-4.0': ${model === 'imagen-4.0'}`);
 
     if (!user_id || !prompt) {
       return NextResponse.json({ error: 'Missing user_id or prompt' }, { status: 400 });

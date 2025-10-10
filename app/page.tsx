@@ -40,16 +40,32 @@ import { generateImageWithImagen } from '@/lib/imagen-service'
 
 export default function AIImageGenerator() {
   const [feedback, setFeedback] = useState("")
-  const [prompt, setPrompt] = useState("")
+  // 为两个模式创建独立的状态
+  const [generatePrompt, setGeneratePrompt] = useState("")
+  const [editPrompt, setEditPrompt] = useState("")
   const [images, setImages] = useState<UploadedImage[]>([])
   const [isGenerating, setIsGenerating] = useState(false)
   const [userId, setUserId] = useState<string | null>(null)
-  const [generatedImage, setGeneratedImage] = useState<string | null>(null)
+  const [generateResult, setGenerateResult] = useState<string | null>(null)
+  const [editResult, setEditResult] = useState<string | null>(null)
   const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false)
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState<{src: string, alt: string, title?: string} | null>(null)
   const [selectedAspectRatio, setSelectedAspectRatio] = useState("16:9")
   const [mode, setMode] = useState<'generate' | 'edit'>('generate')
+  
+  // 根据当前模式获取对应的prompt和结果
+  const currentPrompt = mode === 'generate' ? generatePrompt : editPrompt
+  const setCurrentPrompt = mode === 'generate' ? setGeneratePrompt : setEditPrompt
+  const currentResult = mode === 'generate' ? generateResult : editResult
+  
+  // 模式切换时清空编辑模式的图片
+  const handleModeChange = (newMode: 'generate' | 'edit') => {
+    setMode(newMode)
+    if (newMode === 'generate') {
+      setImages([]) // 切换到生图模式时清空上传的图片
+    }
+  }
   const supabase = createClient()
 
   const { t } = useLanguage()
@@ -83,10 +99,10 @@ export default function AIImageGenerator() {
 
   // 下载图片功能
   const handleDownloadImage = async () => {
-    if (!generatedImage) return
+    if (!currentResult) return
 
     try {
-      const response = await fetch(generatedImage)
+      const response = await fetch(currentResult)
       const blob = await response.blob()
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement('a')
@@ -181,13 +197,13 @@ export default function AIImageGenerator() {
 
   // 处理提示词模板点击
   const handlePromptTemplate = (templateName: string, prompt: string) => {
-    setPrompt(prompt);
+    setCurrentPrompt(prompt);
     trackPromptTemplate(templateName);
   };
 
   const handleGenerate = async () => {
     // 追踪生成按钮点击
-    trackGeneration('start', { prompt: prompt.substring(0, 50), hasImages: images.length > 0 });
+    trackGeneration('start', { prompt: currentPrompt.substring(0, 50), hasImages: images.length > 0 });
     
     // 检查用户是否已登录
     if (!userId) {
@@ -225,7 +241,7 @@ export default function AIImageGenerator() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           user_id: userId,
-          prompt,
+          prompt: currentPrompt,
           images: mode === 'edit' ? images.map(i => i.url) : [], // 生图模式不需要图片
           model: mode === 'generate' ? 'imagen-4.0' : undefined, // 区分模型
           aspect_ratio: selectedAspectRatio
@@ -292,7 +308,12 @@ export default function AIImageGenerator() {
       
       // Display the generated image(s)
       if (data.image) {
-        setGeneratedImage(data.image)
+        // 根据模式设置对应的结果
+        if (mode === 'generate') {
+          setGenerateResult(data.image)
+        } else {
+          setEditResult(data.image)
+        }
         
         // 如果是生图模式且有多个图像，存储所有图像
         if (mode === 'generate' && data.images && data.images.length > 1) {
@@ -302,7 +323,7 @@ export default function AIImageGenerator() {
         
         // 追踪生成成功
         trackGeneration('success', { 
-          prompt: prompt.substring(0, 50), 
+          prompt: currentPrompt.substring(0, 50), 
           hasImages: images.length > 0,
           mode: mode === 'generate' ? 'imagen-4.0' : 'nano-banana',
           creditsUsed: mode === 'generate' ? 50 : 30,
@@ -331,7 +352,7 @@ export default function AIImageGenerator() {
       
       // 追踪生成失败
       trackGeneration('error', { 
-        prompt: prompt.substring(0, 50), 
+        prompt: currentPrompt.substring(0, 50), 
         hasImages: images.length > 0,
         error: e?.message || 'unknown'
       });
@@ -516,7 +537,7 @@ export default function AIImageGenerator() {
             </div>
             <div className="flex bg-card/10 backdrop-blur-sm rounded-lg border border-primary/20 overflow-hidden">
               <button
-                onClick={() => setMode('generate')}
+                onClick={() => handleModeChange('generate')}
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-all duration-200 ${
                   mode === 'generate'
                     ? 'bg-primary text-primary-foreground'
@@ -528,7 +549,7 @@ export default function AIImageGenerator() {
               </button>
               <div className="w-px bg-border/50"></div>
               <button
-                onClick={() => setMode('edit')}
+                onClick={() => handleModeChange('edit')}
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-all duration-200 ${
                   mode === 'edit'
                     ? 'bg-primary text-primary-foreground'
@@ -593,8 +614,8 @@ export default function AIImageGenerator() {
                       ? (t?.hero?.mode?.generateDesc || '从文本生成全新图像，支持多种宽高比')
                       : (t?.hero?.placeholder || '描述您的愿景...')
                   }
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
+                  value={currentPrompt}
+                  onChange={(e) => setCurrentPrompt(e.target.value)}
                   className="min-h-[100px] bg-input/50 border-primary/20 focus:border-primary/50 focus:shadow-[0_0_20px_rgba(59,130,246,0.2)] transition-all duration-300"
                 />
 
@@ -717,7 +738,7 @@ export default function AIImageGenerator() {
                 <Button
                   size="lg"
                   onClick={handleGenerate}
-                  disabled={isGenerating || !prompt.trim()}
+                  disabled={isGenerating || !currentPrompt.trim()}
                   className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-primary-foreground font-semibold py-4 shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] transition-all duration-300"
                 >
                   {isGenerating ? (
@@ -740,7 +761,7 @@ export default function AIImageGenerator() {
           </Card>
 
           {/* Generated Image Display */}
-          {(generatedImage || isGenerating) && (
+          {(currentResult || isGenerating) && (
             <Card className="max-w-2xl mx-auto mt-8 backdrop-blur-xl bg-card/30 border-2 border-primary/60 shadow-2xl shadow-primary/10">
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold text-foreground mb-4 text-center">
@@ -758,7 +779,7 @@ export default function AIImageGenerator() {
                   ) : (
                     <>
                       <img
-                        src={generatedImage!}
+                        src={currentResult!}
                         alt="Generated image"
                         className="w-full h-auto rounded-lg border border-primary/20 cursor-pointer hover:opacity-90 transition-opacity"
                         onClick={() => setIsPreviewOpen(true)}
@@ -800,7 +821,13 @@ export default function AIImageGenerator() {
                           variant="outline"
                           size="sm"
                           className="group relative bg-white/98 hover:bg-red-50 text-gray-800 border-2 border-red-400 hover:border-red-500 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 backdrop-blur-sm"
-                          onClick={() => setGeneratedImage(null)}
+                          onClick={() => {
+                            if (mode === 'generate') {
+                              setGenerateResult(null)
+                            } else {
+                              setEditResult(null)
+                            }
+                          }}
                           title="关闭"
                         >
                           <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 via-red-500/10 to-red-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md"></div>
@@ -1899,13 +1926,13 @@ export default function AIImageGenerator() {
       </div>
 
       {/* 图片预览模态框 */}
-      {isPreviewOpen && generatedImage && (
+      {isPreviewOpen && currentResult && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md">
           <div className="relative w-full h-full flex items-center justify-center p-4">
             {/* 图片容器 - 确保整张图片可见 */}
             <div className="relative max-w-[95vw] max-h-[95vh] flex items-center justify-center">
               <img
-                src={generatedImage}
+                src={currentResult}
                 alt="{t?.home?.common?.generated || 'Generated'} image preview"
                 className="max-w-full max-h-full object-contain rounded-xl shadow-2xl border border-white/20"
                 style={{ 
