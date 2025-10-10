@@ -5,13 +5,13 @@ import { getAPIKeyManager } from './api-key-manager';
  * 使用 Imagen-4.0 生成图像
  * @param prompt 文本提示词
  * @param aspectRatio 宽高比
- * @returns 生成的图像 base64 数据 URL
+ * @returns 生成的图像数据，包含主要图像和所有图像
  */
-export async function generateImageWithImagen(prompt: string, aspectRatio: string = "16:9"): Promise<string> {
+export async function generateImageWithImagen(prompt: string, aspectRatio: string = "16:9"): Promise<{ primary: string; all: string[] }> {
   try {
     // 获取可用的 API Key
     const apiKeyManager = getAPIKeyManager();
-    const apiKey = apiKeyManager.getAvailableKey();
+    const apiKey = apiKeyManager.getCurrentKey();
     
     if (!apiKey) {
       throw new Error('No available API keys');
@@ -58,7 +58,7 @@ export async function generateImageWithImagen(prompt: string, aspectRatio: strin
       error.message.includes('429')
     )) {
       const apiKeyManager = getAPIKeyManager();
-      apiKeyManager.markKeyAsUnavailable();
+      apiKeyManager.markCurrentKeyFailed();
     }
     
     throw error;
