@@ -2,25 +2,13 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Sparkles, ChevronDown, ChevronUp, ArrowLeft, Moon, Sun, Globe, HelpCircle } from "lucide-react"
+import { ChevronDown, ChevronUp, ArrowLeft, HelpCircle } from "lucide-react"
 import Link from "next/link"
-import { useLanguage, languages } from "@/contexts/language-context"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function FAQPage() {
-  const [isDark, setIsDark] = useState(false)
-  const { language, setLanguage, t } = useLanguage()
+  const { t } = useLanguage()
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
-  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
-
-  const toggleTheme = () => {
-    setIsDark(!isDark)
-    document.documentElement.classList.toggle("dark")
-  }
-
-  const handleLanguageSelect = (lang: typeof language) => {
-    setLanguage(lang)
-    setShowLanguageDropdown(false)
-  }
 
   const toggleExpanded = (id: string) => {
     const newExpanded = new Set(expandedItems)
@@ -33,9 +21,7 @@ export default function FAQPage() {
   }
 
   return (
-    <div className={`min-h-screen bg-transparent ${isDark ? "dark" : ""}`}>
-
-      {showLanguageDropdown && <div className="fixed inset-0 z-40" onClick={() => setShowLanguageDropdown(false)} />}
+    <div className="min-h-screen bg-transparent">
 
       {/* Breadcrumb - Enhanced with glow effect */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
