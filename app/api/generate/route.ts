@@ -159,8 +159,15 @@ export async function POST(req: NextRequest) {
       const remainingBalance = decRes?.balance ?? (current - costPerGeneration);
       
       // 根据模式决定返回的数据结构
+      const imageData = model === 'imagen-4.0' ? imageResult.image : imageResult.imageUrl;
+      console.log(`🔍 返回的图片数据:`, { 
+        mode: model === 'imagen-4.0' ? 'imagen' : 'edit',
+        hasImage: !!imageData,
+        imageLength: imageData?.length || 0
+      });
+      
       const responseData: any = {
-        image: imageResult.image,
+        image: imageData,
         remaining: remainingBalance,
         model: model === 'imagen-4.0' ? 'imagen-4.0' : 'gemini-2.5-flash-image',
         provider: aiClient.getCurrentProvider(),

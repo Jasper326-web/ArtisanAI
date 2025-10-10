@@ -318,7 +318,8 @@ export default function AIImageGenerator() {
       console.log('🔍 返回数据:', { 
         hasImage: !!data.image, 
         hasImages: !!data.images, 
-        imagesLength: data.images?.length 
+        imagesLength: data.images?.length,
+        imageData: data.image ? data.image.substring(0, 50) + '...' : 'null'
       })
       
       // Display the generated image(s)
