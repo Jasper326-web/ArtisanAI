@@ -65,7 +65,7 @@ BEGIN
     -- 如果用户没有积分记录，初始化
     IF current_balance IS NULL THEN
       INSERT INTO public.credits (user_id, balance) 
-      VALUES (p_user_id, 220)
+      VALUES (p_user_id, 120)
       ON CONFLICT (user_id) DO NOTHING;
       
       SELECT balance INTO current_balance 

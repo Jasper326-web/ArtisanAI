@@ -25,14 +25,14 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // If user has no credits row yet, provision initial 220 credits on first GET
+    // If user has no credits row yet, provision initial 120 credits on first GET
     if (!data) {
-      console.log('No credits record found for user:', userId, 'Provisioning initial 220 credits');
+      console.log('No credits record found for user:', userId, 'Provisioning initial 120 credits');
       
       // Try direct insert first to avoid raising on missing RPCs
       const { data: insertRes, error: insertErr } = await supabase
         .from('credits')
-        .insert({ user_id: userId, balance: 220 })
+        .insert({ user_id: userId, balance: 120 })
         .select('balance')
         .maybeSingle();
 
@@ -41,16 +41,16 @@ export async function GET(req: NextRequest) {
         // Fallback to recharge_credits RPC if direct insert failed due to constraints
         const { data: rechargeRes, error: rechargeErr } = await supabase.rpc('recharge_credits', {
           p_user_id: userId,
-          p_amount: 220,
+          p_amount: 120,
         });
         if (rechargeErr) {
           console.error('RPC recharge failed:', rechargeErr);
           return NextResponse.json({ error: rechargeErr.message }, { status: 500 });
         }
-        return NextResponse.json({ balance: rechargeRes?.balance ?? 220 });
+        return NextResponse.json({ balance: rechargeRes?.balance ?? 120 });
       }
 
-      return NextResponse.json({ balance: insertRes?.balance ?? 220 });
+      return NextResponse.json({ balance: insertRes?.balance ?? 120 });
     }
 
     const balance = data?.balance ?? 0;

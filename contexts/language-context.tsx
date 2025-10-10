@@ -299,6 +299,17 @@ const translations = {
         consistency: "Ultra Character Consistency", 
         freeCredits: "High Free Credits"
       },
+      updates: {
+        title: "Recent Updates",
+        v2_0_0: {
+          title: "🎉 Brand New UI Design & Credit System Upgrade",
+          content: "Completely redesigned user interface with modern glassmorphism effects. User registration credits increased from 120 to 220, offering more generous free credits. Added multi-language support with seamless Chinese-English switching. New tag system showcasing product features."
+        },
+        v1_9_0: {
+          title: "🎨 UI Beautification & User Experience Optimization", 
+          content: "Redesigned main title and subtitle styles with rainbow gradient effects. Optimized tag design using glassmorphism effects and semi-transparent borders. Adjusted page spacing and layout for enhanced visual appeal."
+        }
+      },
       placeholder: "Describe your vision...",
       generate: "Generate",
       generateBtn: "Generate",
@@ -1120,6 +1131,17 @@ const translations = {
         nanoBanana: "由 Nano Banana 提供支持",
         consistency: "超高人物一致性",
         freeCredits: "高免费额度"
+      },
+      updates: {
+        title: "最近更新",
+        v2_0_0: {
+          title: "🎉 全新界面设计 & 积分系统升级",
+          content: "全新设计的用户界面，采用现代化玻璃拟态效果。用户注册积分从120提升至220，更慷慨的免费额度。新增多语言支持，中英文无缝切换。全新的标签系统展示产品特色。"
+        },
+        v1_9_0: {
+          title: "🎨 界面美化 & 用户体验优化",
+          content: "重新设计主标题和副标题样式，采用彩虹渐变效果。优化标签设计，使用玻璃拟态效果和半透明边框。调整页面间距和布局，提升整体视觉效果。"
+        }
       },
       placeholder: "描述您的愿景...",
       generate: "生成",

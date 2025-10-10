@@ -32,9 +32,25 @@ interface UpdateNote {
 }
 
 // Mock update notes - in production, this would come from Supabase
-const mockUpdates: UpdateNote[] = [
+const getMockUpdates = (t: any): UpdateNote[] => [
   {
     id: '1',
+    version: 'v2.0.0',
+    title: t?.updates?.v2_0_0?.title || '🎉 全新界面设计 & 积分系统升级',
+    content: t?.updates?.v2_0_0?.content || '全新设计的用户界面，采用现代化玻璃拟态效果。用户注册积分从120提升至220，更慷慨的免费额度。新增多语言支持，中英文无缝切换。全新的标签系统展示产品特色。',
+    date: '2025-01-15',
+    type: 'feature'
+  },
+  {
+    id: '2',
+    version: 'v1.9.0',
+    title: t?.updates?.v1_9_0?.title || '🎨 界面美化 & 用户体验优化',
+    content: t?.updates?.v1_9_0?.content || '重新设计主标题和副标题样式，采用彩虹渐变效果。优化标签设计，使用玻璃拟态效果和半透明边框。调整页面间距和布局，提升整体视觉效果。',
+    date: '2025-01-14',
+    type: 'improvement'
+  },
+  {
+    id: '3',
     version: 'v1.8.0',
     title: 'API Integration Overhaul & Production Stability',
     content: 'Major refactor of Google Gemini API integration using official @google/genai SDK. Fixed API calling conventions, response handling, and Modality configuration. All 5 API keys now working perfectly with 100% success rate. System now extremely stable for production use.',
@@ -140,7 +156,7 @@ export function FeedbackPanel() {
     content: '',
     rating: 5
   });
-  const [showUpdates, setShowUpdates] = useState(false);
+  const [showUpdates, setShowUpdates] = useState(true);
   const panelRef = useRef<HTMLDivElement>(null);
 
   // Close panel when clicking outside
@@ -319,7 +335,7 @@ export function FeedbackPanel() {
                   
                   <ScrollArea className="h-64">
                     <div className="space-y-3">
-                      {mockUpdates.map((update) => (
+                      {getMockUpdates(t).map((update) => (
                         <div key={update.id} className="space-y-2">
                           <div className="flex items-center gap-2">
                             <Badge 
