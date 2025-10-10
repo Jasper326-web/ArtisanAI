@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageSquare, X, Send, CheckCircle, AlertCircle, Calendar, Star } from 'lucide-react';
+import { MessageSquare, X, Send, CheckCircle, AlertCircle, Calendar, Star, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
@@ -156,7 +156,6 @@ export function FeedbackPanel() {
     content: '',
     rating: 5
   });
-  const [showUpdates, setShowUpdates] = useState(true);
   const panelRef = useRef<HTMLDivElement>(null);
 
   // Close panel when clicking outside
@@ -283,7 +282,7 @@ export function FeedbackPanel() {
             setIsOpen(!isOpen);
           }}
         >
-          <MessageSquare className="w-5 h-5" />
+          <RefreshCw className="w-5 h-5" />
         </Button>
       </div>
 
@@ -298,18 +297,10 @@ export function FeedbackPanel() {
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <MessageSquare className="w-5 h-5" />
-                  {t?.feedback?.title || 'Feedback & Updates'}
+                  <Calendar className="w-5 h-5" />
+                  {t?.feedback?.updates?.title || 'Recent Updates'}
                 </CardTitle>
                 <div className="flex gap-1">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setShowUpdates(!showUpdates)}
-                    className="h-8 px-2"
-                  >
-                    <Calendar className="w-4 h-4" />
-                  </Button>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -323,145 +314,32 @@ export function FeedbackPanel() {
             </CardHeader>
 
             <CardContent className="space-y-4">
-              {showUpdates ? (
-                // Updates Section
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4" />
-                    <h3 className="font-semibold">
-                      {t?.feedback?.updates?.title || 'Recent Updates'}
-                    </h3>
-                  </div>
-                  
-                  <ScrollArea className="h-64">
-                    <div className="space-y-3">
-                      {getMockUpdates(t).map((update) => (
-                        <div key={update.id} className="space-y-2">
-                          <div className="flex items-center gap-2">
-                            <Badge 
-                              variant="secondary" 
-                              className={cn("text-white text-xs", getUpdateTypeColor(update.type))}
-                            >
-                              {getUpdateTypeLabel(update.type)}
-                            </Badge>
-                            <span className="text-sm font-medium">{update.version}</span>
-                            <span className="text-xs text-muted-foreground">{update.date}</span>
-                          </div>
-                          <div>
-                            <h4 className="font-medium text-sm">{update.title}</h4>
-                            <p className="text-xs text-muted-foreground mt-1">{update.content}</p>
-                          </div>
-                          <Separator />
-                        </div>
-                      ))}
-                    </div>
-                  </ScrollArea>
-                </div>
-              ) : (
-                // Feedback Section
-                <div className="space-y-4">
-                  {submitStatus === 'success' && (
-                    <div className="flex items-center gap-2 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                      <CheckCircle className="w-4 h-4 text-green-600" />
-                      <span className="text-sm text-green-600">
-                        {t?.feedback?.success || 'Thank you for your feedback!'}
-                      </span>
-                    </div>
-                  )}
-
-                  {submitStatus === 'error' && (
-                    <div className="flex items-center gap-2 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                      <AlertCircle className="w-4 h-4 text-red-600" />
-                      <span className="text-sm text-red-600">
-                        {t?.feedback?.error || 'Failed to submit feedback. Please try again.'}
-                      </span>
-                    </div>
-                  )}
-
+              {/* Updates Section */}
+              <div className="space-y-4">
+                <ScrollArea className="h-64">
                   <div className="space-y-3">
-
-                    <div>
-                      <Label htmlFor="feedback-rating">
-                        {t?.feedback?.rating || 'Rating'} ({feedbackData.rating}/5)
-                      </Label>
-                      <div className="flex gap-1 mt-2">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <Star
-                            key={star}
-                            className={cn(
-                              "w-5 h-5 cursor-pointer transition-colors",
-                              star <= (feedbackData.rating || 0)
-                                ? "fill-yellow-400 text-yellow-400"
-                                : "text-gray-300 hover:text-yellow-400"
-                            )}
-                            onClick={() => setFeedbackData(prev => ({ ...prev, rating: star }))}
-                          />
-                        ))}
+                    {getMockUpdates(t).map((update) => (
+                      <div key={update.id} className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <Badge 
+                            variant="secondary" 
+                            className={cn("text-white text-xs", getUpdateTypeColor(update.type))}
+                          >
+                            {getUpdateTypeLabel(update.type)}
+                          </Badge>
+                          <span className="text-sm font-medium">{update.version}</span>
+                          <span className="text-xs text-muted-foreground">{update.date}</span>
+                        </div>
+                        <div>
+                          <h4 className="font-medium text-sm">{update.title}</h4>
+                          <p className="text-xs text-muted-foreground mt-1">{update.content}</p>
+                        </div>
+                        <Separator />
                       </div>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="feedback-content">
-                        {t?.feedback?.content || 'Your Feedback'}
-                      </Label>
-                      <Textarea
-                        id="feedback-content"
-                        placeholder={t?.feedback?.placeholder || 'Tell us what you think...'}
-                        value={feedbackData.content}
-                        onChange={(e) => setFeedbackData(prev => ({ ...prev, content: e.target.value }))}
-                        className="min-h-[100px] resize-none"
-                        disabled={isSubmitting}
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-2">
-                      <div>
-                        <Label htmlFor="feedback-name">
-                          {t?.feedback?.name || 'Name (Optional)'}
-                        </Label>
-                        <Input
-                          id="feedback-name"
-                          placeholder={t?.feedback?.namePlaceholder || 'Your name'}
-                          value={feedbackData.name || ''}
-                          onChange={(e) => setFeedbackData(prev => ({ ...prev, name: e.target.value }))}
-                          disabled={isSubmitting}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="feedback-email">
-                          {t?.feedback?.email || 'Email (Optional)'}
-                        </Label>
-                        <Input
-                          id="feedback-email"
-                          type="email"
-                          placeholder={t?.feedback?.emailPlaceholder || 'your@email.com'}
-                          value={feedbackData.email || ''}
-                          onChange={(e) => setFeedbackData(prev => ({ ...prev, email: e.target.value }))}
-                          disabled={isSubmitting}
-                        />
-                      </div>
-                    </div>
-
-                    <Button
-                      onClick={handleSubmit}
-                      disabled={!feedbackData.content.trim() || isSubmitting}
-                      className="w-full"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                          {t?.feedback?.submitting || 'Submitting...'}
-                        </>
-                      ) : (
-                        <>
-                          <Send className="w-4 h-4 mr-2" />
-                          {t?.feedback?.submit || 'Submit Feedback'}
-                        </>
-                      )}
-                    </Button>
+                    ))}
                   </div>
-                </div>
-              )}
+                </ScrollArea>
+              </div>
             </CardContent>
           </Card>
         </div>

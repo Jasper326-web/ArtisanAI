@@ -98,7 +98,7 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold text-white mb-8">Profile</h1>
+          <h1 className="text-3xl font-bold text-white mb-8">{t?.profile?.title || 'Profile'}</h1>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* User Info Card */}
@@ -106,7 +106,7 @@ export default function ProfilePage() {
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <User className="h-5 w-5" />
-                  User Information
+                  {t?.profile?.userInfo || 'User Information'}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -127,7 +127,7 @@ export default function ProfilePage() {
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-white">
-                      {user.name || 'User'}
+                      {user.name || t?.profile?.defaultName || 'User'}
                     </h3>
                     <p className="text-gray-300 text-sm">
                       {user.email}
@@ -157,7 +157,7 @@ export default function ProfilePage() {
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <CreditCard className="h-5 w-5" />
-                  Credits
+                  {t?.profile?.credits || 'Credits'}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -165,13 +165,13 @@ export default function ProfilePage() {
                   <div className="text-4xl font-bold text-white mb-2">
                     {fetchError ? '—' : userCredits}
                   </div>
-                  <p className="text-gray-300 mb-2">Available Credits</p>
+                  <p className="text-gray-300 mb-2">{t?.profile?.availableCredits || 'Available Credits'}</p>
                   {fetchError && (
                     <p className="text-xs text-red-400 mb-2">{fetchError}</p>
                   )}
                   <Link href="/pricing">
                     <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white">
-                      Buy More Credits
+                      {t?.profile?.buyMoreCredits || 'Buy More Credits'}
                     </Button>
                   </Link>
                 </div>
@@ -184,24 +184,24 @@ export default function ProfilePage() {
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
                 <Settings className="h-5 w-5" />
-                Quick Actions
+                {t?.profile?.quickActions || 'Quick Actions'}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Link href="/">
                   <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10">
-                    Generate Images
+                    {t?.profile?.generateImages || 'Generate Images'}
                   </Button>
                 </Link>
                 <Link href="/pricing">
                   <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10">
-                    Buy Credits
+                    {t?.profile?.buyCredits || 'Buy Credits'}
                   </Button>
                 </Link>
                 <Link href="/faq">
                   <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10">
-                    Help & FAQ
+                    {t?.profile?.helpFaq || 'Help & FAQ'}
                   </Button>
                 </Link>
               </div>

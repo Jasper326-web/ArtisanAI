@@ -310,6 +310,18 @@ const translations = {
           content: "Redesigned main title and subtitle styles with rainbow gradient effects. Optimized tag design using glassmorphism effects and semi-transparent borders. Adjusted page spacing and layout for enhanced visual appeal."
         }
       },
+      profile: {
+        title: "Profile",
+        userInfo: "User Information",
+        defaultName: "User",
+        credits: "Credits",
+        availableCredits: "Available Credits",
+        buyMoreCredits: "Buy More Credits",
+        quickActions: "Quick Actions",
+        generateImages: "Generate Images",
+        buyCredits: "Buy Credits",
+        helpFaq: "Help & FAQ"
+      },
       placeholder: "Describe your vision...",
       generate: "Generate",
       generateBtn: "Generate",
@@ -1142,6 +1154,18 @@ const translations = {
           title: "🎨 界面美化 & 用户体验优化",
           content: "重新设计主标题和副标题样式，采用彩虹渐变效果。优化标签设计，使用玻璃拟态效果和半透明边框。调整页面间距和布局，提升整体视觉效果。"
         }
+      },
+      profile: {
+        title: "个人资料",
+        userInfo: "用户信息",
+        defaultName: "用户",
+        credits: "积分",
+        availableCredits: "可用积分",
+        buyMoreCredits: "购买更多积分",
+        quickActions: "快速操作",
+        generateImages: "生成图片",
+        buyCredits: "购买积分",
+        helpFaq: "帮助与常见问题"
       },
       placeholder: "描述您的愿景...",
       generate: "生成",
