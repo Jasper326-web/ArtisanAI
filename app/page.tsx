@@ -73,7 +73,7 @@ export default function AIImageGenerator() {
   }
   const supabase = createClient()
 
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const { toast } = useToast()
   
   // 网络状态监控
@@ -410,7 +410,7 @@ export default function AIImageGenerator() {
       });
       
       // 使用网络错误消息映射
-      const errorMessage = getNetworkErrorMessage(e)
+      const errorMessage = getNetworkErrorMessage(e, language)
       
       toast({
         title: "生成失败",
@@ -631,28 +631,30 @@ export default function AIImageGenerator() {
                   </div>
                 </div>
 
-                {/* Output Ratio Selection */}
-                <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-foreground">
-                    {t?.hero?.outputRatio || 'Output Ratio'}
-                  </label>
-                  <select
-                    value={selectedAspectRatio}
-                    onChange={(e) => setSelectedAspectRatio(e.target.value)}
-                    className="px-3 py-2 text-sm bg-input/50 border border-primary/20 rounded-lg focus:border-primary/50 focus:outline-none transition-all duration-300"
-                  >
-                    <option value="21:9">{t?.hero?.aspectRatios?.landscape || 'Landscape'} — 21:9</option>
-                    <option value="16:9">{t?.hero?.aspectRatios?.landscape || 'Landscape'} — 16:9</option>
-                    <option value="4:3">{t?.hero?.aspectRatios?.landscape || 'Landscape'} — 4:3</option>
-                    <option value="3:2">{t?.hero?.aspectRatios?.landscape || 'Landscape'} — 3:2</option>
-                    <option value="1:1">{t?.hero?.aspectRatios?.square || 'Square'} — 1:1</option>
-                    <option value="9:16">{t?.hero?.aspectRatios?.portrait || 'Portrait'} — 9:16</option>
-                    <option value="3:4">{t?.hero?.aspectRatios?.portrait || 'Portrait'} — 3:4</option>
-                    <option value="2:3">{t?.hero?.aspectRatios?.portrait || 'Portrait'} — 2:3</option>
-                    <option value="5:4">{t?.hero?.aspectRatios?.flexible || 'Flexible'} — 5:4</option>
-                    <option value="4:5">{t?.hero?.aspectRatios?.flexible || 'Flexible'} — 4:5</option>
-                  </select>
-                </div>
+                {/* Output Ratio Selection - Only for Generate Mode */}
+                {mode === 'generate' && (
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium text-foreground">
+                      {t?.hero?.outputRatio || 'Output Ratio'}
+                    </label>
+                    <select
+                      value={selectedAspectRatio}
+                      onChange={(e) => setSelectedAspectRatio(e.target.value)}
+                      className="px-3 py-2 text-sm bg-input/50 border border-primary/20 rounded-lg focus:border-primary/50 focus:outline-none transition-all duration-300"
+                    >
+                      <option value="21:9">{t?.hero?.aspectRatios?.landscape || 'Landscape'} — 21:9</option>
+                      <option value="16:9">{t?.hero?.aspectRatios?.landscape || 'Landscape'} — 16:9</option>
+                      <option value="4:3">{t?.hero?.aspectRatios?.landscape || 'Landscape'} — 4:3</option>
+                      <option value="3:2">{t?.hero?.aspectRatios?.landscape || 'Landscape'} — 3:2</option>
+                      <option value="1:1">{t?.hero?.aspectRatios?.square || 'Square'} — 1:1</option>
+                      <option value="9:16">{t?.hero?.aspectRatios?.portrait || 'Portrait'} — 9:16</option>
+                      <option value="3:4">{t?.hero?.aspectRatios?.portrait || 'Portrait'} — 3:4</option>
+                      <option value="2:3">{t?.hero?.aspectRatios?.portrait || 'Portrait'} — 2:3</option>
+                      <option value="5:4">{t?.hero?.aspectRatios?.flexible || 'Flexible'} — 5:4</option>
+                      <option value="4:5">{t?.hero?.aspectRatios?.flexible || 'Flexible'} — 4:5</option>
+                    </select>
+                  </div>
+                )}
 
                 {mode === 'edit' && (
                   <div className="max-w-md mx-auto">

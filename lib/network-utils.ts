@@ -249,34 +249,55 @@ export class NetworkMonitor {
 /**
  * 网络错误消息映射
  */
-export function getNetworkErrorMessage(error: any): string {
+export function getNetworkErrorMessage(error: any, language: string = 'zh'): string {
+  // 生成过快的情况 - 优先检查
+  if (error?.status === 429 || 
+      error?.message?.includes('rate limit') || 
+      error?.message?.includes('too many requests') ||
+      error?.message?.includes('generation too fast') ||
+      error?.message?.includes('请求过于频繁')) {
+    return language === 'zh' 
+      ? '生成过快，请刷新页面重试，放心，不会扣除积分'
+      : 'Generation too fast, please refresh the page and try again. Don\'t worry, credits won\'t be deducted';
+  }
+  
   if (error?.message?.includes('ERR_NETWORK_CHANGED')) {
-    return '网络连接发生变化，请刷新页面重试';
+    return language === 'zh' 
+      ? '网络连接发生变化，请刷新页面重试，放心，不会扣除积分'
+      : 'Network connection changed, please refresh the page and try again. Don\'t worry, credits won\'t be deducted';
   }
   
   if (error?.message?.includes('Failed to fetch')) {
-    return '网络连接失败，请检查网络连接后重试';
+    return language === 'zh' 
+      ? '网络连接失败，请检查网络连接后重试，放心，不会扣除积分'
+      : 'Network connection failed, please check your connection and try again. Don\'t worry, credits won\'t be deducted';
   }
   
   if (error?.message?.includes('timeout')) {
-    return '请求超时，请稍后重试';
+    return language === 'zh' 
+      ? '请求超时，请稍后重试，放心，不会扣除积分'
+      : 'Request timeout, please try again later. Don\'t worry, credits won\'t be deducted';
   }
   
   if (error?.message?.includes('ERR_CONNECTION_REFUSED')) {
-    return '连接被拒绝，服务器可能暂时不可用';
+    return language === 'zh' 
+      ? '连接被拒绝，服务器可能暂时不可用，放心，不会扣除积分'
+      : 'Connection refused, server may be temporarily unavailable. Don\'t worry, credits won\'t be deducted';
   }
   
   if (error?.message?.includes('ERR_NAME_NOT_RESOLVED')) {
-    return '域名解析失败，请检查网络设置';
-  }
-  
-  if (error?.status === 429) {
-    return '请求过于频繁，请稍后重试';
+    return language === 'zh' 
+      ? '域名解析失败，请检查网络设置，放心，不会扣除积分'
+      : 'Domain resolution failed, please check your network settings. Don\'t worry, credits won\'t be deducted';
   }
   
   if (error?.status >= 500) {
-    return '服务器内部错误，请稍后重试';
+    return language === 'zh' 
+      ? '服务器内部错误，请稍后重试，放心，不会扣除积分'
+      : 'Server internal error, please try again later. Don\'t worry, credits won\'t be deducted';
   }
   
-  return '网络错误，请检查连接后重试';
+  return language === 'zh' 
+    ? '网络错误，请检查连接后重试，放心，不会扣除积分'
+    : 'Network error, please check your connection and try again. Don\'t worry, credits won\'t be deducted';
 }
