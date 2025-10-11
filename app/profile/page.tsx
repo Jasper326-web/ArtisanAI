@@ -18,7 +18,7 @@ interface UserProfile {
 }
 
 export default function ProfilePage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [user, setUser] = useState<UserProfile | null>(null);
   const [userCredits, setUserCredits] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
