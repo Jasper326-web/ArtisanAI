@@ -78,7 +78,7 @@ export default function ProfilePage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="text-white">Loading...</div>
+        <div className="text-white">{t?.loading || 'Loading...'}</div>
       </div>
     );
   }
@@ -87,8 +87,8 @@ export default function ProfilePage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
         <div className="text-center text-white">
-          <h1 className="text-2xl font-bold mb-4">Please sign in</h1>
-          <p>You need to be signed in to view your profile.</p>
+          <h1 className="text-2xl font-bold mb-4">{t?.auth?.signInRequired || 'Please sign in'}</h1>
+          <p>{t?.auth?.signInToViewProfile || 'You need to be signed in to view your profile.'}</p>
         </div>
       </div>
     );
@@ -144,7 +144,7 @@ export default function ProfilePage() {
                     <div className="flex items-center gap-2 text-gray-300">
                       <Calendar className="h-4 w-4" />
                       <span className="text-sm">
-                        Joined {new Date(user.created_at).toLocaleDateString()}
+                        {t?.profile?.joined || 'Joined'} {new Date(user.created_at).toLocaleDateString()}
                       </span>
                     </div>
                   )}

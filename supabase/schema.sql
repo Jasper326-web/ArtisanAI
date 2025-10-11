@@ -60,7 +60,7 @@ begin
 
   if current_balance is null then
     -- initialize if missing
-    insert into public.credits(user_id, balance) values (p_user_id, 120)
+    insert into public.credits(user_id, balance) values (p_user_id, 220)
     on conflict (user_id) do nothing;
     select balance into current_balance from public.credits where user_id = p_user_id for update;
   end if;

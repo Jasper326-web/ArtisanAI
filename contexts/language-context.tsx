@@ -290,7 +290,6 @@ const translations = {
     hero: {
       title: "The Most Powerful AI Image model Ever",
       subtitle: "One-stop AI image generation editor",
-      subtitle2: "Creative generation, P-pictures, watermark removal, 3D redraw, nothing is impossible",
       subtitle1: "One-stop AI image generator & editor",
       subtitle2: "Create. Edit. Transform.",
       subtitle3: "nothing is impossible",
@@ -301,6 +300,10 @@ const translations = {
       },
       updates: {
         title: "Recent Updates",
+        v2_1_0: {
+          title: "🚀 Major Model & Feature Updates (Oct 9-11, 2024)",
+          content: "Google officially launched production-level Nano Banana stable model with enhanced stability. Added creative generation mode based on Imagen-4.0 model, complementing Nano Banana's editing mode for one-stop AI image generation & editing. Optimized main and subtitle styling. Increased free credits for new users from 120 to 220, boosting free generation quota by 80%."
+        },
         v2_0_0: {
           title: "🎉 Brand New UI Design & Credit System Upgrade",
           content: "Completely redesigned user interface with modern glassmorphism effects. User registration credits increased from 120 to 220, offering more generous free credits. Added multi-language support with seamless Chinese-English switching. New tag system showcasing product features."
@@ -320,7 +323,12 @@ const translations = {
         quickActions: "Quick Actions",
         generateImages: "Generate Images",
         buyCredits: "Buy Credits",
-        helpFaq: "Help & FAQ"
+        helpFaq: "Help & FAQ",
+        joined: "Joined"
+      },
+      auth: {
+        signInRequired: "Please sign in",
+        signInToViewProfile: "You need to be signed in to view your profile."
       },
       placeholder: "Describe your vision...",
       generate: "Generate",
@@ -339,6 +347,12 @@ const translations = {
       processing: "Processing Images...",
       uploadText: "Upload images and enter prompts",
       outputRatio: "Output Ratio",
+      aspectRatios: {
+        landscape: "Landscape",
+        square: "Square",
+        portrait: "Portrait", 
+        flexible: "Flexible"
+      },
       generating: {
         title: "Generating...",
         result: "Generated Result",
@@ -359,55 +373,129 @@ const translations = {
       },
       promptTemplates: {
         title: "✨ Explore AI Magic:",
-        multiAngle: {
-          emoji: "🌀",
-          label: "Multi-Angle",
-          prompt: "Generate front, back, left, right, top, and bottom views of the same subject on a white background. Ensure perfect identity and proportion consistency."
+        generateMode: {
+          title: "✨ Creative Generation Styles:",
+          wordChoices: {
+            title: "🎨 Choose Descriptive Words:",
+            categories: {
+              quality: {
+                title: "Quality",
+                words: ["high quality", "8K resolution", "professional", "masterpiece", "sharp focus"]
+              },
+              lighting: {
+                title: "Lighting",
+                words: ["studio lighting", "natural light", "golden hour", "dramatic lighting", "soft lighting"]
+              },
+              composition: {
+                title: "Composition",
+                words: ["close-up", "wide shot", "portrait", "landscape", "bird's eye view"]
+              },
+              mood: {
+                title: "Mood",
+                words: ["serene", "dramatic", "mysterious", "cheerful", "energetic"]
+              }
+            }
+          },
+          realistic: {
+            emoji: "📸",
+            label: "Realistic",
+            prompt: "Photorealistic, high quality, detailed, professional photography, studio lighting, sharp focus, 8K resolution, cinematic quality"
+          },
+          anime: {
+            emoji: "🎌",
+            label: "Anime",
+            prompt: "Anime style, manga, vibrant colors, cel shading, Japanese animation, detailed character design, high quality"
+          },
+          fantasy: {
+            emoji: "🧙",
+            label: "Fantasy",
+            prompt: "Fantasy art, magical, ethereal, mystical, enchanted forest, magical creatures, fantasy lighting, detailed"
+          },
+          cyberpunk: {
+            emoji: "🤖",
+            label: "Cyberpunk",
+            prompt: "Cyberpunk, neon lights, futuristic, high tech, dystopian city, glowing effects, dark atmosphere, detailed"
+          },
+          vintage: {
+            emoji: "📻",
+            label: "Vintage",
+            prompt: "Vintage style, retro, classic, nostalgic, film photography, aged look, warm tones, timeless"
+          },
+          watercolor: {
+            emoji: "🎨",
+            label: "Watercolor",
+            prompt: "Watercolor painting, soft brushstrokes, artistic, flowing colors, hand-painted, artistic style"
+          },
+          oilPainting: {
+            emoji: "🖼️",
+            label: "Oil Painting",
+            prompt: "Oil painting, classical art, rich textures, artistic brushwork, museum quality, traditional painting"
+          },
+          sketch: {
+            emoji: "✏️",
+            label: "Sketch",
+            prompt: "Pencil sketch, line art, hand-drawn, artistic sketch, detailed drawing, monochrome"
+          },
+          minimalist: {
+            emoji: "⚪",
+            label: "Minimalist",
+            prompt: "Minimalist design, clean lines, simple composition, modern, elegant, white space, geometric"
+          },
+          abstract: {
+            emoji: "🌀",
+            label: "Abstract",
+            prompt: "Abstract art, creative composition, artistic interpretation, unique perspective, modern art"
+          }
         },
-        actionChange: {
-          emoji: "💃",
-          label: "Action",
-          prompt: "Keep the same person and background. Change the pose to [crossed arms / waving hand / jumping / running]. Maintain identity consistency."
-        },
-        backgroundSwitch: {
-          emoji: "🌄",
-          label: "Background",
-          prompt: "Replace the background with a [mountain / city street / photography studio / beach]. Keep lighting consistent with the new environment."
+        watermarkRemoval: {
+          emoji: "🚫",
+          label: "Remove Watermark",
+          prompt: "Remove all watermarks, logos, and text overlays from the image while preserving the original content quality and details."
         },
         hairstyleChange: {
           emoji: "💇",
-          label: "Hairstyle",
-          prompt: "Keep the same person. Change the hairstyle to [curly hair / bun / straight hair] and hair color to [blonde / red / black]."
+          label: "Hairstyle Change",
+          prompt: "classic [male / female] style. Add [long curly hair / short bob / ponytail / bun]. Change hair color to [blonde / brunette / black / red]. Do not change the character's facial features."
         },
-        timeTravel: {
+        skinEnhancement: {
+          emoji: "✨",
+          label: "Skin Enhancement",
+          prompt: "Enhance skin quality with professional retouching: smooth skin texture, remove blemishes, brighten complexion, maintain natural skin tone and facial features."
+        },
+        characterModel: {
+          emoji: "🔥",
+          label: "🔥 3D Figurine Play",
+          prompt: "Transform this photo into a character figurine. Place a box with character image behind it, showing Blender modeling process on a computer screen. Add a circular plastic base in front, with the character figurine standing on it. Set the scene indoors if possible."
+        },
+        vintageStyle: {
           emoji: "🕰️",
-          label: "Time Travel",
-          prompt: "Keep the same person but place them in [ancient China / 1900s Europe / 2080 futuristic city]. Match outfit and background with the chosen era."
+          label: "Vintage Style",
+          prompt: "Change the character's style to [1970s / 1980s / 1990s] classic [male / female] style. Add [long curly hair / long beard / vintage clothing]. Change background to iconic [California summer landscape / New York street / retro studio]. Do not change the character's facial features."
         },
-        interaction: {
-          emoji: "🤝",
-          label: "Interaction",
-          prompt: "Create a scene where two or more people are interacting — e.g., [drinking coffee together / performing music / taking a group photo]. Ensure realistic interaction and identity preservation."
-        },
-        outfit: {
-          emoji: "👗",
-          label: "Outfit",
-          prompt: "Keep the same model. Change outfit to [casual streetwear / office suit / elegant dress]. Highlight fabric texture and lighting."
-        },
-        expression: {
-          emoji: "😄",
-          label: "Expression",
-          prompt: "Keep the same person and angle. Generate expressions of [smile / surprise / sadness / confidence]."
-        },
-        product: {
-          emoji: "📦",
-          label: "Product",
-          prompt: "Render the uploaded product in a studio lighting setup. Generate photorealistic images from multiple angles with soft shadows."
-        },
-        stylize: {
+        multiReference: {
           emoji: "🎨",
-          label: "Style",
-          prompt: "Keep the same image composition. Apply [anime / oil painting / cyberpunk / watercolor] artistic style while preserving key identity details."
+          label: "Multi-Reference",
+          prompt: "A model posing against a [pink BMW / vintage car / modern vehicle]. She is wearing [specific items]. Scene background is [light gray / colorful / studio]. Add [green alien keychain on pink handbag / accessories]. A [pink parrot on shoulder / pet]. A [pug with pink collar and gold headphones / dog] sitting nearby."
+        },
+        customSticker: {
+          emoji: "🏷️",
+          label: "Custom Sticker",
+          prompt: "Create a custom character sticker design: clean background, bold outlines, vibrant colors, sticker-style appearance, suitable for printing and digital use."
+        },
+        colorizePhoto: {
+          emoji: "🌈",
+          label: "Colorize Photo",
+          prompt: "Colorize this black and white or old photo: add realistic colors, maintain historical accuracy, enhance details, bring the image to life with natural color tones."
+        },
+        virtualMakeup: {
+          emoji: "💄",
+          label: "Virtual Makeup",
+          prompt: "Apply virtual makeup: [natural look / glamorous / party style / professional]. Include [foundation / eyeshadow / lipstick / blush / eyeliner]. Maintain natural facial features and skin texture."
+        },
+        outfitChange: {
+          emoji: "👗",
+          label: "Outfit Change",
+          prompt: "Change the outfit to [casual streetwear / formal business suit / elegant evening dress / sportswear / vintage fashion]. Highlight fabric texture, proper fit, and lighting that matches the new clothing style."
         }
       }
     },
@@ -884,6 +972,10 @@ const translations = {
       placeholder: "Tell us what you think about ArtisanAI...",
       submit: "Submit",
       submitting: "Submitting...",
+      buttonLabel: "Update Notes",
+      updates: {
+        title: "Recent Updates"
+      },
       success: {
         title: "Feedback Submitted Successfully!",
         description: "Thank you for your valuable feedback, we will seriously consider your suggestions."
@@ -1135,7 +1227,6 @@ const translations = {
     hero: {
       title: "迄今为止最强大的 AI 图像编辑器",
       subtitle: "一站式AI图像生成编辑器",
-      subtitle2: "创意生图、P图、去水印、3D重绘，无所不能",
       subtitle1: "一站式AI图像生成&编辑工具",
       subtitle2: "创造。编辑。转换。",
       subtitle3: "一切皆有可能",
@@ -1146,6 +1237,10 @@ const translations = {
       },
       updates: {
         title: "最近更新",
+        v2_1_0: {
+          title: "🚀 重大模型与功能更新 (2024年10月9-11日)",
+          content: "Google官方于10月9日推出生产级别的Nano Banana稳定模型，模型稳定性进一步提升。增加基于Imagen-4.0模型的创意生图模式，与Nano Banana的编辑模式相辅相成，实现一站式创意AI图片生成&编辑。优化主副标题样式。提升首次登陆用户的免费积分额度，从120提升至220，免费生图额度提升80%。"
+        },
         v2_0_0: {
           title: "🎉 全新界面设计 & 积分系统升级",
           content: "全新设计的用户界面，采用现代化玻璃拟态效果。用户注册积分从120提升至220，更慷慨的免费额度。新增多语言支持，中英文无缝切换。全新的标签系统展示产品特色。"
@@ -1165,17 +1260,22 @@ const translations = {
         quickActions: "快速操作",
         generateImages: "生成图片",
         buyCredits: "购买积分",
-        helpFaq: "帮助与常见问题"
+        helpFaq: "帮助与常见问题",
+        joined: "加入时间"
+      },
+      auth: {
+        signInRequired: "请登录",
+        signInToViewProfile: "您需要登录才能查看个人资料。"
       },
       placeholder: "描述您的愿景...",
       generate: "生成",
       generateBtn: "生成",
       upload: "上传图片",
       mode: {
-        generate: "生图模式",
-        edit: "编辑模式",
-        generateModel: "Imagen-4.0",
-        editModel: "Imagen-4.0",
+        generate: "创意生图模式",
+        edit: "超强编辑模式",
+        generateModel: "Imagen-4.0模型驱动",
+        editModel: "Nano Banana模型驱动",
         generateDesc: "从文本生成全新图像，支持多种宽高比",
         editDesc: "重绘、去水印、P图修图，保持人物一致性",
         selectHint: "请先选择模式",
@@ -1184,6 +1284,12 @@ const translations = {
       processing: "正在处理图片...",
       uploadText: "上传图片并输入提示词",
       outputRatio: "输出比例",
+      aspectRatios: {
+        landscape: "横屏",
+        square: "方形", 
+        portrait: "竖屏",
+        flexible: "灵活"
+      },
       generating: {
         title: "生成中...",
         result: "生成结果",
@@ -1204,55 +1310,129 @@ const translations = {
       },
       promptTemplates: {
         title: "✨ 探索AI魔法:",
-        multiAngle: {
-          emoji: "🌀",
-          label: "多角度展示",
-          prompt: "生成同一主体的前、后、左、右、上、下视图，白色背景，保持面部与身体比例一致。"
+        generateMode: {
+          title: "✨ 创意生图风格:",
+          wordChoices: {
+            title: "🎨 选择描述词语:",
+            categories: {
+              quality: {
+                title: "质量",
+                words: ["高质量", "8K分辨率", "专业", "杰作", "清晰对焦"]
+              },
+              lighting: {
+                title: "光线",
+                words: ["工作室灯光", "自然光", "黄金时刻", "戏剧性灯光", "柔和光线"]
+              },
+              composition: {
+                title: "构图",
+                words: ["特写", "全景", "肖像", "风景", "鸟瞰图"]
+              },
+              mood: {
+                title: "氛围",
+                words: ["宁静", "戏剧性", "神秘", "欢快", "充满活力"]
+              }
+            }
+          },
+          realistic: {
+            emoji: "📸",
+            label: "写实派",
+            prompt: "写实风格，高质量，细节丰富，专业摄影，工作室灯光，清晰对焦，8K分辨率，电影级画质"
+          },
+          anime: {
+            emoji: "🎌",
+            label: "动漫风",
+            prompt: "动漫风格，日式漫画，鲜艳色彩，赛璐璐着色，日本动画，详细角色设计，高质量"
+          },
+          fantasy: {
+            emoji: "🧙",
+            label: "奇幻风",
+            prompt: "奇幻艺术，魔法感，空灵，神秘，魔法森林，奇幻生物，奇幻灯光，细节丰富"
+          },
+          cyberpunk: {
+            emoji: "🤖",
+            label: "赛博朋克",
+            prompt: "赛博朋克，霓虹灯，未来主义，高科技，反乌托邦城市，发光效果，黑暗氛围，细节丰富"
+          },
+          vintage: {
+            emoji: "📻",
+            label: "复古风",
+            prompt: "复古风格，怀旧，经典，怀旧感，胶片摄影，复古外观，暖色调，永恒"
+          },
+          watercolor: {
+            emoji: "🎨",
+            label: "水彩画",
+            prompt: "水彩画，柔和笔触，艺术感，流动色彩，手绘风格，艺术风格"
+          },
+          oilPainting: {
+            emoji: "🖼️",
+            label: "油画风",
+            prompt: "油画，古典艺术，丰富质感，艺术笔触，博物馆级质量，传统绘画"
+          },
+          sketch: {
+            emoji: "✏️",
+            label: "素描风",
+            prompt: "铅笔素描，线条艺术，手绘，艺术素描，详细绘画，单色"
+          },
+          minimalist: {
+            emoji: "⚪",
+            label: "极简风",
+            prompt: "极简设计，简洁线条，简单构图，现代，优雅，留白，几何"
+          },
+          abstract: {
+            emoji: "🌀",
+            label: "抽象风",
+            prompt: "抽象艺术，创意构图，艺术诠释，独特视角，现代艺术"
+          }
         },
-        actionChange: {
-          emoji: "💃",
-          label: "动作变换",
-          prompt: "保留相同人物与背景，将姿势调整为 [交叉双臂 / 挥手 / 跑步 / 跳跃]，保持身份一致。"
-        },
-        backgroundSwitch: {
-          emoji: "🌄",
-          label: "背景切换",
-          prompt: "将背景替换为 [雪山 / 城市街头 / 摄影棚 / 海滩]，光线与新环境保持一致。"
+        watermarkRemoval: {
+          emoji: "🚫",
+          label: "去水印",
+          prompt: "去除图片中的所有水印、标志和文字覆盖层，同时保持原始内容的质量和细节。"
         },
         hairstyleChange: {
           emoji: "💇",
-          label: "发型变化",
-          prompt: "保留相同人物，将发型修改为 [卷发 / 发髻 / 直发]，发色调整为 [金色 / 红色 / 黑色]。"
+          label: "发型改变",
+          prompt: "经典[男性 / 女性]风格。添加[长卷发 / 短波波头 / 马尾 / 发髻]。改变发色为[金色 / 棕色 / 黑色 / 红色]。不要改变角色的面部特征。"
         },
-        timeTravel: {
+        skinEnhancement: {
+          emoji: "✨",
+          label: "美白磨皮",
+          prompt: "专业修图增强肌肤质量：平滑肌肤纹理，去除瑕疵，提亮肤色，保持自然肌肤色调和面部特征。"
+        },
+        characterModel: {
+          emoji: "🔥",
+          label: "🔥 3D手办玩法",
+          prompt: "将这张照片变成角色手办。在它后面放置一个印有角色图像的盒子，盒子上有一台电脑显示建模过程。在盒子前面添加一个圆形塑料底座，角色手办站在上面。如果可能的话，将场景设置在室内。"
+        },
+        vintageStyle: {
           emoji: "🕰️",
-          label: "时光穿越",
-          prompt: "保持相同人物，将其置于 [古代中国 / 20世纪初欧洲 / 2080年未来城市]，服装与背景应符合时代特征。"
+          label: "复古风格",
+          prompt: "将角色风格改为[1970年代 / 1980年代 / 1990年代]经典[男性 / 女性]风格。添加[长卷发 / 长胡子 / 复古服装]。将背景改为标志性的[加州夏季风景 / 纽约街头 / 复古工作室]。不要改变角色的面部特征。"
         },
-        interaction: {
-          emoji: "🤝",
-          label: "互动场景",
-          prompt: "生成两人或多人互动场景，例如 [一起喝咖啡 / 表演音乐 / 合照]，互动自然且身份保持一致。"
-        },
-        outfit: {
-          emoji: "👗",
-          label: "今日穿搭",
-          prompt: "保留相同模特，更换服装为 [休闲街头风 / 职场西装 / 优雅礼服]，突出布料质感与光影细节。"
-        },
-        expression: {
-          emoji: "😄",
-          label: "表情变化",
-          prompt: "保持相同人物与角度，生成 [微笑 / 惊讶 / 悲伤 / 自信] 等不同表情。"
-        },
-        product: {
-          emoji: "📦",
-          label: "产品展示",
-          prompt: "对上传的产品进行渲染，使用摄影棚光效，从多个角度生成真实感图像，带柔和阴影。"
-        },
-        stylize: {
+        multiReference: {
           emoji: "🎨",
-          label: "风格化",
-          prompt: "保持原图构图不变，转换为 [动漫 / 油画 / 赛博朋克 / 水彩] 风格，保留人物特征。"
+          label: "多参考图像生成",
+          prompt: "一个模特摆姿势靠在[粉色宝马 / 复古汽车 / 现代车辆]上。她穿着[具体物品]。场景背景是[浅灰色 / 彩色 / 工作室]。添加[绿色外星人钥匙扣挂在粉色手提包上 / 配饰]。一只[粉色鹦鹉在肩上 / 宠物]。一只[戴着粉色项圈和金色耳机的哈巴狗 / 狗]坐在旁边。"
+        },
+        customSticker: {
+          emoji: "🏷️",
+          label: "定制人物贴纸",
+          prompt: "创建定制角色贴纸设计：干净背景，粗线条轮廓，鲜艳色彩，贴纸风格外观，适合打印和数字使用。"
+        },
+        colorizePhoto: {
+          emoji: "🌈",
+          label: "旧照片上色",
+          prompt: "为这张黑白或旧照片上色：添加真实色彩，保持历史准确性，增强细节，用自然色调让图像栩栩如生。"
+        },
+        virtualMakeup: {
+          emoji: "💄",
+          label: "虚拟试妆",
+          prompt: "应用虚拟化妆：[自然妆容 / 华丽 / 派对风格 / 专业]。包括[粉底 / 眼影 / 口红 / 腮红 / 眼线]。保持自然面部特征和肌肤纹理。"
+        },
+        outfitChange: {
+          emoji: "👗",
+          label: "人物换衣",
+          prompt: "更换服装为[休闲街头风 / 正式商务套装 / 优雅晚礼服 / 运动装 / 复古时尚]。突出布料质感，合身剪裁，与新服装风格匹配的光线。"
         }
       }
     },
@@ -1729,6 +1909,10 @@ const translations = {
       placeholder: "告诉我们您对ArtisanAI的想法...",
       submit: "提交",
       submitting: "提交中...",
+      buttonLabel: "更新说明",
+      updates: {
+        title: "最近更新"
+      },
       success: {
         title: "反馈提交成功！",
         description: "感谢您的宝贵意见，我们会认真考虑您的建议。"

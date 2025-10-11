@@ -56,7 +56,7 @@ export default function AIImageGenerator() {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState<{src: string, alt: string, title?: string} | null>(null)
   const [selectedAspectRatio, setSelectedAspectRatio] = useState("16:9")
-  const [mode, setMode] = useState<'generate' | 'edit'>('generate')
+  const [mode, setMode] = useState<'generate' | 'edit'>('edit')
   
   // 根据当前模式获取对应的prompt和结果
   const currentPrompt = mode === 'generate' ? generatePrompt : editPrompt
@@ -468,33 +468,28 @@ export default function AIImageGenerator() {
             >
               {t?.hero?.subtitle1 ? (
                 t.hero.subtitle1.includes('generator & editor') ? (
-                  <>
-                    {t.hero.subtitle1.split('generator & editor')[0]}
-                    <span style={{
-                      background: 'linear-gradient(45deg, #ffff00, #ff7f50, #ff4500, #ff7f50, #ffff00)',
-                      backgroundSize: '300% 300%',
-                      backgroundClip: 'text',
-                      WebkitBackgroundClip: 'text',
-                      color: 'transparent',
-                      animation: 'gradient 6s ease infinite'
-                    }}>generator & editor</span>
-                    {t.hero.subtitle1.split('generator & editor')[1]}
-                  </>
-                ) : (
-                  t.hero.subtitle1
-                )
-              ) : (
-                <>
-                  One-stop AI image 
-                  <span style={{
-                    background: 'linear-gradient(45deg, #ffff00, #ff7f50, #ff4500, #ff7f50, #ffff00)',
+                  <span className="text-3xl md:text-5xl lg:text-6xl" style={{
+                    background: 'linear-gradient(45deg, #40ffaa, #4079ff, #40ffaa, #4079ff, #40ffaa)',
                     backgroundSize: '300% 300%',
                     backgroundClip: 'text',
                     WebkitBackgroundClip: 'text',
                     color: 'transparent',
-                    animation: 'gradient 6s ease infinite'
-                  }}>generator & editor</span>
-                </>
+                    animation: 'gradient 6s ease infinite',
+                    whiteSpace: 'nowrap'
+                  }}>{t.hero.subtitle1}</span>
+                ) : (
+                  t.hero.subtitle1
+                )
+              ) : (
+                <span className="text-xl md:text-2xl lg:text-3xl" style={{
+                  background: 'linear-gradient(45deg, #40ffaa, #4079ff, #40ffaa, #4079ff, #40ffaa)',
+                  backgroundSize: '300% 300%',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  color: 'transparent',
+                  animation: 'gradient 6s ease infinite',
+                  whiteSpace: 'nowrap'
+                }}>One-stop AI image generator & editor</span>
               )}
             </GradientText>
           </div>
@@ -592,18 +587,6 @@ export default function AIImageGenerator() {
             </div>
             <div className="flex bg-card/10 backdrop-blur-sm rounded-lg border border-primary/20 overflow-hidden">
               <button
-                onClick={() => handleModeChange('generate')}
-                className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-all duration-200 ${
-                  mode === 'generate'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-card/20'
-                }`}
-              >
-                <span>{t?.hero?.mode?.generate || '生图模式'}</span>
-                <span className="text-yellow-400 font-bold">⚡️50</span>
-              </button>
-              <div className="w-px bg-border/50"></div>
-              <button
                 onClick={() => handleModeChange('edit')}
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-all duration-200 ${
                   mode === 'edit'
@@ -613,6 +596,18 @@ export default function AIImageGenerator() {
               >
                 <span>{t?.hero?.mode?.edit || '编辑模式'}</span>
                 <span className="text-yellow-400 font-bold">⚡️30</span>
+              </button>
+              <div className="w-px bg-border/50"></div>
+              <button
+                onClick={() => handleModeChange('generate')}
+                className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-all duration-200 ${
+                  mode === 'generate'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-card/20'
+                }`}
+              >
+                <span>{t?.hero?.mode?.generate || '生图模式'}</span>
+                <span className="text-yellow-400 font-bold">⚡️50</span>
               </button>
             </div>
           </div>
@@ -646,21 +641,23 @@ export default function AIImageGenerator() {
                     onChange={(e) => setSelectedAspectRatio(e.target.value)}
                     className="px-3 py-2 text-sm bg-input/50 border border-primary/20 rounded-lg focus:border-primary/50 focus:outline-none transition-all duration-300"
                   >
-                    <option value="21:9">Landscape — 21:9</option>
-                    <option value="16:9">Landscape — 16:9</option>
-                    <option value="4:3">Landscape — 4:3</option>
-                    <option value="3:2">Landscape — 3:2</option>
-                    <option value="1:1">Square — 1:1</option>
-                    <option value="9:16">Portrait — 9:16</option>
-                    <option value="3:4">Portrait — 3:4</option>
-                    <option value="2:3">Portrait — 2:3</option>
-                    <option value="5:4">Flexible — 5:4</option>
-                    <option value="4:5">Flexible — 4:5</option>
+                    <option value="21:9">{t?.hero?.aspectRatios?.landscape || 'Landscape'} — 21:9</option>
+                    <option value="16:9">{t?.hero?.aspectRatios?.landscape || 'Landscape'} — 16:9</option>
+                    <option value="4:3">{t?.hero?.aspectRatios?.landscape || 'Landscape'} — 4:3</option>
+                    <option value="3:2">{t?.hero?.aspectRatios?.landscape || 'Landscape'} — 3:2</option>
+                    <option value="1:1">{t?.hero?.aspectRatios?.square || 'Square'} — 1:1</option>
+                    <option value="9:16">{t?.hero?.aspectRatios?.portrait || 'Portrait'} — 9:16</option>
+                    <option value="3:4">{t?.hero?.aspectRatios?.portrait || 'Portrait'} — 3:4</option>
+                    <option value="2:3">{t?.hero?.aspectRatios?.portrait || 'Portrait'} — 2:3</option>
+                    <option value="5:4">{t?.hero?.aspectRatios?.flexible || 'Flexible'} — 5:4</option>
+                    <option value="4:5">{t?.hero?.aspectRatios?.flexible || 'Flexible'} — 4:5</option>
                   </select>
                 </div>
 
                 {mode === 'edit' && (
-                  <ImageUpload onImagesChange={setImages} className="rounded-lg" />
+                  <div className="max-w-md mx-auto">
+                    <ImageUpload onImagesChange={setImages} className="rounded-lg" />
+                  </div>
                 )}
 
                 <Textarea
@@ -676,119 +673,281 @@ export default function AIImageGenerator() {
 
                 {/* Prompt Templates */}
                 <div className="space-y-4">
-                  <p className="text-sm font-medium text-foreground">{t?.hero?.promptTemplates?.title || '✨ Explore AI Magic:'}</p>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-                    {/* Multi-Angle View */}
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => handlePromptTemplate('multi-angle', t?.hero?.promptTemplates?.multiAngle?.prompt || '')}
-                      className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-blue-500/20 to-blue-600/30 border-2 border-blue-400 text-blue-100 hover:from-blue-400/30 hover:to-blue-500/40 hover:border-blue-300 hover:text-blue-50 hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:shadow-blue-500/30 transition-all duration-300 rounded-xl overflow-hidden"
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-400/0 via-blue-400/20 to-blue-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <span className="relative z-10">{t?.hero?.promptTemplates?.multiAngle?.label || 'Multi-Angle View'}</span>
-                    </Button>
+                  <p className="text-sm font-medium text-foreground">
+                    {mode === 'generate' 
+                      ? (t?.hero?.promptTemplates?.generateMode?.title || '✨ Creative Generation Styles:')
+                      : (t?.hero?.promptTemplates?.title || '✨ Explore AI Magic:')
+                    }
+                  </p>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                    {mode === 'generate' ? (
+                      // 生图模式标签
+                      <>
+                        {/* Realistic */}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => handlePromptTemplate('realistic', t?.hero?.promptTemplates?.generateMode?.realistic?.prompt || '')}
+                          className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-blue-500/20 to-blue-600/30 border-2 border-blue-400 text-blue-100 hover:from-blue-400/30 hover:to-blue-500/40 hover:border-blue-300 hover:text-blue-50 hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:shadow-blue-500/30 transition-all duration-300 rounded-xl overflow-hidden"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-blue-400/0 via-blue-400/20 to-blue-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10">{t?.hero?.promptTemplates?.generateMode?.realistic?.label || 'Realistic'}</span>
+                        </Button>
 
-                    {/* Action Change */}
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => handlePromptTemplate('action-change', t?.hero?.promptTemplates?.actionChange?.prompt || '')}
-                      className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-purple-500/20 to-purple-600/30 border-2 border-purple-400 text-purple-100 hover:from-purple-400/30 hover:to-purple-500/40 hover:border-purple-300 hover:text-purple-50 hover:shadow-[0_0_20px_rgba(147,51,234,0.4)] hover:shadow-purple-500/30 transition-all duration-300 rounded-xl overflow-hidden"
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-400/0 via-purple-400/20 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <span className="relative z-10">{t?.hero?.promptTemplates?.actionChange?.label || 'Action Change'}</span>
-                    </Button>
+                        {/* Anime */}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => handlePromptTemplate('anime', t?.hero?.promptTemplates?.generateMode?.anime?.prompt || '')}
+                          className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-purple-500/20 to-purple-600/30 border-2 border-purple-400 text-purple-100 hover:from-purple-400/30 hover:to-purple-500/40 hover:border-purple-300 hover:text-purple-50 hover:shadow-[0_0_20px_rgba(147,51,234,0.4)] hover:shadow-purple-500/30 transition-all duration-300 rounded-xl overflow-hidden"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-400/0 via-purple-400/20 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10">{t?.hero?.promptTemplates?.generateMode?.anime?.label || 'Anime'}</span>
+                        </Button>
 
-                    {/* Background Switch */}
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => handlePromptTemplate('background-switch', t?.hero?.promptTemplates?.backgroundSwitch?.prompt || '')}
-                      className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-green-500/20 to-green-600/30 border-2 border-green-400 text-green-100 hover:from-green-400/30 hover:to-green-500/40 hover:border-green-300 hover:text-green-50 hover:shadow-[0_0_20px_rgba(34,197,94,0.4)] hover:shadow-green-500/30 transition-all duration-300 rounded-xl overflow-hidden"
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-green-400/0 via-green-400/20 to-green-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <span className="relative z-10">{t?.hero?.promptTemplates?.backgroundSwitch?.label || 'Background Switch'}</span>
-                    </Button>
+                        {/* Fantasy */}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => handlePromptTemplate('fantasy', t?.hero?.promptTemplates?.generateMode?.fantasy?.prompt || '')}
+                          className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-green-500/20 to-green-600/30 border-2 border-green-400 text-green-100 hover:from-green-400/30 hover:to-green-500/40 hover:border-green-300 hover:text-green-50 hover:shadow-[0_0_20px_rgba(34,197,94,0.4)] hover:shadow-green-500/30 transition-all duration-300 rounded-xl overflow-hidden"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-green-400/0 via-green-400/20 to-green-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10">{t?.hero?.promptTemplates?.generateMode?.fantasy?.label || 'Fantasy'}</span>
+                        </Button>
 
-                    {/* Hairstyle Change */}
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => handlePromptTemplate('hairstyle-change', t?.hero?.promptTemplates?.hairstyleChange?.prompt || '')}
-                      className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-pink-500/20 to-pink-600/30 border-2 border-pink-400 text-pink-100 hover:from-pink-400/30 hover:to-pink-500/40 hover:border-pink-300 hover:text-pink-50 hover:shadow-[0_0_20px_rgba(236,72,153,0.4)] hover:shadow-pink-500/30 transition-all duration-300 rounded-xl overflow-hidden"
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-pink-400/0 via-pink-400/20 to-pink-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <span className="relative z-10">{t?.hero?.promptTemplates?.hairstyleChange?.label || 'Hairstyle Change'}</span>
-                    </Button>
+                        {/* Cyberpunk */}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => handlePromptTemplate('cyberpunk', t?.hero?.promptTemplates?.generateMode?.cyberpunk?.prompt || '')}
+                          className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-pink-500/20 to-pink-600/30 border-2 border-pink-400 text-pink-100 hover:from-pink-400/30 hover:to-pink-500/40 hover:border-pink-300 hover:text-pink-50 hover:shadow-[0_0_20px_rgba(236,72,153,0.4)] hover:shadow-pink-500/30 transition-all duration-300 rounded-xl overflow-hidden"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-pink-400/0 via-pink-400/20 to-pink-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10">{t?.hero?.promptTemplates?.generateMode?.cyberpunk?.label || 'Cyberpunk'}</span>
+                        </Button>
 
-                    {/* Time Travel */}
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => handlePromptTemplate('time-travel', t?.hero?.promptTemplates?.timeTravel?.prompt || '')}
-                      className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-orange-500/20 to-orange-600/30 border-2 border-orange-400 text-orange-100 hover:from-orange-400/30 hover:to-orange-500/40 hover:border-orange-300 hover:text-orange-50 hover:shadow-[0_0_20px_rgba(249,115,22,0.4)] hover:shadow-orange-500/30 transition-all duration-300 rounded-xl overflow-hidden"
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-orange-400/0 via-orange-400/20 to-orange-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <span className="relative z-10">{t?.hero?.promptTemplates?.timeTravel?.label || 'Time Travel'}</span>
-                    </Button>
+                        {/* Vintage */}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => handlePromptTemplate('vintage', t?.hero?.promptTemplates?.generateMode?.vintage?.prompt || '')}
+                          className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-orange-500/20 to-orange-600/30 border-2 border-orange-400 text-orange-100 hover:from-orange-400/30 hover:to-orange-500/40 hover:border-orange-300 hover:text-orange-50 hover:shadow-[0_0_20px_rgba(249,115,22,0.4)] hover:shadow-orange-500/30 transition-all duration-300 rounded-xl overflow-hidden"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-orange-400/0 via-orange-400/20 to-orange-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10">{t?.hero?.promptTemplates?.generateMode?.vintage?.label || 'Vintage'}</span>
+                        </Button>
 
-                    {/* Interaction Scene */}
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => handlePromptTemplate('interaction', t?.hero?.promptTemplates?.interaction?.prompt || '')}
-                      className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-cyan-500/20 to-cyan-600/30 border-2 border-cyan-400 text-cyan-100 hover:from-cyan-400/30 hover:to-cyan-500/40 hover:border-cyan-300 hover:text-cyan-50 hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-cyan-500/30 transition-all duration-300 rounded-xl overflow-hidden"
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/0 via-cyan-400/20 to-cyan-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <span className="relative z-10">{t?.hero?.promptTemplates?.interaction?.label || 'Interaction Scene'}</span>
-                    </Button>
+                        {/* Watercolor */}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => handlePromptTemplate('watercolor', t?.hero?.promptTemplates?.generateMode?.watercolor?.prompt || '')}
+                          className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-cyan-500/20 to-cyan-600/30 border-2 border-cyan-400 text-cyan-100 hover:from-cyan-400/30 hover:to-cyan-500/40 hover:border-cyan-300 hover:text-cyan-50 hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-cyan-500/30 transition-all duration-300 rounded-xl overflow-hidden"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/0 via-cyan-400/20 to-cyan-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10">{t?.hero?.promptTemplates?.generateMode?.watercolor?.label || 'Watercolor'}</span>
+                        </Button>
 
-                    {/* Today's Outfit */}
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => handlePromptTemplate('outfit', t?.hero?.promptTemplates?.outfit?.prompt || '')}
-                      className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-red-500/20 to-red-600/30 border-2 border-red-400 text-red-100 hover:from-red-400/30 hover:to-red-500/40 hover:border-red-300 hover:text-red-50 hover:shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:shadow-red-500/30 transition-all duration-300 rounded-xl overflow-hidden"
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-red-400/0 via-red-400/20 to-red-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <span className="relative z-10">{t?.hero?.promptTemplates?.outfit?.label || 'Today\'s Outfit'}</span>
-                    </Button>
+                        {/* Oil Painting */}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => handlePromptTemplate('oilPainting', t?.hero?.promptTemplates?.generateMode?.oilPainting?.prompt || '')}
+                          className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-red-500/20 to-red-600/30 border-2 border-red-400 text-red-100 hover:from-red-400/30 hover:to-red-500/40 hover:border-red-300 hover:text-red-50 hover:shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:shadow-red-500/30 transition-all duration-300 rounded-xl overflow-hidden"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-red-400/0 via-red-400/20 to-red-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10">{t?.hero?.promptTemplates?.generateMode?.oilPainting?.label || 'Oil Painting'}</span>
+                        </Button>
 
-                    {/* Expression Change */}
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => handlePromptTemplate('expression', t?.hero?.promptTemplates?.expression?.prompt || '')}
-                      className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-yellow-500/20 to-yellow-600/30 border-2 border-yellow-400 text-yellow-100 hover:from-yellow-400/30 hover:to-yellow-500/40 hover:border-yellow-300 hover:text-yellow-50 hover:shadow-[0_0_20px_rgba(234,179,8,0.4)] hover:shadow-yellow-500/30 transition-all duration-300 rounded-xl overflow-hidden"
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/0 via-yellow-400/20 to-yellow-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <span className="relative z-10">{t?.hero?.promptTemplates?.expression?.label || 'Expression Change'}</span>
-                    </Button>
+                        {/* Sketch */}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => handlePromptTemplate('sketch', t?.hero?.promptTemplates?.generateMode?.sketch?.prompt || '')}
+                          className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-yellow-500/20 to-yellow-600/30 border-2 border-yellow-400 text-yellow-100 hover:from-yellow-400/30 hover:to-yellow-500/40 hover:border-yellow-300 hover:text-yellow-50 hover:shadow-[0_0_20px_rgba(234,179,8,0.4)] hover:shadow-yellow-500/30 transition-all duration-300 rounded-xl overflow-hidden"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/0 via-yellow-400/20 to-yellow-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10">{t?.hero?.promptTemplates?.generateMode?.sketch?.label || 'Sketch'}</span>
+                        </Button>
 
-                    {/* Product Display */}
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => handlePromptTemplate('product', t?.hero?.promptTemplates?.product?.prompt || '')}
-                      className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-indigo-500/20 to-indigo-600/30 border-2 border-indigo-400 text-indigo-100 hover:from-indigo-400/30 hover:to-indigo-500/40 hover:border-indigo-300 hover:text-indigo-50 hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] hover:shadow-indigo-500/30 transition-all duration-300 rounded-xl overflow-hidden"
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-indigo-400/0 via-indigo-400/20 to-indigo-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <span className="relative z-10">{t?.hero?.promptTemplates?.product?.label || 'Product Display'}</span>
-                    </Button>
+                        {/* Minimalist */}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => handlePromptTemplate('minimalist', t?.hero?.promptTemplates?.generateMode?.minimalist?.prompt || '')}
+                          className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-indigo-500/20 to-indigo-600/30 border-2 border-indigo-400 text-indigo-100 hover:from-indigo-400/30 hover:to-indigo-500/40 hover:border-indigo-300 hover:text-indigo-50 hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] hover:shadow-indigo-500/30 transition-all duration-300 rounded-xl overflow-hidden"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-indigo-400/0 via-indigo-400/20 to-indigo-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10">{t?.hero?.promptTemplates?.generateMode?.minimalist?.label || 'Minimalist'}</span>
+                        </Button>
 
-                    {/* Stylization */}
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => handlePromptTemplate('stylize', t?.hero?.promptTemplates?.stylize?.prompt || '')}
-                      className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-teal-500/20 to-teal-600/30 border-2 border-teal-400 text-teal-100 hover:from-teal-400/30 hover:to-teal-500/40 hover:border-teal-300 hover:text-teal-50 hover:shadow-[0_0_20px_rgba(20,184,166,0.4)] hover:shadow-teal-500/30 transition-all duration-300 rounded-xl overflow-hidden"
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-teal-400/0 via-teal-400/20 to-teal-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <span className="relative z-10">{t?.hero?.promptTemplates?.stylize?.label || 'Stylization'}</span>
-                    </Button>
+                        {/* Abstract */}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => handlePromptTemplate('abstract', t?.hero?.promptTemplates?.generateMode?.abstract?.prompt || '')}
+                          className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-teal-500/20 to-teal-600/30 border-2 border-teal-400 text-teal-100 hover:from-teal-400/30 hover:to-teal-500/40 hover:border-teal-300 hover:text-teal-50 hover:shadow-[0_0_20px_rgba(20,184,166,0.4)] hover:shadow-teal-500/30 transition-all duration-300 rounded-xl overflow-hidden"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-teal-400/0 via-teal-400/20 to-teal-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10">{t?.hero?.promptTemplates?.generateMode?.abstract?.label || 'Abstract'}</span>
+                        </Button>
+                      </>
+                    ) : (
+                      // 编辑模式标签（新功能标签）
+                      <>
+                        {/* Watermark Removal */}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => handlePromptTemplate('watermark-removal', t?.hero?.promptTemplates?.watermarkRemoval?.prompt || '')}
+                          className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-red-500/20 to-red-600/30 border-2 border-red-400 text-red-100 hover:from-red-400/30 hover:to-red-500/40 hover:border-red-300 hover:text-red-50 hover:shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:shadow-red-500/30 transition-all duration-300 rounded-xl overflow-hidden"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-red-400/0 via-red-400/20 to-red-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10">{t?.hero?.promptTemplates?.watermarkRemoval?.label || 'Watermark Removal'}</span>
+                        </Button>
+
+
+                        {/* Hairstyle Change */}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => handlePromptTemplate('hairstyle-change', t?.hero?.promptTemplates?.hairstyleChange?.prompt || '')}
+                          className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-pink-500/20 to-pink-600/30 border-2 border-pink-400 text-pink-100 hover:from-pink-400/30 hover:to-pink-500/40 hover:border-pink-300 hover:text-pink-50 hover:shadow-[0_0_20px_rgba(236,72,153,0.4)] hover:shadow-pink-500/30 transition-all duration-300 rounded-xl overflow-hidden"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-pink-400/0 via-pink-400/20 to-pink-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10">{t?.hero?.promptTemplates?.hairstyleChange?.label || 'Hairstyle Change'}</span>
+                        </Button>
+
+                        {/* Skin Enhancement */}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => handlePromptTemplate('skin-enhancement', t?.hero?.promptTemplates?.skinEnhancement?.prompt || '')}
+                          className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-purple-500/20 to-purple-600/30 border-2 border-purple-400 text-purple-100 hover:from-purple-400/30 hover:to-purple-500/40 hover:border-purple-300 hover:text-purple-50 hover:shadow-[0_0_20px_rgba(147,51,234,0.4)] hover:shadow-purple-500/30 transition-all duration-300 rounded-xl overflow-hidden"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-400/0 via-purple-400/20 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10">{t?.hero?.promptTemplates?.skinEnhancement?.label || 'Skin Enhancement'}</span>
+                        </Button>
+
+
+                        {/* 3D Character Model */}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => handlePromptTemplate('character-model', t?.hero?.promptTemplates?.characterModel?.prompt || '')}
+                          className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-orange-500/20 to-orange-600/30 border-2 border-orange-400 text-orange-100 hover:from-orange-400/30 hover:to-orange-500/40 hover:border-orange-300 hover:text-orange-50 hover:shadow-[0_0_20px_rgba(249,115,22,0.4)] hover:shadow-orange-500/30 transition-all duration-300 rounded-xl overflow-hidden"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-orange-400/0 via-orange-400/20 to-orange-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10">{t?.hero?.promptTemplates?.characterModel?.label || '🔥 3D Figurine Play'}</span>
+                        </Button>
+
+                        {/* Vintage Style */}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => handlePromptTemplate('vintage-style', t?.hero?.promptTemplates?.vintageStyle?.prompt || '')}
+                          className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-amber-500/20 to-amber-600/30 border-2 border-amber-400 text-amber-100 hover:from-amber-400/30 hover:to-amber-500/40 hover:border-amber-300 hover:text-amber-50 hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:shadow-amber-500/30 transition-all duration-300 rounded-xl overflow-hidden"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-amber-400/0 via-amber-400/20 to-amber-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10">{t?.hero?.promptTemplates?.vintageStyle?.label || 'Vintage Style'}</span>
+                        </Button>
+
+                        {/* Multi-Reference */}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => handlePromptTemplate('multi-reference', t?.hero?.promptTemplates?.multiReference?.prompt || '')}
+                          className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-green-500/20 to-green-600/30 border-2 border-green-400 text-green-100 hover:from-green-400/30 hover:to-green-500/40 hover:border-green-300 hover:text-green-50 hover:shadow-[0_0_20px_rgba(34,197,94,0.4)] hover:shadow-green-500/30 transition-all duration-300 rounded-xl overflow-hidden"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-green-400/0 via-green-400/20 to-green-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10">{t?.hero?.promptTemplates?.multiReference?.label || 'Multi-Reference'}</span>
+                        </Button>
+
+                        {/* Custom Sticker */}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => handlePromptTemplate('custom-sticker', t?.hero?.promptTemplates?.customSticker?.prompt || '')}
+                          className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-cyan-500/20 to-cyan-600/30 border-2 border-cyan-400 text-cyan-100 hover:from-cyan-400/30 hover:to-cyan-500/40 hover:border-cyan-300 hover:text-cyan-50 hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-cyan-500/30 transition-all duration-300 rounded-xl overflow-hidden"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/0 via-cyan-400/20 to-cyan-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10">{t?.hero?.promptTemplates?.customSticker?.label || 'Custom Sticker'}</span>
+                        </Button>
+
+                        {/* Colorize Photo */}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => handlePromptTemplate('colorize-photo', t?.hero?.promptTemplates?.colorizePhoto?.prompt || '')}
+                          className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-indigo-500/20 to-indigo-600/30 border-2 border-indigo-400 text-indigo-100 hover:from-indigo-400/30 hover:to-indigo-500/40 hover:border-indigo-300 hover:text-indigo-50 hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] hover:shadow-indigo-500/30 transition-all duration-300 rounded-xl overflow-hidden"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-indigo-400/0 via-indigo-400/20 to-indigo-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10">{t?.hero?.promptTemplates?.colorizePhoto?.label || 'Colorize Photo'}</span>
+                        </Button>
+
+                        {/* Virtual Makeup */}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => handlePromptTemplate('virtual-makeup', t?.hero?.promptTemplates?.virtualMakeup?.prompt || '')}
+                          className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-rose-500/20 to-rose-600/30 border-2 border-rose-400 text-rose-100 hover:from-rose-400/30 hover:to-rose-500/40 hover:border-rose-300 hover:text-rose-50 hover:shadow-[0_0_20px_rgba(244,63,94,0.4)] hover:shadow-rose-500/30 transition-all duration-300 rounded-xl overflow-hidden"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-rose-400/0 via-rose-400/20 to-rose-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10">{t?.hero?.promptTemplates?.virtualMakeup?.label || 'Virtual Makeup'}</span>
+                        </Button>
+
+                        {/* Outfit Change */}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => handlePromptTemplate('outfit-change', t?.hero?.promptTemplates?.outfitChange?.prompt || '')}
+                          className="group relative h-12 px-3 text-xs font-medium bg-gradient-to-br from-teal-500/20 to-teal-600/30 border-2 border-teal-400 text-teal-100 hover:from-teal-400/30 hover:to-teal-500/40 hover:border-teal-300 hover:text-teal-50 hover:shadow-[0_0_20px_rgba(20,184,166,0.4)] hover:shadow-teal-500/30 transition-all duration-300 rounded-xl overflow-hidden"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-teal-400/0 via-teal-400/20 to-teal-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span className="relative z-10">{t?.hero?.promptTemplates?.outfitChange?.label || 'Outfit Change'}</span>
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </div>
+
+                {/* Word Choices for Generate Mode */}
+                {mode === 'generate' && (
+                  <div className="space-y-4">
+                    <p className="text-sm font-medium text-foreground">
+                      {t?.hero?.promptTemplates?.generateMode?.wordChoices?.title || '🎨 Choose Descriptive Words:'}
+                    </p>
+                    <div className="space-y-3">
+                      {Object.entries(t?.hero?.promptTemplates?.generateMode?.wordChoices?.categories || {}).map(([categoryKey, category]: [string, any]) => (
+                        <div key={categoryKey} className="space-y-2">
+                          <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                            {category.title}
+                          </h4>
+                          <div className="flex flex-wrap gap-2">
+                            {category.words.map((word: string, index: number) => (
+                              <Button
+                                key={index}
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  const newPrompt = currentPrompt.trim() 
+                                    ? `${currentPrompt}, ${word}` 
+                                    : word;
+                                  setCurrentPrompt(newPrompt);
+                                }}
+                                className="h-8 px-3 text-xs font-medium bg-gradient-to-br from-slate-500/10 to-slate-600/20 border border-slate-400/30 text-slate-200 hover:from-slate-400/20 hover:to-slate-500/30 hover:border-slate-300/50 hover:text-slate-100 hover:shadow-[0_0_15px_rgba(148,163,184,0.3)] transition-all duration-300 rounded-lg"
+                              >
+                                {word}
+                              </Button>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <Button
                   size="lg"
@@ -1846,7 +2005,7 @@ export default function AIImageGenerator() {
                     <div className="absolute inset-0 h-8 w-8 bg-primary/20 rounded-full blur-lg animate-pulse" />
                   </div>
                   <h4 className="font-semibold text-foreground mb-2">{t.pricing.freeStarter}</h4>
-                  <p className="text-3xl font-bold text-foreground mb-2">120 Points</p>
+                  <p className="text-3xl font-bold text-foreground mb-2">220 Points</p>
                   <p className="text-sm text-muted-foreground">{t.pricing.freeStarterDesc}</p>
                 </div>
 
